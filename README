@@ -1,0 +1,6 @@
+These are optional modules that you can add into Aurora and use them in your distribution. 
+To use these modules, do the following:
+
+1.) Copy the folder in its entirety that you wish to use into the Aurora/addon-modules/ folder.
+2.) Run prebuild on your system in the Aurora/ folder.
+3.) Compile, and the module will be ready to be used!
