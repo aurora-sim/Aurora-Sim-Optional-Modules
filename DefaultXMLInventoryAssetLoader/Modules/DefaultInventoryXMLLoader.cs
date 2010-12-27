@@ -15,7 +15,7 @@ using OpenMetaverse;
 using OpenSim.Region.Framework.Scenes;
 using OpenSim.Region.CoreModules.Avatar.Inventory.Archiver;
 
-namespace OpenSim.Services.InventoryService
+namespace Aurora.DefaultLibraryLoaders
 {
     public class InventoryXMLLoader : IDefaultLibraryLoader
     {
