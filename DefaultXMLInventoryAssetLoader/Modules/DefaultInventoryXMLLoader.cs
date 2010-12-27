@@ -23,7 +23,7 @@ namespace Aurora.DefaultLibraryLoaders
 
         protected ILibraryService m_service;
 
-        public void LoadLibrary(ILibraryService service, IConfigSource source)
+        public void LoadLibrary(ILibraryService service, IConfigSource source, IRegistryCore registry)
         {
             m_service = service;
 
