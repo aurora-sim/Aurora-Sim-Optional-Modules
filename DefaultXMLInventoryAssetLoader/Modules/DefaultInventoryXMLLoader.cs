@@ -22,10 +22,14 @@ namespace Aurora.DefaultLibraryLoaders
         private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         protected ILibraryService m_service;
+        protected IInventoryService m_inventoryService;
+        protected InventoryFolderImpl m_folder;
 
         public void LoadLibrary(ILibraryService service, IConfigSource source, IRegistryCore registry)
         {
             m_service = service;
+            m_inventoryService = registry.Get<IInventoryService>();
+            m_folder = new InventoryFolderImpl();
 
             IConfig libConfig = source.Configs["InventoryXMLLoader"];
             string pLibrariesLocation = Path.Combine("inventory", "Libraries.xml");
@@ -35,6 +39,7 @@ namespace Aurora.DefaultLibraryLoaders
                     return; //If it is loaded, don't reload
                 pLibrariesLocation = libConfig.GetString("DefaultLibrary", pLibrariesLocation);
                 LoadLibraries(pLibrariesLocation);
+                m_service.AddToDefaultInventory(m_folder);
             }
         }
 
@@ -105,22 +110,8 @@ namespace Aurora.DefaultLibraryLoaders
             folderInfo.Owner = m_service.LibraryOwner;
             folderInfo.Version = 1;
 
-            Dictionary<UUID, InventoryFolderImpl> libraryFolders = m_service.GetAllFolders();
-            if (libraryFolders.ContainsKey(folderInfo.ParentID))
-            {
-                InventoryFolderImpl parentFolder = libraryFolders[folderInfo.ParentID];
-
-                libraryFolders.Add(folderInfo.ID, folderInfo);
-                parentFolder.AddChildFolder(folderInfo);
-
-                //                 m_log.InfoFormat("[LIBRARY INVENTORY]: Adding folder {0} ({1})", folderInfo.name, folderInfo.folderID);
-            }
-            else
-            {
-                m_log.WarnFormat(
-                    "[LIBRARY INVENTORY]: Couldn't add folder {0} ({1}) since parent folder with ID {2} does not exist!",
-                    folderInfo.Name, folderInfo.ID, folderInfo.ParentID);
-            }
+            m_inventoryService.AddFolder(folderInfo);
+            m_folder.AddChildFolder(folderInfo);
         }
 
         /// <summary>
@@ -145,25 +136,11 @@ namespace Aurora.DefaultLibraryLoaders
             item.BasePermissions = (uint)config.GetLong("basePermissions", 0x7FFFFFFF);
             item.Flags = (uint)config.GetInt("flags", 0);
 
-            Dictionary<UUID, InventoryFolderImpl> libraryFolders = m_service.GetAllFolders();
-            if (libraryFolders.ContainsKey(item.Folder))
-            {
-                InventoryFolderImpl parentFolder = libraryFolders[item.Folder];
-                try
-                {
-                    parentFolder.Items.Add(item.ID, item);
-                }
-                catch (Exception)
-                {
-                    m_log.WarnFormat("[LIBRARY INVENTORY] Item {1} [{0}] not added, duplicate item", item.ID, item.Name);
-                }
-            }
+            m_inventoryService.AddItem(item);
+            if (item.Folder == m_service.LibraryRootFolder.ID)
+                m_folder.Items.Add(item.ID, item);
             else
-            {
-                m_log.WarnFormat(
-                    "[LIBRARY INVENTORY]: Couldn't add item {0} ({1}) since parent folder with ID {2} does not exist!",
-                    item.Name, item.ID, item.Folder);
-            }
+                m_folder.FindFolder(item.Folder).Items.Add(item.ID, item);
         }
 
         private delegate void ConfigAction(IConfig config, string path);

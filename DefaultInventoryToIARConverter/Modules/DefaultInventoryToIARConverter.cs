@@ -21,7 +21,7 @@ namespace OpenSim.Services.InventoryService
     /// <summary>
     /// This plugin changes the default asset and inventory folders over into IARs so they can be loaded easier.
     /// </summary>
-    public class DefaultLibraryLoader : IService
+    public class DefaultInventoryToIARConverter : IService
     {
         public void Initialize(IConfigSource config, IRegistryCore registry)
         {
@@ -94,7 +94,15 @@ namespace OpenSim.Services.InventoryService
         /// <param name="folder"></param>
         private void BuildInventoryFolder(Scene m_MockScene, InventoryFolderImpl folder)
         {
-            m_MockScene.InventoryService.AddFolder(folder);
+            InventoryFolderBase folderBase = new InventoryFolderBase();
+            folderBase.ID = folder.ID;
+            folderBase.Name = folder.Name;
+            folderBase.Owner = folder.Owner;
+            folderBase.ParentID = folder.ParentID;
+            folderBase.Type = folder.Type;
+            folderBase.Version = folder.Version;
+
+            m_MockScene.InventoryService.AddFolder(folderBase);
             foreach (InventoryFolderImpl childFolder in folder.RequestListOfFolderImpls())
             {
                 BuildInventoryFolder(m_MockScene, childFolder);
