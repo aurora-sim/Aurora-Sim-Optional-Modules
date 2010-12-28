@@ -41,7 +41,17 @@ namespace OpenSim.Services.InventoryService
         public void PostStart(IConfigSource config, IRegistryCore registry)
         {
             string IARName = "DefaultInventory.iar";
+            IniConfigSource iniSource = null;
+            try
+            {
+                iniSource = new IniConfigSource("DefaultInventory/Inventory.ini", Nini.Ini.IniFileType.AuroraStyle);
+            }
+            catch
+            {
+            }
             IConfig libConfig = config.Configs["DefaultAssetsIARCreator"];
+            if (libConfig == null)
+                libConfig = iniSource.Configs["DefaultAssetsIARCreator"];
             if (libConfig != null)
             {
                 if (!libConfig.GetBoolean("Enabled", false))
@@ -86,6 +96,8 @@ namespace OpenSim.Services.InventoryService
 
             List<AssetBase> assets = new List<AssetBase>();
             IConfig assetConfig = config.Configs["DefaultXMLAssetLoader"];
+            if (assetConfig == null)
+                assetConfig = iniSource.Configs["DefaultXMLAssetLoader"];
             if (assetConfig != null)
             {
                 string loaderArgs = assetConfig.GetString("AssetLoaderArgs",
