@@ -28,7 +28,7 @@ namespace Aurora.DefaultLibraryLoaders
         public void LoadLibrary(ILibraryService service, IConfigSource source, IRegistryCore registry)
         {
             m_service = service;
-            m_inventoryService = registry.Get<IInventoryService>();
+            m_inventoryService = registry.RequestModuleInterface<IInventoryService>();
             m_folder = new InventoryFolderImpl();
 
             IConfig libConfig = source.Configs["InventoryXMLLoader"];

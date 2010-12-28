@@ -67,11 +67,11 @@ namespace Aurora.DefaultLibraryLoaders
 
         protected static void LoadAsset(AssetBase info, string path)
         {
-//            bool image =
-//               (info.Type == (sbyte)AssetType.Texture ||
-//                info.Type == (sbyte)AssetType.TextureTGA ||
-//                info.Type == (sbyte)AssetType.ImageJPEG ||
-//                info.Type == (sbyte)AssetType.ImageTGA);
+            //            bool image =
+            //               (info.Type == (sbyte)AssetType.Texture ||
+            //                info.Type == (sbyte)AssetType.TextureTGA ||
+            //                info.Type == (sbyte)AssetType.ImageJPEG ||
+            //                info.Type == (sbyte)AssetType.ImageTGA);
 
             FileInfo fInfo = new FileInfo(path);
             long numBytes = fInfo.Length;
@@ -182,8 +182,10 @@ namespace Aurora.DefaultLibraryLoaders
                         String.Empty);
             bool assetLoaderEnabled = assetConfig.GetBoolean("Loaded", false);
 
+            registry.RegisterModuleInterface<DefaultAssetXMLLoader>(this);
+
             m_log.InfoFormat("[DefaultXMLAssetLoader]: Loading default asset set from {0}", loaderArgs);
-            IAssetService assetService = registry.Get<IAssetService>();
+            IAssetService assetService = registry.RequestModuleInterface<IAssetService>();
             ForEachDefaultXmlAsset(loaderArgs,
                     delegate(AssetBase a)
                     {
