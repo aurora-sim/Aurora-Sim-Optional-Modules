@@ -614,8 +614,8 @@ namespace OpenSimSearch.Modules.OpenSearch
                         break;
                 }
                 i = 0;
-                uint locX = 0;
-                uint locY = 0;
+                int locX = 0;
+                int locY = 0;
 
                 List<mapItemReply> mapitems = new List<mapItemReply>();
 
