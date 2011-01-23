@@ -169,42 +169,42 @@ namespace OpenSim.Server.Handlers.Caps
         /// <returns></returns>
         private string AddSpecificUrl(string type)
         {
-            string capPath = "/cap/"+UUID.Random()+"/"+type;
+            string capPath = "/cap/" + UUID.Random() + "/" + type;
             m_server.AddHTTPHandler(capPath, delegate(Hashtable request)
+            {
+                Hashtable responsedata = new Hashtable();
+                responsedata["content_type"] = "text/html";
+                responsedata["keepalive"] = false;
+
+                OSD resp = new OSD();
+                try
                 {
-                    Hashtable responsedata = new Hashtable();
-                    responsedata["content_type"] = "text/html";
-                    responsedata["keepalive"] = false;
+                    OSDMap r = (OSDMap)OSDParser.DeserializeLLSDXml((string)request["requestbody"]);
 
-                    OSD resp = new OSD();
-                    try
-                    {
-                        OSDMap r = (OSDMap)OSDParser.DeserializeLLSDXml((string)request["requestbody"]);
+                    if (type == "add_to_group")
+                        resp = AddUserToGroup(r);
 
-                        if (type == "add_to_group")
-                            resp = AddUserToGroup(r);
+                    if (type == "check_name")
+                        resp = CheckName(r);
 
-                        if (type == "check_name")
-                            resp = CheckName(r);
+                    if (type == "create_user")
+                        resp = CreateUser(r);
 
-                        if (type == "create_user")
-                            resp = CreateUser(r);
+                    if (type == "get_error_codes")
+                        resp = GetErrorCode(r);
 
-                        if (type == "get_error_codes")
-                            resp = GetErrorCode(r);
+                    if (type == "get_last_names")
+                        resp = GetLastNames(r);
+                }
+                catch
+                {
+                }
 
-                        if (type == "get_last_names")
-                            resp = GetLastNames(r);
-                    }
-                    catch
-                    {
-                    }
+                responsedata["int_response_code"] = HttpStatusCode.OK;
+                responsedata["str_response_string"] = OSDParser.SerializeLLSDXmlString(resp);
 
-                    responsedata["int_response_code"] = HttpStatusCode.OK;
-                    responsedata["str_response_string"] = OSDParser.SerializeLLSDXmlString(resp);
-
-                    return responsedata;
-                });
+                return responsedata;
+            });
             ICapsService capsService = m_registry.RequestModuleInterface<ICapsService>();
             if (capsService != null)
             {
@@ -229,7 +229,7 @@ namespace OpenSim.Server.Handlers.Caps
                     UserAccount user = m_registry.RequestModuleInterface<IUserAccountService>().GetUserAccount(UUID.Zero, first, last);
                     if (user != null)
                     {
-                        groupsService.AddAgentToGroup(user.PrincipalID, record.GroupID, UUID.Zero);
+                        groupsService.AddAgentToGroup(UUID.Zero, user.PrincipalID, record.GroupID, UUID.Zero);
                         finished = true;
                     }
                 }
