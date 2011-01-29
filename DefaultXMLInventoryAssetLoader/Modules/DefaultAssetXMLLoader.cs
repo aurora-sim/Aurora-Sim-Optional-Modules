@@ -180,7 +180,10 @@ namespace Aurora.DefaultLibraryLoaders
                 return;
             string loaderArgs = assetConfig.GetString("AssetLoaderArgs",
                         String.Empty);
-            bool assetLoaderEnabled = assetConfig.GetBoolean("Loaded", false);
+            bool assetLoaderEnabled = !assetConfig.GetBoolean("PreviouslyLoaded", false);
+
+            if (!assetLoaderEnabled)
+                return;
 
             registry.RegisterModuleInterface<DefaultAssetXMLLoader>(this);
 

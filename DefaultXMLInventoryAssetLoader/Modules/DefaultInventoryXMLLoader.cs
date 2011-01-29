@@ -35,7 +35,7 @@ namespace Aurora.DefaultLibraryLoaders
             string pLibrariesLocation = Path.Combine("inventory", "Libraries.xml");
             if (libConfig != null)
             {
-                if (libConfig.GetBoolean("Loaded", false))
+                if (libConfig.GetBoolean("PreviouslyLoaded", false))
                     return; //If it is loaded, don't reload
                 pLibrariesLocation = libConfig.GetString("DefaultLibrary", pLibrariesLocation);
                 LoadLibraries(pLibrariesLocation);
