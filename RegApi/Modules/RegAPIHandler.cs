@@ -122,7 +122,7 @@ namespace OpenSim.Server.Handlers.Caps
             UUID secureSessionID;
             UUID userID = UUID.Zero;
 
-            LoginResponse loginresp = loginService.VerifyClient(FirstName, LastName, Password, UUID.Zero, false, "", out secureSessionID);
+            LoginResponse loginresp = loginService.VerifyClient(FirstName, LastName, Password, UUID.Zero, false, "", "", "", out secureSessionID);
             //Null means it went through without an error
             Verified = loginresp == null;
 
@@ -169,42 +169,42 @@ namespace OpenSim.Server.Handlers.Caps
         /// <returns></returns>
         private string AddSpecificUrl(string type)
         {
-            string capPath = "/cap/" + UUID.Random() + "/" + type;
+            string capPath = "/cap/"+UUID.Random()+"/"+type;
             m_server.AddHTTPHandler(capPath, delegate(Hashtable request)
-            {
-                Hashtable responsedata = new Hashtable();
-                responsedata["content_type"] = "text/html";
-                responsedata["keepalive"] = false;
-
-                OSD resp = new OSD();
-                try
                 {
-                    OSDMap r = (OSDMap)OSDParser.DeserializeLLSDXml((string)request["requestbody"]);
+                    Hashtable responsedata = new Hashtable();
+                    responsedata["content_type"] = "text/html";
+                    responsedata["keepalive"] = false;
 
-                    if (type == "add_to_group")
-                        resp = AddUserToGroup(r);
+                    OSD resp = new OSD();
+                    try
+                    {
+                        OSDMap r = (OSDMap)OSDParser.DeserializeLLSDXml((string)request["requestbody"]);
 
-                    if (type == "check_name")
-                        resp = CheckName(r);
+                        if (type == "add_to_group")
+                            resp = AddUserToGroup(r);
 
-                    if (type == "create_user")
-                        resp = CreateUser(r);
+                        if (type == "check_name")
+                            resp = CheckName(r);
 
-                    if (type == "get_error_codes")
-                        resp = GetErrorCode(r);
+                        if (type == "create_user")
+                            resp = CreateUser(r);
 
-                    if (type == "get_last_names")
-                        resp = GetLastNames(r);
-                }
-                catch
-                {
-                }
+                        if (type == "get_error_codes")
+                            resp = GetErrorCode(r);
 
-                responsedata["int_response_code"] = HttpStatusCode.OK;
-                responsedata["str_response_string"] = OSDParser.SerializeLLSDXmlString(resp);
+                        if (type == "get_last_names")
+                            resp = GetLastNames(r);
+                    }
+                    catch
+                    {
+                    }
 
-                return responsedata;
-            });
+                    responsedata["int_response_code"] = HttpStatusCode.OK;
+                    responsedata["str_response_string"] = OSDParser.SerializeLLSDXmlString(resp);
+
+                    return responsedata;
+                });
             ICapsService capsService = m_registry.RequestModuleInterface<ICapsService>();
             if (capsService != null)
             {
