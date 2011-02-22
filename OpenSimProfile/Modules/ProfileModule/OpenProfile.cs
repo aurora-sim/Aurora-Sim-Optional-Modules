@@ -269,8 +269,8 @@ namespace OpenSimProfile.Modules.OpenProfile
 
             // Getting the global position for the Avatar
 
-            Vector3 posGlobal = new Vector3(remoteClient.Scene.RegionInfo.RegionLocX * Constants.RegionSize + avaPos.X,
-                                            remoteClient.Scene.RegionInfo.RegionLocY * Constants.RegionSize + avaPos.Y,
+            Vector3 posGlobal = new Vector3(remoteClient.Scene.RegionInfo.RegionLocX  + avaPos.X,
+                                            remoteClient.Scene.RegionInfo.RegionLocY + avaPos.Y,
                                             avaPos.Z);
 
             ReqHash["pos_global"] = posGlobal.ToString();
@@ -419,8 +419,8 @@ namespace OpenSimProfile.Modules.OpenProfile
 
             // Getting the global position for the Avatar
 
-            Vector3 posGlobal = new Vector3(remoteClient.Scene.RegionInfo.RegionLocX * Constants.RegionSize + avaPos.X,
-                                            remoteClient.Scene.RegionInfo.RegionLocY * Constants.RegionSize + avaPos.Y,
+            Vector3 posGlobal = new Vector3(remoteClient.Scene.RegionInfo.RegionLocX + avaPos.X,
+                                            remoteClient.Scene.RegionInfo.RegionLocY + avaPos.Y,
                                             avaPos.Z);
 
             ReqHash["pos_global"] = posGlobal.ToString();
