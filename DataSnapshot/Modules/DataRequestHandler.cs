@@ -27,6 +27,7 @@
 */
 
 using System.Collections;
+using System.Collections.Generic;
 using System.Reflection;
 using System.Xml;
 using log4net;
@@ -36,7 +37,7 @@ using OpenSim.Framework;
 using OpenSim.Framework.Servers;
 using OpenSim.Framework.Servers.HttpServer;
 using OpenSim.Region.Framework.Scenes;
-using Caps=OpenSim.Framework.Capabilities.Caps;
+using OpenSim.Framework.Capabilities;
 
 namespace OpenSim.Region.DataSnapshot
 {
@@ -65,12 +66,15 @@ namespace OpenSim.Region.DataSnapshot
             //harbl
         }
 
-        public void OnRegisterCaps(UUID agentID, Caps caps)
+        public OSDMap OnRegisterCaps(UUID agentID, IHttpServer httpServer)
         {
+            OSDMap retVal = new OSDMap();
+            retVal["PublicSnapshotDataInfo"] = CapsUtil.CreateCAPS("PublicSnapshotDataInfo", "");
+
+            httpServer.AddStreamHandler(new RestStreamHandler("POST", retVal["ViewerStartAuction"],
+                                                      OnDiscoveryAttempt));
             //m_log.Info("[DATASNAPSHOT]: Registering service discovery capability for " + agentID);
-            string capsBase = "/CAPS/" + caps.CapsObjectPath;
-            caps.RegisterHandler("PublicSnapshotDataInfo",
-                new RestStreamHandler("POST", capsBase + m_discoveryPath, OnDiscoveryAttempt));
+            return retVal;
         }
 
         public string OnDiscoveryAttempt(string request, string path, string param,

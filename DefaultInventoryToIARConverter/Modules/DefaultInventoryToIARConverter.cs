@@ -36,10 +36,6 @@ namespace OpenSim.Services.InventoryService
 
         public void Start(IConfigSource config, IRegistryCore registry)
         {
-        }
-
-        public void PostStart(IConfigSource config, IRegistryCore registry)
-        {
             string IARName = "DefaultInventory.iar";
             IniConfigSource iniSource = null;
             try
@@ -78,8 +74,7 @@ namespace OpenSim.Services.InventoryService
             if (uinfo == null)
             {
                 uinfo = new UserAccount(m_service.LibraryOwner);
-                uinfo.FirstName = m_service.LibraryOwnerName[0];
-                uinfo.LastName = m_service.LibraryOwnerName[1];
+                uinfo.Name = m_service.LibraryOwnerName;
                 uinfo.ServiceURLs = new Dictionary<string, object>();
                 m_MockScene.InventoryService.CreateUserInventory(m_service.LibraryOwner);
             }
@@ -112,6 +107,10 @@ namespace OpenSim.Services.InventoryService
             InventoryArchiveWriteRequest write = new InventoryArchiveWriteRequest(Guid.NewGuid(), null, m_MockScene,
                 uinfo, "/", new GZipStream(new FileStream(IARName, FileMode.Create), CompressionMode.Compress), true, m_service.LibraryRootFolder, assets);
             write.Execute();
+        }
+
+        public void FinishedStartup()
+        {
         }
 
         protected AssetBase CreateAsset(string assetIdStr, string name, string path, sbyte type)
@@ -261,10 +260,6 @@ namespace OpenSim.Services.InventoryService
             {
                 m_MockScene.InventoryService.AddItem(item);
             }
-        }
-
-        public void AddNewRegistry(IConfigSource config, IRegistryCore registry)
-        {
         }
     }
 }

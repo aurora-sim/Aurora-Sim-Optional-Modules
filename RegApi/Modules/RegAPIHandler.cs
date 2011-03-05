@@ -18,7 +18,7 @@ using OpenMetaverse;
 using OpenMetaverse.StructuredData;
 using System.Collections.Specialized;
 
-namespace OpenSim.Server.Handlers.Caps
+namespace OpenSim.Services
 {
     /// <summary>
     /// Reference:
@@ -38,15 +38,7 @@ namespace OpenSim.Server.Handlers.Caps
         {
         }
 
-        public void PostInitialize(IConfigSource config, IRegistryCore registry)
-        {
-        }
-
         public void Start(IConfigSource config, IRegistryCore registry)
-        {
-        }
-
-        public void PostStart(IConfigSource config, IRegistryCore registry)
         {
             IConfig handlerConfig = config.Configs["Handlers"];
             if (handlerConfig.GetString("RegApiHandler", "") != Name)
@@ -56,7 +48,7 @@ namespace OpenSim.Server.Handlers.Caps
             m_server.AddStreamHandler(new RegApiHTTPHandler(registry, m_server));
         }
 
-        public void AddNewRegistry(IConfigSource config, IRegistryCore registry)
+        public void FinishedStartup()
         {
         }
     }
@@ -122,7 +114,7 @@ namespace OpenSim.Server.Handlers.Caps
             UUID secureSessionID;
             UUID userID = UUID.Zero;
 
-            LoginResponse loginresp = loginService.VerifyClient(FirstName, LastName, Password, UUID.Zero, false, "", "", "", out secureSessionID);
+            LoginResponse loginresp = loginService.VerifyClient(FirstName + " " + LastName, Password, UUID.Zero, false, "", "", "", out secureSessionID);
             //Null means it went through without an error
             Verified = loginresp == null;
 
@@ -292,7 +284,7 @@ namespace OpenSim.Server.Handlers.Caps
                     if (user == null)
                     {
                         //The pass is in plain text... so put it in and create the account
-                        accountService.CreateUser(username, lastName, password, email);
+                        accountService.CreateUser(username + " " + lastName, password, email);
                         DateTime time = DateTime.ParseExact(dob, "YYYY-MM-DD", System.Globalization.CultureInfo.InvariantCulture);
                         user = accountService.GetUserAccount(UUID.Zero, username, lastName);
                         //Update the dob
@@ -304,19 +296,18 @@ namespace OpenSim.Server.Handlers.Caps
                         {
                             if (start_region_name != "")
                             {
-                                IGridUserService gridUserService = m_registry.RequestModuleInterface<IGridUserService>();
-                                if (gridUserService != null)
+                                IAgentInfoService agentInfoService = m_registry.RequestModuleInterface<IAgentInfoService>();
+                                if (agentInfoService != null)
                                 {
-                                    //Set their home position
-                                    gridUserService.SetHome(user.PrincipalID.ToString(),
-                                        m_registry.RequestModuleInterface<IGridService>().GetRegionByName
-                                        (UUID.Zero, start_region_name).RegionID,
-                                        new Vector3(start_local_x,
-                                        start_local_y,
-                                        start_local_z),
-                                        new Vector3(start_look_at_x,
-                                        start_look_at_y,
-                                        start_look_at_z));
+                                    agentInfoService.SetHomePosition(user.PrincipalID.ToString(),
+                                            m_registry.RequestModuleInterface<IGridService>().GetRegionByName
+                                            (UUID.Zero, start_region_name).RegionID,
+                                            new Vector3(start_local_x,
+                                            start_local_y,
+                                            start_local_z),
+                                            new Vector3(start_look_at_x,
+                                            start_look_at_y,
+                                            start_look_at_z));
                                 }
                             }
                         }

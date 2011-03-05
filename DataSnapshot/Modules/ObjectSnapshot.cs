@@ -57,7 +57,6 @@ namespace OpenSim.Region.DataSnapshot.Providers
             //To check for staleness, we must catch all incoming client packets.
             m_scene.EventManager.OnNewClient += OnNewClient;
             scene.EventManager.OnClosingClient += OnClosingClient;
-            m_scene.EventManager.OnParcelPrimCountAdd += delegate(SceneObjectGroup obj) { this.Stale = true; };
         }
 
         public void OnNewClient(IClientAPI client)
@@ -148,7 +147,7 @@ namespace OpenSim.Region.DataSnapshot.Providers
 
                         if (m_rootPart != null)
                         {
-                            ILandObject land = m_scene.LandChannel.GetLandObject(m_rootPart.AbsolutePosition.X, m_rootPart.AbsolutePosition.Y);
+                            ILandObject land = m_scene.RequestModuleInterface < IParcelManagementModule>().GetLandObject(m_rootPart.AbsolutePosition.X, m_rootPart.AbsolutePosition.Y);
 
                             XmlNode xmlobject = nodeFactory.CreateNode(XmlNodeType.Element, "object", "");
                             node = nodeFactory.CreateNode(XmlNodeType.Element, "uuid", "");

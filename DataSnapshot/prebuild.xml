@@ -16,11 +16,9 @@
   <Reference name="System.Xml"/>
   <Reference name="System.Data"/>
   <Reference name="OpenSim.Framework"/>
-  <Reference name="OpenSim.Framework.Capabilities"/>
   <Reference name="OpenSim.Framework.Servers.HttpServer"/>
   <Reference name="OpenSim.Region.Framework"/>
   <Reference name="OpenSim.Region.CoreModules"/>
-  <Reference name="OpenSim.Services.Interfaces"/>
   <Reference name="OpenMetaverseTypes" path="../../../bin/"/>
   <Reference name="OpenMetaverse.StructuredData" path="../../../bin/"/>
   <Reference name="OpenMetaverse" path="../../../bin/"/>
