@@ -1,11 +1,31 @@
 <?xml version="1.0" ?>
 <Project frameworkVersion="v3_5" name="OpenSim.Region.DataSnapshot" path="addon-modules/DataSnapshot/Modules" type="Library">
-  <Configuration name="Debug">
+  <Configuration name="Debug" platform="x86">
     <Options>
       <OutputPath>../../../bin/</OutputPath>
     </Options>
   </Configuration>
-  <Configuration name="Release">
+  <Configuration name="Release" platform="x86">
+    <Options>
+      <OutputPath>../../../bin/</OutputPath>
+    </Options>
+  </Configuration>
+  <Configuration name="Debug" platform="x64">
+    <Options>
+      <OutputPath>../../../bin/</OutputPath>
+    </Options>
+  </Configuration>
+  <Configuration name="Release" platform="x64">
+    <Options>
+      <OutputPath>../../../bin/</OutputPath>
+    </Options>
+  </Configuration>
+  <Configuration name="Debug" platform="AnyCPU">
+    <Options>
+      <OutputPath>../../../bin/</OutputPath>
+    </Options>
+  </Configuration>
+  <Configuration name="Release" platform="AnyCPU">
     <Options>
       <OutputPath>../../../bin/</OutputPath>
     </Options>
@@ -16,7 +36,6 @@
   <Reference name="System.Xml"/>
   <Reference name="System.Data"/>
   <Reference name="OpenSim.Framework"/>
-  <Reference name="OpenSim.Framework.Servers.HttpServer"/>
   <Reference name="OpenSim.Region.Framework"/>
   <Reference name="OpenSim.Region.CoreModules"/>
   <Reference name="OpenMetaverseTypes" path="../../../bin/"/>

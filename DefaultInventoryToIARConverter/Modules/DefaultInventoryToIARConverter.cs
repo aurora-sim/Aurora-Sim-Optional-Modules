@@ -65,7 +65,8 @@ namespace OpenSim.Services.InventoryService
                 m_MockScene = (Scene)registry;
             else
             {
-                m_MockScene = new Scene(regInfo);
+                m_MockScene = new Scene();
+                m_MockScene.Initialize(regInfo);
                 m_MockScene.AddModuleInterfaces(registry.GetInterfaces());
             }
 

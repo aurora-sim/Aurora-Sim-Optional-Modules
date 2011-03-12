@@ -47,8 +47,6 @@ namespace OpenSim.Region.DataSnapshot
         private DataSnapshotManager m_externalData = null;
         private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
-        private readonly string m_discoveryPath = "DS0001/";
-
         public DataRequestHandler(Scene scene, DataSnapshotManager externalData)
         {
             m_scene = scene;
