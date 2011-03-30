@@ -1,7 +1,7 @@
-This .iar is a collection of many assets, textures, sounds, and more that are to be used in the Default Inventory.
-This collection is only for use in Standalone mode or with Aurora.Server (not for users connected to a grid).
+These .iar is a collection of many assets, textures, sounds, and more that are to be used in the Default Inventory.
+This collection is only for use in Standalone mode or with Aurora.Server (not for users connected to a grid with regions).
 
-To use this collection, drop the .iar file in 
+To use this collection, drop the .iar files in 
 bin/DefaultInventory/
 and then restart Aurora and it will load.
 
