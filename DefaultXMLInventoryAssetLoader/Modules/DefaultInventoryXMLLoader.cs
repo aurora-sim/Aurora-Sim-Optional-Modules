@@ -23,13 +23,11 @@ namespace Aurora.DefaultLibraryLoaders
 
         protected ILibraryService m_service;
         protected IInventoryService m_inventoryService;
-        protected InventoryFolderImpl m_folder;
 
         public void LoadLibrary(ILibraryService service, IConfigSource source, IRegistryCore registry)
         {
             m_service = service;
             m_inventoryService = registry.RequestModuleInterface<IInventoryService>();
-            m_folder = new InventoryFolderImpl();
 
             IConfig libConfig = source.Configs["InventoryXMLLoader"];
             string pLibrariesLocation = Path.Combine("inventory", "Libraries.xml");
@@ -39,7 +37,6 @@ namespace Aurora.DefaultLibraryLoaders
                     return; //If it is loaded, don't reload
                 pLibrariesLocation = libConfig.GetString("DefaultLibrary", pLibrariesLocation);
                 LoadLibraries(pLibrariesLocation);
-                m_service.AddToDefaultInventory(m_folder);
             }
         }
 
@@ -102,16 +99,15 @@ namespace Aurora.DefaultLibraryLoaders
         {
             InventoryFolderImpl folderInfo = new InventoryFolderImpl();
 
-            folderInfo.ID = new UUID(config.GetString("folderID", m_service.LibraryRootFolder.ID.ToString()));
+            folderInfo.ID = new UUID(config.GetString("folderID", UUID.Random().ToString()));
             folderInfo.Name = config.GetString("name", "unknown");
-            folderInfo.ParentID = new UUID(config.GetString("parentFolderID", m_service.LibraryRootFolder.ID.ToString()));
+            folderInfo.ParentID = new UUID (config.GetString ("parentFolderID", UUID.Zero.ToString ()));
             folderInfo.Type = (short)config.GetInt("type", 8);
 
             folderInfo.Owner = m_service.LibraryOwner;
             folderInfo.Version = 1;
 
             m_inventoryService.AddFolder(folderInfo);
-            m_folder.AddChildFolder(folderInfo);
         }
 
         /// <summary>
@@ -123,9 +119,9 @@ namespace Aurora.DefaultLibraryLoaders
             InventoryItemBase item = new InventoryItemBase();
             item.Owner = m_service.LibraryOwner;
             item.CreatorId = m_service.LibraryOwner.ToString();
-            item.ID = new UUID(config.GetString("inventoryID", m_service.LibraryRootFolder.ID.ToString()));
+            item.ID = new UUID (config.GetString ("inventoryID", UUID.Random().ToString()));
             item.AssetID = new UUID(config.GetString("assetID", item.ID.ToString()));
-            item.Folder = new UUID(config.GetString("folderID", m_service.LibraryRootFolder.ID.ToString()));
+            item.Folder = new UUID (config.GetString ("folderID", UUID.Zero.ToString ()));
             item.Name = config.GetString("name", String.Empty);
             item.Description = config.GetString("description", item.Name);
             item.InvType = config.GetInt("inventoryType", 0);
@@ -137,10 +133,6 @@ namespace Aurora.DefaultLibraryLoaders
             item.Flags = (uint)config.GetInt("flags", 0);
 
             m_inventoryService.AddItem(item);
-            if (item.Folder == m_service.LibraryRootFolder.ID)
-                m_folder.Items.Add(item.ID, item);
-            else
-                m_folder.FindFolder(item.Folder).Items.Add(item.ID, item);
         }
 
         private delegate void ConfigAction(IConfig config, string path);
