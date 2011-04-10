@@ -328,7 +328,7 @@ namespace OpenSim.Region.UserStatistics
             }
         }
 
-        public void OnMakeRootAgent(ScenePresence agent)
+        public void OnMakeRootAgent(IScenePresence agent)
         {
             UUID regionUUID = GetRegionUUIDFromHandle(agent.Scene.RegionInfo.RegionHandle);
 
@@ -357,12 +357,12 @@ namespace OpenSim.Region.UserStatistics
             }
         }
 
-        public void OnMakeChildAgent(ScenePresence agent)
+        public void OnMakeChildAgent(IScenePresence agent)
         {
             
         }
 
-        public void OnClientClosed(UUID agentID, Scene scene)
+        public void OnClientClosed(UUID agentID, IScene scene)
         {
             lock (m_sessions)
             {

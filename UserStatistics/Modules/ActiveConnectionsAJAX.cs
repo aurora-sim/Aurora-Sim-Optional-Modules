@@ -71,7 +71,7 @@ namespace OpenSim.Region.UserStatistics
                 HTMLUtil.LI_O(ref output, String.Empty);
                 output.Append(scene.RegionInfo.RegionName);
                 HTMLUtil.OL_O(ref output, String.Empty);
-                scene.ForEachScenePresence(delegate(ScenePresence av)
+                scene.ForEachScenePresence(delegate(IScenePresence av)
                 {
                     Dictionary<string, string> queues = new Dictionary<string, string>();
                     if (av.ControllingClient is IStatsCollector)

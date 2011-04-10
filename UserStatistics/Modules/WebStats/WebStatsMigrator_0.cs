@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
-using C5;
+using Aurora.DataManager;
 using Aurora.Framework;
+using Aurora.DataManager.Migration;
+using C5;
 
-namespace Aurora.DataManager.Migration.Migrators
+namespace Aurora.DataManager
 {
     public class WebStatsMigrator_0 : Migrator
     {

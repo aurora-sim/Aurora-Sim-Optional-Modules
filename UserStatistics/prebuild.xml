@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<Project frameworkVersion="v3_5" name="Aurora.RegApi" path="addon-modules/UserStatistics/Modules" type="Library">
+<Project frameworkVersion="v3_5" name="Aurora.UserStatistics" path="addon-modules/UserStatistics/Modules" type="Library">
   <Configuration name="Debug" platform="x86">
     <Options>
       <OutputPath>../../../bin/</OutputPath>
@@ -39,6 +39,7 @@
   <Reference name="System.Web"/>
   <Reference name="System.Xml"/>
 
+  <Reference name="Aurora.DataManager"/>
   <Reference name="Aurora.Framework"/>
   <Reference name="OpenSim.Data"/>
   <Reference name="OpenSim.Framework"/>
@@ -47,6 +48,7 @@
   <Reference name="OpenSim.Region.Physics.Manager"/>
 
   <Reference name="DotNetOpenMail" path="../../../bin/"/>
+  <Reference name="C5" path="../../../bin/"/>
   <Reference name="log4net" path="../../../bin/"/>
   <Reference name="Mono.Data.SqliteClient"/>
   <Reference name="Nini" path="../../../bin/"/>
