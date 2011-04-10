@@ -51,7 +51,7 @@ namespace Aurora.ScriptEngine.AuroraDotNetEngine.CompilerTools
             return compileScript;
         }
 
-        public CompilerResults Compile(CompilerParameters parameters, string Script)
+        public CompilerResults Compile(CompilerParameters parameters, bool isFilePath, string Script)
         {
             bool complete = false;
             bool retried = false;
@@ -60,7 +60,11 @@ namespace Aurora.ScriptEngine.AuroraDotNetEngine.CompilerTools
             {
                 lock (YPcodeProvider)
                 {
-                    results = YPcodeProvider.CompileAssemblyFromSource(
+                    if (isFilePath)
+                        results = YPcodeProvider.CompileAssemblyFromFile (
+                            parameters, Script);
+                    else
+                        results = YPcodeProvider.CompileAssemblyFromSource(
                         parameters, Script);
                 }
                 // Deal with an occasional segv in the compiler.
@@ -87,6 +91,15 @@ namespace Aurora.ScriptEngine.AuroraDotNetEngine.CompilerTools
                 }
             } while (!complete);
             return results;
+        }
+
+        public string DefaultState
+        {
+            get { return ""; }
+        }
+
+        public void FinishCompile(IScriptModulePlugin plugin, ScriptData data, IScript Script)
+        {
         }
     }
 }
