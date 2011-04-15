@@ -31,6 +31,8 @@ namespace Aurora.StandaloneLoader
         private bool m_enabled = false;
         private bool m_inuse = false;
         private string m_fileName = "";
+        private bool m_saveNewArchiveAtClose = false;
+        private bool m_useExistingRegionInfo = true;
 
         #endregion
 
@@ -45,6 +47,10 @@ namespace Aurora.StandaloneLoader
             m_enabled = config.GetBoolean("Enabled", false);
             if (!m_enabled)
                 return;
+
+            m_saveNewArchiveAtClose = config.GetBoolean("SaveNewArchiveAtClose", false);
+            m_useExistingRegionInfo = config.GetBoolean("UseExistingRegionInfo ", false);
+
             foreach (string f in m_simulationBase.CommandLineParameters)
             {
                 if (f.EndsWith(".abackup"))
@@ -96,6 +102,10 @@ namespace Aurora.StandaloneLoader
 
         public void Close()
         {
+            if (m_saveNewArchiveAtClose)
+            {
+                //TODO: implement
+            }
         }
 
         public void ReloadConfiguration(IConfigSource m_config)
@@ -178,6 +188,25 @@ namespace Aurora.StandaloneLoader
                     MemoryStream ms = new MemoryStream(data);
                     groups.Add(SceneObjectSerializer.FromXml2Format(ms, (Scene)fakeScene));
                 }
+            }
+
+            if (!m_useExistingRegionInfo)
+            {
+                regionInfo.RegionID = UUID.Random();
+                regionInfo.RegionName = MainConsole.Instance.CmdPrompt("Region Name: ", regionInfo.RegionName);
+                regionInfo.RegionLocX = int.Parse(MainConsole.Instance.CmdPrompt("Region Position X: ", regionInfo.RegionLocX.ToString()));
+                regionInfo.RegionLocY = int.Parse(MainConsole.Instance.CmdPrompt("Region Position Y: ", regionInfo.RegionLocY.ToString()));
+                regionInfo.HttpPort = uint.Parse(MainConsole.Instance.CmdPrompt("HTTP Port: ", regionInfo.HttpPort.ToString()));
+
+                string externalName = MainConsole.Instance.CmdPrompt("IP: ", "DEFAULT");
+                if (externalName == "DEFAULT")
+                {
+                    externalName = Aurora.Framework.Utilities.GetExternalIp();
+                    regionInfo.FindExternalAutomatically = true;
+                }
+                else
+                    regionInfo.FindExternalAutomatically = false;
+                regionInfo.ExternalHostName = externalName;
             }
 
             ISimulationDataStore simulationStore = sceneManager.SimulationDataService;
