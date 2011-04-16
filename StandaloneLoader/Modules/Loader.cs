@@ -49,7 +49,7 @@ namespace Aurora.StandaloneLoader
                 return;
 
             m_saveNewArchiveAtClose = config.GetBoolean("SaveNewArchiveAtClose", false);
-            m_useExistingRegionInfo = config.GetBoolean("UseExistingRegionInfo ", false);
+            m_useExistingRegionInfo = config.GetBoolean("UseExistingRegionInfo", false);
 
             foreach (string f in m_simulationBase.CommandLineParameters)
             {
