@@ -168,6 +168,9 @@ namespace FreeswitchVoice
                     MainServer.Instance.AddHTTPHandler (String.Format ("{0}/viv_buddy.php", m_freeSwitchAPIPrefix),
                                      FreeSwitchSLVoiceBuddyHTTPHandler);
 
+                    MainServer.Instance.AddHTTPHandler(String.Format("{0}/viv_watcher.php", m_freeSwitchAPIPrefix),
+                                     FreeSwitchSLVoiceWatcherHTTPHandler);
+
                     m_log.InfoFormat ("[FreeSwitchVoice] using FreeSwitch server {0}", m_freeSwitchRealm);
 
                     m_log.Info ("[FreeSwitchVoice] plugin enabled");
@@ -641,6 +644,46 @@ namespace FreeswitchVoice
             Regex normalizeEndLines = new Regex(@"\r\n", RegexOptions.Compiled | RegexOptions.Singleline | RegexOptions.Multiline);
 
             m_log.DebugFormat("[FREESWITCH]: {0}", normalizeEndLines.Replace((string)response["str_response_string"], ""));
+            return response;
+        }
+
+        public Hashtable FreeSwitchSLVoiceWatcherHTTPHandler(Hashtable request)
+        {
+            m_log.Debug("[FreeSwitchVoice]: FreeSwitchSLVoiceWatcherHTTPHandler called");
+
+            Hashtable response = new Hashtable();
+            response["int_response_code"] = 200;
+            response["content-type"] = "text/xml";
+
+            Hashtable requestBody = ParseRequestBody((string)request["body"]);
+
+            string auth_token = (string)requestBody["auth_token"];
+            //string[] auth_tokenvals = auth_token.Split(':');
+            //string username = auth_tokenvals[0];
+
+            StringBuilder resp = new StringBuilder();
+            resp.Append("<?xml version=\"1.0\" encoding=\"iso-8859-1\" ?><response xmlns=\"http://www.vivox.com\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation= \"/xsd/buddy_list.xsd\">");
+
+            // FIXME: This is enough of a response to stop viewer 2 complaining about a login failure and get voice to work.  If we don't
+            // give an OK response, then viewer 2 engages in an continuous viv_signin.php, viv_buddy.php, viv_watcher.php loop
+            // Viewer 1 appeared happy to ignore the lack of reply and still works with this reply.
+            //
+            // However, really we need to fill in whatever watcher data should be here (whatever that is).
+            resp.Append(string.Format(@"<level0>
+                        <status>OK</status>
+                        <cookie_name>lib_session</cookie_name>
+                        <cookie>{0}</cookie>
+                        <auth_token>{0}</auth_token>
+                        <body/></level0></response>", auth_token));
+
+            response["str_response_string"] = resp.ToString();
+
+//            Regex normalizeEndLines = new Regex(@"(\r\n|\n)", RegexOptions.Compiled | RegexOptions.Singleline | RegexOptions.Multiline);
+//
+//            m_log.DebugFormat(
+//                "[FREESWITCH]: FreeSwitchSLVoiceWatcherHTTPHandler() response {0}",
+//                normalizeEndLines.Replace((string)response["str_response_string"],""));
+
             return response;
         }
 
