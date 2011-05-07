@@ -64,6 +64,8 @@ namespace IARModifierGUI
         private void RebuildTreeView ()
         {
             m_rootFolders.Clear ();
+            UUID previouslySelectedID = treeView1.SelectedNode != null ? UUID.Parse (treeView1.SelectedNode.Name) : UUID.Zero;
+            TreeNode selectedNode = null;
             TreeNode rootNode = new TreeNode ("My Inventory");
             Dictionary<UUID, TreeNode> nodes = new Dictionary<UUID, TreeNode> ();
             foreach (InventoryFolderBase folder in m_folders)
@@ -72,12 +74,16 @@ namespace IARModifierGUI
                 {
                     TreeNode node = new TreeNode (folder.Name);
                     node.Name = folder.ID.ToString ();
+                    if (previouslySelectedID == folder.ID)
+                        selectedNode = node;
                     if (m_items.ContainsKey (folder.ID))
                     {
                         foreach (InventoryItemBase item in m_items[folder.ID])
                         {
                             TreeNode inventoryNode = new TreeNode (item.Name);
                             inventoryNode.Name = item.ID.ToString ();
+                            if (previouslySelectedID == item.ID)
+                                selectedNode = inventoryNode;
                             node.Nodes.Add (inventoryNode);
                         }
                     }
@@ -91,12 +97,16 @@ namespace IARModifierGUI
                     TreeNode parentNode = nodes[folder.ParentID];
                     TreeNode node = new TreeNode (folder.Name);
                     node.Name = folder.ID.ToString ();
+                    if (previouslySelectedID == folder.ID)
+                        selectedNode = node;
                     if (m_items.ContainsKey (folder.ID))
                     {
                         foreach (InventoryItemBase item in m_items[folder.ID])
                         {
                             TreeNode inventoryNode = new TreeNode (item.Name);
                             inventoryNode.Name = item.ID.ToString ();
+                            if (previouslySelectedID == item.ID)
+                                selectedNode = inventoryNode;
                             node.Nodes.Add (inventoryNode);
                         }
                     }
@@ -107,6 +117,20 @@ namespace IARModifierGUI
 
             treeView1.Nodes.Clear();
             treeView1.Nodes.Add(rootNode);
+            if (selectedNode != null)
+            {
+                treeView1.Select ();
+                List<TreeNode> parentNodes = new List<TreeNode>();
+                TreeNode node = selectedNode;
+                while (true)
+                {
+                    if (node.Parent == null)
+                        break;
+                    node.Parent.Toggle ();
+                    node = node.Parent;
+                }
+                treeView1.Update ();
+            }
         }
 
         #endregion
@@ -447,6 +471,144 @@ namespace IARModifierGUI
             }
             //Update the GUI now
             RebuildTreeView ();
+        }
+
+        private bool m_nameChanged = false;
+        private void textBox1_TextChanged (object sender, EventArgs e)
+        {
+            m_nameChanged = true;
+        }
+
+        private void textBox1_Leave (object sender, EventArgs e)
+        {
+            if (!m_nameChanged)
+                return;
+            m_nameChanged = false;
+            string value = textBox1.Text;
+            UUID id = UUID.Parse (treeView1.SelectedNode.Name);
+            if (m_folderList.ContainsKey (id))
+            {
+                InventoryFolderBase folder = m_folderList[id];
+                folder.Name = value;
+            }
+            else
+            {
+                //Its an item!
+                InventoryItemBase item = m_itemList[id];
+                item.Name = value;
+            }
+            //Update the GUI now
+            RebuildTreeView ();
+        }
+
+        private bool m_typeChanged = false;
+        private void textBox2_TextChanged (object sender, EventArgs e)
+        {
+            m_typeChanged = true;
+        }
+
+        private void textBox2_Leave (object sender, EventArgs e)
+        {
+            if (!m_typeChanged)
+                return;
+            m_typeChanged = false;
+            bool isitem = false;
+            try
+            {
+                UUID id = UUID.Parse (treeView1.SelectedNode.Name);
+                if (m_folderList.ContainsKey (id))
+                {
+                    AssetType value = (AssetType)Enum.Parse (typeof (AssetType), textBox2.Text);
+                    InventoryFolderBase folder = m_folderList[id];
+                    folder.Type = (short)value;
+                }
+                else
+                {
+                    InventoryType value = (InventoryType)Enum.Parse (typeof (InventoryType), textBox2.Text);
+                    isitem = true;
+                    //Its an item!
+                    InventoryItemBase item = m_itemList[id];
+                    item.InvType = (int)value;
+                }
+            }
+            catch
+            {
+                if(isitem)
+                    MessageBox.Show (@"Valid types are:
+        Unknown
+        Texture
+        Sound
+        CallingCard
+        Landmark
+        Object
+        Notecard
+        Category
+        Folder
+        RootCategory
+        LSL
+        Snapshot
+        Attachment
+        Wearable
+        Animation
+        Gesture
+        Mesh");
+                else
+                    MessageBox.Show (@"Valid types are:
+        Unknown
+        Texture
+        Sound
+        CallingCard
+        Landmark
+        Clothing
+        Object
+        Notecard
+        Folder
+        RootFolder
+        LSLText
+        TextureTGA
+        Bodypart
+        TrashFolder
+        SnapshotFolder
+        LostAndFoundFolder
+        Animation
+        Gesture
+        Simstate
+        FavoriteFolder
+        LinkFolder
+        CurrentOutfitFolder
+        OutfitFolder
+        MyOutfitsFolder
+        Mesh");
+            }
+        }
+
+        private void treeView1_NodeMouseDoubleClick (object sender, TreeNodeMouseClickEventArgs e)
+        {
+            try
+            {
+                UUID id = UUID.Parse (e.Node.Name);
+                if (m_folderList.ContainsKey (id))
+                {
+                    InventoryFolderBase folder = m_folderList[id];
+                    textBox1.Text = folder.Name;
+                    textBox2.Text = ((AssetType)folder.Type).ToString();
+                }
+                else
+                {
+                    //Its an item!
+                    InventoryItemBase item = m_itemList[id];
+                    textBox1.Text = item.Name;
+                    textBox2.Text = ((InventoryType)item.InvType).ToString ();
+                }
+            }
+            catch
+            {
+            }
+        }
+
+        private void treeView1_NodeMouseClick_1 (object sender, TreeNodeMouseClickEventArgs e)
+        {
+            treeView1_NodeMouseDoubleClick (sender, e);
         }
 
         private UUID m_movingObject = UUID.Zero;
