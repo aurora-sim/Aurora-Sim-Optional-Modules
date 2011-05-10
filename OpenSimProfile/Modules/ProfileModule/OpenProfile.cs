@@ -97,9 +97,9 @@ namespace OpenSimProfile.Modules.OpenProfile
         {
         }
 
-        ScenePresence FindPresence(UUID clientID)
+        IScenePresence FindPresence(UUID clientID)
         {
-            ScenePresence p;
+            IScenePresence p;
 
             foreach (Scene s in m_Scenes)
             {
@@ -259,13 +259,13 @@ namespace OpenSimProfile.Modules.OpenProfile
             ReqHash["classifiedFlags"] = queryclassifiedFlags.ToString();
             ReqHash["classifiedPrice"] = queryclassifiedPrice.ToString();
 
-            ScenePresence p = FindPresence(remoteClient.AgentId);
+            IScenePresence p = FindPresence(remoteClient.AgentId);
 
             Vector3 avaPos = p.AbsolutePosition;
 
             // Getting the parceluuid for this parcel
 
-            ReqHash["parcel_uuid"] = p.currentParcelUUID.ToString();
+            ReqHash["parcel_uuid"] = p.CurrentParcelUUID.ToString();
 
             // Getting the global position for the Avatar
 
@@ -409,13 +409,13 @@ namespace OpenSimProfile.Modules.OpenProfile
             ReqHash["enabled"] = enabled.ToString();
             ReqHash["sim_name"] = remoteClient.Scene.RegionInfo.RegionName;
 
-            ScenePresence p = FindPresence(remoteClient.AgentId);
+            IScenePresence p = FindPresence(remoteClient.AgentId);
 
             Vector3 avaPos = p.AbsolutePosition;
 
             // Getting the parceluuid for this parcel
 
-            ReqHash["parcel_uuid"] = p.currentParcelUUID.ToString();
+            ReqHash["parcel_uuid"] = p.CurrentParcelUUID.ToString();
 
             // Getting the global position for the Avatar
 

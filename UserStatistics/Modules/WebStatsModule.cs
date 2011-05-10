@@ -359,7 +359,6 @@ namespace OpenSim.Region.UserStatistics
 
         public void OnMakeChildAgent(IScenePresence agent)
         {
-            
         }
 
         public void OnClientClosed(UUID agentID, IScene scene)

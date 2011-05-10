@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<Project frameworkVersion="v3_5" name="Aurora.UserStatistics" path="addon-modules/UserStatistics/Modules" type="Library">
+<Project frameworkVersion="v3_5" name="Aurora.Addon.UserStatistics" path="addon-modules/UserStatistics/Modules" type="Library">
   <Configuration name="Debug" platform="x86">
     <Options>
       <OutputPath>../../../bin/</OutputPath>

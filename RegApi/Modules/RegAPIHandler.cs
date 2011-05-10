@@ -27,7 +27,6 @@ namespace OpenSim.Services
     /// </summary>
     public class RegAPIHandler : IService
     {
-        private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         public IHttpServer m_server = null;
         public string Name
         {
@@ -83,7 +82,6 @@ namespace OpenSim.Services
             body = body.Trim();
 
             //m_log.DebugFormat("[XXX]: query String: {0}", body);
-            string method = string.Empty;
             try
             {
                 OSDMap map = (OSDMap)OSDParser.DeserializeLLSDXml(body);
@@ -112,9 +110,8 @@ namespace OpenSim.Services
 
             ILoginService loginService = m_registry.RequestModuleInterface<ILoginService>();
             UUID secureSessionID;
-            UUID userID = UUID.Zero;
 
-            LoginResponse loginresp = loginService.VerifyClient(FirstName + " " + LastName, Password, UUID.Zero, false, "", "", "", out secureSessionID);
+            LoginResponse loginresp = loginService.VerifyClient (FirstName + " " + LastName, "UserAccount", Password, UUID.Zero, false, "", "", "", out secureSessionID);
             //Null means it went through without an error
             Verified = loginresp == null;
 
@@ -263,7 +260,7 @@ namespace OpenSim.Services
             string dob = map["dob"];
 
             //Optional params
-            int limited_to_estate = map["limited_to_estate"];
+            //int limited_to_estate = map["limited_to_estate"];
             string start_region_name = map["start_region_name"];
             float start_local_x = map["start_local_x"];
             float start_local_y = map["start_local_y"];

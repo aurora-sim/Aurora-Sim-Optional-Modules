@@ -1,4 +1,4 @@
-<Project frameworkVersion="v3_5" name="Aurora.StandaloneLoader" path="addon-modules/StandaloneLoader/Modules" type="Library">
+<Project frameworkVersion="v3_5" name="Aurora.Addon.StandaloneLoader" path="addon-modules/StandaloneLoader/Modules" type="Library">
 	<Configuration name="Debug" platform="x86">
 		<Options>
 			<OutputPath>../../../bin/</OutputPath>

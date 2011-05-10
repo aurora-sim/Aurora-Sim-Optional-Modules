@@ -267,10 +267,9 @@ namespace Aurora.Services.DataService
 
             sql += " ORDER BY a.name_f, a.name_l, b.last_updated;";
 
-            IDbCommand cmd = GD.QueryData(sql,
+            IDataReader sdr = GD.QueryData (sql,
                 "stats_session_data",
                 "distinct a.name_f, a.name_l, a.Agent_ID, b.Session_ID, b.client_version, b.last_updated, b.start_time");
-            IDataReader sdr = cmd.ExecuteReader ();
             if (sdr != null && sdr.FieldCount != 0)
             {
                 UUID userUUID = UUID.Zero;
@@ -308,8 +307,6 @@ namespace Aurora.Services.DataService
                     sdr.Close ();
                     sdr.Dispose ();
                 }
-                if (cmd != null)
-                    cmd.Dispose ();
             }
             catch { }
 

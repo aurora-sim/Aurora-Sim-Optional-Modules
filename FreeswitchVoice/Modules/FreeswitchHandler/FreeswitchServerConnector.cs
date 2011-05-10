@@ -48,7 +48,6 @@ namespace FreeswitchVoice
         protected readonly string m_freeSwitchAPIPrefix = "/fsapi";
 
         private IRegistryCore m_registry;
-        private uint m_port = 0;
 
         public string Name
         {
@@ -66,18 +65,7 @@ namespace FreeswitchVoice
                 return;
 
             m_registry = registry;
-            m_port = handlerConfig.GetUInt("FreeswitchInHandlerPort");
 
-            if (handlerConfig.GetBoolean("UnsecureUrls", false))
-            {
-                IHttpServer server = registry.RequestModuleInterface<ISimulationBase>().GetHttpServer(m_port);
-                m_port = server.Port;
-
-                m_FreeswitchService = registry.RequestModuleInterface<IFreeswitchService>();
-
-                server.AddHTTPHandler(String.Format("{0}/{1}/freeswitch-config", m_freeSwitchAPIPrefix, UUID.Random()), FreeSwitchConfigHTTPHandler);
-                server.AddHTTPHandler(String.Format("{0}/{1}/region-config", m_freeSwitchAPIPrefix, UUID.Random()), RegionConfigHTTPHandler);
-            }
             m_registry.RequestModuleInterface<IGridRegistrationService>().RegisterModule(this);
         }
 
@@ -144,34 +132,34 @@ namespace FreeswitchVoice
             get { return "FreeswitchServiceURL"; }
         }
 
-        public uint Port
+        public void AddExistingUrlForClient (string SessionID, ulong RegionHandle, string url, uint port)
         {
-            get { return m_port; }
-        }
-
-        public void AddExistingUrlForClient(string SessionID, ulong RegionHandle, string url)
-        {
-            IHttpServer server = m_registry.RequestModuleInterface<ISimulationBase>().GetHttpServer(m_port);
-            m_port = server.Port;
+            IHttpServer server = m_registry.RequestModuleInterface<ISimulationBase> ().GetHttpServer (port);
 
             m_FreeswitchService = m_registry.RequestModuleInterface<IFreeswitchService>();
 
-            server.AddHTTPHandler(String.Format("{0}/{1}/freeswitch-config", m_freeSwitchAPIPrefix, UUID.Random()), FreeSwitchConfigHTTPHandler);
-            server.AddHTTPHandler(String.Format("{0}/{1}/region-config", m_freeSwitchAPIPrefix, UUID.Random()), RegionConfigHTTPHandler);
+            server.AddHTTPHandler(String.Format("{0}/freeswitch-config", url), FreeSwitchConfigHTTPHandler);
+            server.AddHTTPHandler(String.Format("{0}/region-config", url), RegionConfigHTTPHandler);
         }
 
-        public string GetUrlForRegisteringClient(string SessionID, ulong RegionHandle)
+        public string GetUrlForRegisteringClient(string SessionID, ulong RegionHandle, uint port)
         {
-            string url = "/CAPS/EQMPOSTER" + UUID.Random();
+            string url = String.Format("{0}/{1}", m_freeSwitchAPIPrefix, UUID.Random());
 
-            IHttpServer server = m_registry.RequestModuleInterface<ISimulationBase>().GetHttpServer(m_port);
-            m_port = server.Port;
+            IHttpServer server = m_registry.RequestModuleInterface<ISimulationBase> ().GetHttpServer (port);
 
             m_FreeswitchService = m_registry.RequestModuleInterface<IFreeswitchService>();
 
-            server.AddHTTPHandler(String.Format("{0}/{1}/freeswitch-config", m_freeSwitchAPIPrefix, UUID.Random()), FreeSwitchConfigHTTPHandler);
-            server.AddHTTPHandler(String.Format("{0}/{1}/region-config", m_freeSwitchAPIPrefix, UUID.Random()), RegionConfigHTTPHandler);
+            server.AddHTTPHandler(url + "/freeswitch-config", FreeSwitchConfigHTTPHandler);
+            server.AddHTTPHandler(url + "/region-config", RegionConfigHTTPHandler);
             return url;
+        }
+
+        public void RemoveUrlForClient (ulong regionHandle, string sessionID, string url, uint port)
+        {
+            IHttpServer server = m_registry.RequestModuleInterface<ISimulationBase> ().GetHttpServer (port);
+            server.RemoveHTTPHandler("POST", url + "/freeswitch-config");
+            server.RemoveHTTPHandler("POST", url + "/region-config");
         }
 
         #endregion

@@ -77,7 +77,7 @@ namespace OpenSim.Services.InventoryService
                 uinfo = new UserAccount(m_service.LibraryOwner);
                 uinfo.Name = m_service.LibraryOwnerName;
                 uinfo.ServiceURLs = new Dictionary<string, object>();
-                m_MockScene.InventoryService.CreateUserInventory(m_service.LibraryOwner);
+                m_MockScene.InventoryService.CreateUserInventory(m_service.LibraryOwner, false);
             }
 
             List<AssetBase> assets = new List<AssetBase> ();
