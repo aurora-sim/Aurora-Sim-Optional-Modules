@@ -70,15 +70,9 @@ namespace OpenSim.Region.UserStatistics
         public virtual void Initialise(IConfigSource config)
         {
             IConfig cnfg;
-            try
-            {
-                cnfg = config.Configs["WebStats"];
+            cnfg = config.Configs["WebStats"]; 
+            if(cnfg != null)
                 enabled = cnfg.GetBoolean("enabled", false);
-            } 
-            catch (Exception)
-            {
-                enabled = false;
-            }
         }
 
         public void AddRegion(Scene scene)
