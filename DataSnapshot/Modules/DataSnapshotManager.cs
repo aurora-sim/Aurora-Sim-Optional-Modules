@@ -97,6 +97,8 @@ namespace OpenSim.Region.DataSnapshot
                 //Read from the config for options
                 lock (m_syncInit)
                 {
+                    if (config.Configs["DataSnapshot"] == null)
+                        return;
                     try
                     {
                         m_enabled = config.Configs["DataSnapshot"].GetBoolean("index_sims", m_enabled);
@@ -122,7 +124,6 @@ namespace OpenSim.Region.DataSnapshot
                     }
                     catch (Exception)
                     {
-                        m_log.Warn("[DATASNAPSHOT]: Could not load configuration. DataSnapshot will be disabled.");
                         m_enabled = false;
                         return;
                     }
