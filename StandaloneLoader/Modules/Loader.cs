@@ -197,9 +197,22 @@ namespace Aurora.StandaloneLoader
             this.saveOnShutdown = saveOnShutdown;
         }
 
+        //Not used
+        public OverridenFileBasedSimulationData ()
+        {
+        }
+
         public override ISimulationDataStore Copy ()
         {
             return this;
+        }
+
+        public override string Name
+        {
+            get
+            {
+                return "OverridenFileBasedSimulationData";
+            }
         }
 
         protected override void ReadConfig (IScene scene, IConfig config)
