@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<Project frameworkVersion="v3_5" name="DefaultInventoryToIARConverter" path="addon-modules/DefaultInventoryToIARConverter/Modules" type="Library">
+<Project frameworkVersion="v3_5" name="Aurora.Addon.DefaultInventoryToIARConverter" path="addon-modules/DefaultInventoryToIARConverter/Modules" type="Library">
   <Configuration name="Debug" platform="x86">
     <Options>
       <OutputPath>../../../bin/</OutputPath>
