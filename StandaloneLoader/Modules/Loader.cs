@@ -69,7 +69,7 @@ namespace Aurora.StandaloneLoader
                 //Register the extention
                 string ext = ".abackup";
                 RegistryKey key = Registry.ClassesRoot.CreateSubKey(ext);
-                key.SetValue("", "Aurora");
+                key.SetValue("", "abackup file");
                 key.Close();
 
                 key = Registry.ClassesRoot.CreateSubKey(ext + "\\Shell\\Open\\command");
@@ -187,6 +187,7 @@ namespace Aurora.StandaloneLoader
                 {
                     MemoryStream ms = new MemoryStream(data);
                     groups.Add(SceneObjectSerializer.FromXml2Format(ms, (Scene)fakeScene));
+                    ms.Close ();
                 }
             }
 
@@ -216,20 +217,9 @@ namespace Aurora.StandaloneLoader
             parcelService.RemoveLandObject(regionInfo.RegionID);
 
 
-            simulationStore.StoreTerrain(terrainChannel.GetSerialised(null), regionInfo.RegionID, false);
+            //simulationStore.StoreTerrain(terrainChannel.GetSerialised(null), regionInfo.RegionID, false);
 
-            foreach (LandData parcel in parcels)
-            {
-                parcelService.StoreLandObject(parcel);
-            }
-            foreach (SceneObjectGroup grp in groups)
-            {
-                simulationStore.StoreObject(grp, regionInfo.RegionID);
-                foreach (SceneObjectPart part in grp.ChildrenList)
-                {
-                    simulationStore.StorePrimInventory(part.UUID, part.Inventory.GetInventoryItems());
-                }
-            }
+            
             ///Now load the region!
             IScene scene;
             sceneManager.AllRegions++;

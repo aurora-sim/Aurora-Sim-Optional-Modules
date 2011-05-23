@@ -143,10 +143,6 @@ namespace OpenSim.Region.OptionalModules.Scripting.RegionReady
                         m_firstEmptyCompileQueue = false;
                         m_oarFileLoading = false;
 
-                        IBackupModule backup = m_scene.RequestModuleInterface<IBackupModule>();
-                        if (backup != null && backup.LoadPrims)
-                            backup.ProcessPrimBackupTaints(false, false);
-
                         c.From = "RegionReady";
                         if (m_lastOarLoadedOk)
                             c.Message += "1,";

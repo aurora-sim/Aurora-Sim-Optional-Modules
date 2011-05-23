@@ -27,7 +27,7 @@ namespace IARModifierGUI
             //Register the extention
             string ext = ".iar";
             RegistryKey key = Registry.ClassesRoot.CreateSubKey (ext);
-            key.SetValue ("", "Aurora");
+            key.SetValue ("", "iar file");
             key.Close ();
 
             key = Registry.ClassesRoot.CreateSubKey (ext + "\\Shell\\Open\\command");
