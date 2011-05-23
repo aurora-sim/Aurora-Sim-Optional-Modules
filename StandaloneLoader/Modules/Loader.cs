@@ -23,7 +23,7 @@ using OpenSim.Region.Framework.Scenes.Serialization;
 
 namespace Aurora.StandaloneLoader
 {
-    public class Loader : IApplicationPlugin, ISimulationDataStore
+    public class Loader : IApplicationPlugin
     {
         #region Declares
 
