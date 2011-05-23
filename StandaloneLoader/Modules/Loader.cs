@@ -23,7 +23,7 @@ using OpenSim.Region.Framework.Scenes.Serialization;
 
 namespace Aurora.StandaloneLoader
 {
-    public class Loader : IApplicationPlugin
+    public class Loader : IApplicationPlugin, ISimulationDataStore
     {
         #region Declares
 
@@ -33,7 +33,8 @@ namespace Aurora.StandaloneLoader
         private string m_fileName = "";
         private bool m_saveNewArchiveAtClose = false;
         private bool m_useExistingRegionInfo = true;
-
+        private IScene m_scene;
+            
         #endregion
 
         #region IApplicationPlugin Members
@@ -102,10 +103,6 @@ namespace Aurora.StandaloneLoader
 
         public void Close()
         {
-            if (m_saveNewArchiveAtClose)
-            {
-                //TODO: implement
-            }
         }
 
         public void ReloadConfiguration(IConfigSource m_config)
@@ -139,9 +136,6 @@ namespace Aurora.StandaloneLoader
             
             SceneManager sceneManager = m_simulationBase.ApplicationRegistry.RequestModuleInterface<SceneManager>();
             RegionInfo regionInfo = new RegionInfo();
-            ITerrainChannel terrainChannel = null;
-            List<SceneObjectGroup> groups = new List<SceneObjectGroup>();
-            List<LandData> parcels = new List<LandData>();
             IScene fakeScene = new Scene();
             fakeScene.AddModuleInterfaces(m_simulationBase.ApplicationRegistry.GetInterfaces());
 
@@ -161,33 +155,6 @@ namespace Aurora.StandaloneLoader
                 else if (filePath.StartsWith("regioninfo/"))
                 {
                     regionInfo.UnpackRegionInfoData((OSDMap)OSDParser.DeserializeLLSDBinary(data));
-                }
-                else if (filePath.StartsWith("parcels/"))
-                {
-                    LandData parcel = new LandData();
-                    OSD parcelData = OSDParser.DeserializeLLSDBinary(data);
-                    parcel.FromOSD((OSDMap)parcelData);
-                    parcels.Add(parcel);
-                }
-                else if (filePath.StartsWith("terrain/"))
-                {
-                    ITerrainLoader[] terrainLoaders = Aurora.Framework.AuroraModuleLoader.PickupModules<ITerrainLoader>().ToArray();
-                    foreach (ITerrainLoader loader in terrainLoaders)
-                    {
-                        if (loader.FileExtension == ".r32")
-                        {
-                            MemoryStream ms = new MemoryStream(data);
-                            terrainChannel = loader.LoadStream(ms, null);
-                            ms.Close();
-                            break;
-                        }
-                    }
-                }
-                else if (filePath.StartsWith("entities/"))
-                {
-                    MemoryStream ms = new MemoryStream(data);
-                    groups.Add(SceneObjectSerializer.FromXml2Format(ms, (Scene)fakeScene));
-                    ms.Close ();
                 }
             }
 
@@ -210,20 +177,42 @@ namespace Aurora.StandaloneLoader
                 regionInfo.ExternalHostName = externalName;
             }
 
-            ISimulationDataStore simulationStore = sceneManager.SimulationDataService;
+            //ISimulationDataStore simulationStore = sceneManager.SimulationDataService;
+            //Hijack the old simulation service and replace it with ours
+            sceneManager.SimulationDataService = new OverridenFileBasedSimulationData (m_fileName, m_saveNewArchiveAtClose);
 
-            //Remove any old information
-            simulationStore.RemoveRegion(regionInfo.RegionID);
-            parcelService.RemoveLandObject(regionInfo.RegionID);
-
-
-            //simulationStore.StoreTerrain(terrainChannel.GetSerialised(null), regionInfo.RegionID, false);
-
-            
             ///Now load the region!
-            IScene scene;
             sceneManager.AllRegions++;
-            sceneManager.CreateRegion(regionInfo, out scene);
+            sceneManager.CreateRegion (regionInfo, out m_scene);
+        }
+    }
+
+    public class OverridenFileBasedSimulationData : Aurora.Modules.FileBasedSimulationData.FileBasedSimulationData
+    {
+        private string fileName;
+        private bool saveOnShutdown;
+        public OverridenFileBasedSimulationData (string fileName, bool saveOnShutdown)
+        {
+            this.fileName = fileName;
+            this.saveOnShutdown = saveOnShutdown;
+        }
+
+        public override ISimulationDataStore Copy ()
+        {
+            return this;
+        }
+
+        protected override void ReadConfig (IScene scene, IConfig config)
+        {
+            base.ReadConfig (scene, config);
+            m_fileName = fileName; //Fix the file name
+            m_loadDirectory = "";
+        }
+
+        public override void Shutdown ()
+        {
+            if(saveOnShutdown)
+                base.Shutdown ();
         }
     }
 }
