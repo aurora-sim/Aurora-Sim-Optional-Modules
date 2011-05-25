@@ -241,7 +241,7 @@ namespace OpenSim.Region.OptionalModules.Avatar.Concierge
             return;
         }
 
-        public override void OnChatFromClient(Object sender, OSChatMessage c)
+        public override void OnChatFromClient (IClientAPI sender, OSChatMessage c)
         {
             if (m_replacingChatModule)
             {
@@ -249,7 +249,7 @@ namespace OpenSim.Region.OptionalModules.Avatar.Concierge
                 // ChatFromClient to interested subscribers
                 c = FixPositionOfChatMessage(c);
 
-                Scene scene = (Scene)c.Scene;
+                IScene scene = c.Scene;
                 scene.EventManager.TriggerOnChatFromClient(sender, c);
 
                 if (m_conciergedScenes.Contains(c.Scene))

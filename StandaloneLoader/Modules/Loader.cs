@@ -33,7 +33,6 @@ namespace Aurora.StandaloneLoader
         private string m_fileName = "";
         private bool m_saveNewArchiveAtClose = false;
         private bool m_useExistingRegionInfo = true;
-        private IScene m_scene;
             
         #endregion
 
@@ -183,7 +182,7 @@ namespace Aurora.StandaloneLoader
 
             ///Now load the region!
             sceneManager.AllRegions++;
-            sceneManager.CreateRegion (regionInfo, out m_scene);
+            sceneManager.CreateRegion (regionInfo);
         }
     }
 
