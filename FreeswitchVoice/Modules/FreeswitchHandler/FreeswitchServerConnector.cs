@@ -1,5 +1,5 @@
 /*
- * Copyright (c) Contributors, http://opensimulator.org/
+ * Copyright (c) Contributors, http://aurora-sim.org/
  * See CONTRIBUTORS.TXT for a full list of copyright holders.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -9,7 +9,7 @@
  *     * Redistributions in binary form must reproduce the above copyright
  *       notice, this list of conditions and the following disclaimer in the
  *       documentation and/or other materials provided with the distribution.
- *     * Neither the name of the OpenSimulator Project nor the
+ *     * Neither the name of the Aurora-Sim Project nor the
  *       names of its contributors may be used to endorse or promote products
  *       derived from this software without specific prior written permission.
  *
@@ -132,7 +132,7 @@ namespace FreeswitchVoice
             get { return "FreeswitchServiceURL"; }
         }
 
-        public void AddExistingUrlForClient (string SessionID, ulong RegionHandle, string url, uint port)
+        public void AddExistingUrlForClient (string SessionID, string url, uint port)
         {
             IHttpServer server = m_registry.RequestModuleInterface<ISimulationBase> ().GetHttpServer (port);
 
@@ -142,7 +142,7 @@ namespace FreeswitchVoice
             server.AddHTTPHandler(String.Format("{0}/region-config", url), RegionConfigHTTPHandler);
         }
 
-        public string GetUrlForRegisteringClient(string SessionID, ulong RegionHandle, uint port)
+        public string GetUrlForRegisteringClient(string SessionID, uint port)
         {
             string url = String.Format("{0}/{1}", m_freeSwitchAPIPrefix, UUID.Random());
 
@@ -155,7 +155,7 @@ namespace FreeswitchVoice
             return url;
         }
 
-        public void RemoveUrlForClient (ulong regionHandle, string sessionID, string url, uint port)
+        public void RemoveUrlForClient (string sessionID, string url, uint port)
         {
             IHttpServer server = m_registry.RequestModuleInterface<ISimulationBase> ().GetHttpServer (port);
             server.RemoveHTTPHandler("POST", url + "/freeswitch-config");
