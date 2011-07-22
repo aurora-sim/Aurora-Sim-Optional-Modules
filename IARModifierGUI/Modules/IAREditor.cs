@@ -622,9 +622,12 @@ namespace IARModifierGUI
                 else
                 {
                     //Its an item!
-                    InventoryItemBase item = m_itemList[id];
-                    textBox1.Text = item.Name;
-                    textBox2.Text = ((InventoryType)item.InvType).ToString ();
+                    if (m_itemList.ContainsKey (id))
+                    {
+                        InventoryItemBase item = m_itemList[id];
+                        textBox1.Text = item.Name;
+                        textBox2.Text = ((InventoryType)item.InvType).ToString ();
+                    }
                 }
             }
             catch
@@ -785,6 +788,19 @@ namespace IARModifierGUI
             string fileName = SaveTextFile (Environment.CurrentDirectory);
             if (fileName != null)
                 Execute (fileName);
+        }
+
+        private void button2_Click (object sender, EventArgs e)
+        {
+            AddAsset assetFinder = new AddAsset (this);
+            assetFinder.ShowDialog ();
+        }
+
+        public void AddAsset (string id, byte[] data)
+        {
+            AssetBase a = new AssetBase (id, "Unknown asset", (sbyte)AssetType.Texture, UUID.Zero.ToString ());
+            a.Data = data;
+            m_loadedAssets[id] = a;
         }
 
         #endregion
