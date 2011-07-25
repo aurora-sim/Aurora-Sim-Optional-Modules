@@ -1,5 +1,5 @@
 /*
- * Copyright (c) Contributors, http://opensimulator.org/
+ * Copyright (c) Contributors, http://aurora-sim.org/
  * See CONTRIBUTORS.TXT for a full list of copyright holders.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -9,7 +9,7 @@
  *     * Redistributions in binary form must reproduce the above copyright
  *       notice, this list of conditions and the following disclaimer in the
  *       documentation and/or other materials provided with the distribution.
- *     * Neither the name of the OpenSimulator Project nor the
+ *     * Neither the name of the Aurora-Sim Project nor the
  *       names of its contributors may be used to endorse or promote products
  *       derived from this software without specific prior written permission.
  *
@@ -34,6 +34,7 @@ using Mono.Data.SqliteClient;
 using OpenMetaverse;
 using OpenSim.Region.Framework.Scenes;
 using Aurora.Framework;
+using OpenSim.Framework;
 
 namespace OpenSim.Region.UserStatistics
 {
@@ -48,7 +49,7 @@ namespace OpenSim.Region.UserStatistics
 
         public Hashtable ProcessModel(Hashtable pParams)
         {
-            List<Scene> m_scene = (List<Scene>)pParams["Scenes"];
+            List<IScene> m_scene = (List<IScene>)pParams["Scenes"];
             
             Hashtable nh = new Hashtable();
             nh.Add("hdata", m_scene);
@@ -59,7 +60,7 @@ namespace OpenSim.Region.UserStatistics
         public string RenderView(Hashtable pModelResult)
         {
             StringBuilder output = new StringBuilder();
-            List<Scene> all_scenes = (List<Scene>) pModelResult["hdata"];
+            List<IScene> all_scenes = (List<IScene>) pModelResult["hdata"];
             Dictionary<UUID, USimStatsData> sdatadic = (Dictionary<UUID,USimStatsData>)pModelResult["simstats"];
 
             const string TableClass = "defaultr";
@@ -71,9 +72,7 @@ namespace OpenSim.Region.UserStatistics
 
             foreach (USimStatsData sdata in sdatadic.Values)
             {
-
-
-                foreach (Scene sn in all_scenes)
+                foreach (IScene sn in all_scenes)
                 {
                     if (sn.RegionInfo.RegionID == sdata.RegionId)
                     {

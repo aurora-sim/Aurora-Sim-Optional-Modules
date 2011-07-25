@@ -62,7 +62,7 @@ namespace OpenSim.Region.OptionalModules.Avatar.Chat
         // System values - used only be the IRC classes themselves
 
         internal ChannelState cs             = null; // associated IRC configuration
-        internal Scene scene                 = null; // associated scene
+        internal IScene scene                = null; // associated scene
         internal IConfig config              = null; // configuration file reference
         internal bool enabled                = true; 
  
@@ -73,7 +73,7 @@ namespace OpenSim.Region.OptionalModules.Avatar.Chat
 
         // Setup runtime variable values
 
-        public RegionState(Scene p_scene, IConfig p_config)
+        public RegionState(IScene p_scene, IConfig p_config)
         {
 
             scene  = p_scene;
@@ -162,7 +162,7 @@ namespace OpenSim.Region.OptionalModules.Avatar.Chat
         // This event indicates that the agent has left the building. We should treat that the same
         // as if the agent has logged out (we don't want cross-region noise - or do we?)
 
-        private void OnMakeChildAgent (IScenePresence presence)
+        private void OnMakeChildAgent (IScenePresence presence, OpenSim.Services.Interfaces.GridRegion destination)
         {
 
             IClientAPI client = presence.ControllingClient;

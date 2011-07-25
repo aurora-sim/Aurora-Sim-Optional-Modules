@@ -140,7 +140,7 @@ namespace OpenSim.Region.OptionalModules.Avatar.Concierge
         }
 
 
-        public override void AddRegion(Scene scene)
+        public override void AddRegion(IScene scene)
         {
             if (!m_enabled) return;
 
@@ -148,32 +148,29 @@ namespace OpenSim.Region.OptionalModules.Avatar.Concierge
 
             lock (m_syncy)
             {
-                if (!m_scenes.Contains(scene))
-                {
-                    m_scenes.Add(scene);
+                m_scenes.Add (scene);
 
-                    if (m_regions == null || m_regions.IsMatch(scene.RegionInfo.RegionName))
-                        m_conciergedScenes.Add(scene);
+                if (m_regions == null || m_regions.IsMatch (scene.RegionInfo.RegionName))
+                    m_conciergedScenes.Add (scene);
 
-                    // subscribe to NewClient events
-                    scene.EventManager.OnNewClient += OnNewClient;
-                    scene.EventManager.OnClosingClient += OnClientLoggedOut;
+                // subscribe to NewClient events
+                scene.EventManager.OnNewClient += OnNewClient;
+                scene.EventManager.OnClosingClient += OnClientLoggedOut;
 
-                    // subscribe to *Chat events
-                    scene.EventManager.OnChatFromWorld += OnChatFromWorld;
-                    if (!m_replacingChatModule)
-                        scene.EventManager.OnChatFromClient += OnChatFromClient;
-                    scene.EventManager.OnChatBroadcast += OnChatBroadcast;
+                // subscribe to *Chat events
+                scene.EventManager.OnChatFromWorld += OnChatFromWorld;
+                if (!m_replacingChatModule)
+                    scene.EventManager.OnChatFromClient += OnChatFromClient;
+                scene.EventManager.OnChatBroadcast += OnChatBroadcast;
 
-                    // subscribe to agent change events
-                    scene.EventManager.OnMakeRootAgent += OnMakeRootAgent;
-                    scene.EventManager.OnMakeChildAgent += OnMakeChildAgent;
-                }
+                // subscribe to agent change events
+                scene.EventManager.OnMakeRootAgent += OnMakeRootAgent;
+                scene.EventManager.OnMakeChildAgent += OnMakeChildAgent;
             }
             m_log.InfoFormat("[Concierge]: initialized for {0}", scene.RegionInfo.RegionName);
         }
 
-        public override void RemoveRegion(Scene scene)
+        public override void RemoveRegion(IScene scene)
         {
             if (!m_enabled) return;
 
@@ -195,15 +192,9 @@ namespace OpenSim.Region.OptionalModules.Avatar.Concierge
                 scene.EventManager.OnMakeRootAgent -= OnMakeRootAgent;
                 scene.EventManager.OnMakeChildAgent -= OnMakeChildAgent;
 
-                if (m_scenes.Contains(scene))
-                {
-                    m_scenes.Remove(scene);
-                }
+                m_scenes.Remove(scene);
 
-                if (m_conciergedScenes.Contains(scene))
-                {
-                    m_conciergedScenes.Remove(scene);
-                }
+                m_conciergedScenes.Remove(scene);
             }
             m_log.InfoFormat("[Concierge]: removed {0}", scene.RegionInfo.RegionName);
         }
@@ -319,7 +310,7 @@ namespace OpenSim.Region.OptionalModules.Avatar.Concierge
             
             if (m_conciergedScenes.Contains(client.Scene))
             {
-                Scene scene = client.Scene as Scene;
+                IScene scene = client.Scene;
                 IEntityCountModule entityCountModule = client.Scene.RequestModuleInterface<IEntityCountModule>();
                 if (entityCountModule != null)
                 {
@@ -349,7 +340,7 @@ namespace OpenSim.Region.OptionalModules.Avatar.Concierge
         }
 
 
-        public void OnMakeChildAgent (IScenePresence agent)
+        public void OnMakeChildAgent (IScenePresence agent, OpenSim.Services.Interfaces.GridRegion destination)
         {
             if (m_conciergedScenes.Contains(agent.Scene))
             {
@@ -557,8 +548,7 @@ namespace OpenSim.Region.OptionalModules.Avatar.Concierge
             c.SenderUUID = UUID.Zero;
             c.Scene = scene;
 
-            if (scene is Scene)
-                (scene as Scene).EventManager.TriggerOnChatBroadcast(this, c);
+            scene.EventManager.TriggerOnChatBroadcast(this, c);
         }
 
         protected void AnnounceToAgent (IScenePresence agent, string msg)

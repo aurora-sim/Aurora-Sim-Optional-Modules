@@ -65,11 +65,11 @@ namespace OpenSim.Region.OptionalModules.World.WorldView
             m_Enabled = true;
         }
 
-        public void AddRegion(Scene scene)
+        public void AddRegion (IScene scene)
         {
         }
 
-        public void RegionLoaded(Scene scene)
+        public void RegionLoaded (IScene scene)
         {
             if (!m_Enabled)
                 return;
@@ -90,7 +90,7 @@ namespace OpenSim.Region.OptionalModules.World.WorldView
             }
         }
 
-        public void RemoveRegion(Scene scene)
+        public void RemoveRegion (IScene scene)
         {
         }
 

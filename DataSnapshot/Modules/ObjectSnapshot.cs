@@ -40,7 +40,7 @@ namespace OpenSim.Region.DataSnapshot.Providers
 {
     public class ObjectSnapshot : IDataSnapshotProvider
     {
-        private Scene m_scene = null;
+        private IScene m_scene = null;
         // private DataSnapshotManager m_parent = null;
         private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         private bool m_stale = true;
@@ -49,7 +49,7 @@ namespace OpenSim.Region.DataSnapshot.Providers
         private static UUID m_BlankImage = new UUID("5748decc-f629-461c-9a36-a35a221fe21f");
 
 
-        public void Initialize(Scene scene, DataSnapshotManager parent)
+        public void Initialize(IScene scene, DataSnapshotManager parent)
         {
             m_scene = scene;
             // m_parent = parent;
@@ -116,7 +116,7 @@ namespace OpenSim.Region.DataSnapshot.Providers
                 bool RemoveItem, UUID fromTaskID) { this.Stale = true; };
         }
 
-        public Scene GetParentScene
+        public IScene GetParentScene
         {
             get { return m_scene; }
         }

@@ -209,7 +209,7 @@ namespace Aurora.StandaloneLoader
 
             ///Now load the region!
             sceneManager.AllRegions++;
-            sceneManager.CreateRegion (regionInfo);
+            sceneManager.StartNewRegion (regionInfo);
         }
     }
 

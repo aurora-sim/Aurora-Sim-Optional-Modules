@@ -42,11 +42,11 @@ namespace OpenSim.Region.DataSnapshot
 {
     public class DataRequestHandler
     {
-        private Scene m_scene = null;
+        private IScene m_scene = null;
         private DataSnapshotManager m_externalData = null;
         private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
-        public DataRequestHandler(Scene scene, DataSnapshotManager externalData)
+        public DataRequestHandler (IScene scene, DataSnapshotManager externalData)
         {
             m_scene = scene;
             m_externalData = externalData;

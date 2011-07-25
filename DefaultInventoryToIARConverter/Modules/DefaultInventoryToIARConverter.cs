@@ -86,10 +86,10 @@ namespace OpenSim.Services.InventoryService
             m_service = registry.RequestModuleInterface<ILibraryService>();
 
             RegionInfo regInfo = new RegionInfo();
-            Scene m_MockScene = null;
+            IScene m_MockScene = null;
             //Make the scene for the IAR loader
-            if (registry is Scene)
-                m_MockScene = (Scene)registry;
+            if (registry is IScene)
+                m_MockScene = (IScene)registry;
             else
             {
                 m_MockScene = new Scene();
@@ -103,7 +103,6 @@ namespace OpenSim.Services.InventoryService
             {
                 uinfo = new UserAccount(m_service.LibraryOwner);
                 uinfo.Name = m_service.LibraryOwnerName;
-                uinfo.ServiceURLs = new Dictionary<string, object>();
                 m_MockScene.InventoryService.CreateUserInventory(m_service.LibraryOwner, false);
             }
 

@@ -55,7 +55,7 @@ namespace OpenSimProfile.Modules.OpenProfile
         // Module vars
         //
         private IConfigSource m_gConfig;
-        private List<Scene> m_Scenes = new List<Scene>();
+        private List<IScene> m_Scenes = new List<IScene>();
         private string m_ProfileServer = "";
         private bool m_Enabled = true;
 
@@ -100,27 +100,25 @@ namespace OpenSimProfile.Modules.OpenProfile
             get { return null; }
         }
 
-        public void AddRegion(Scene scene)
+        public void AddRegion(IScene scene)
         {
             if (!m_Enabled)
                 return;
 
-            if (!m_Scenes.Contains(scene))
-                m_Scenes.Add(scene);
+            m_Scenes.Add(scene);
 
             // Hook up events
             scene.EventManager.OnNewClient += OnNewClient;
         }
 
-        public void RemoveRegion(Scene scene)
+        public void RemoveRegion(IScene scene)
         {
-            if (m_Scenes.Contains(scene))
-                m_Scenes.Remove(scene);
+            m_Scenes.Remove(scene);
 
             scene.EventManager.OnNewClient -= OnNewClient;
         }
 
-        public void RegionLoaded(Scene scene)
+        public void RegionLoaded(IScene scene)
         {
         }
 
@@ -128,7 +126,7 @@ namespace OpenSimProfile.Modules.OpenProfile
         {
             IScenePresence p;
 
-            foreach (Scene s in m_Scenes)
+            foreach (IScene s in m_Scenes)
             {
                 p = s.GetScenePresence(clientID);
                 if (p != null && !p.IsChildAgent)
@@ -640,12 +638,8 @@ namespace OpenSimProfile.Modules.OpenProfile
 
         public void RequestAvatarProperties(IClientAPI remoteClient, UUID avatarID)
         {
-            IScene s = remoteClient.Scene;
-            if (!(s is Scene))
-                return;
-
-            Scene scene = (Scene)s;
-
+            IScene scene = remoteClient.Scene;
+            
             UserAccount account = scene.UserAccountService.GetUserAccount(scene.RegionInfo.ScopeID, avatarID);
             if (null != account)
             {

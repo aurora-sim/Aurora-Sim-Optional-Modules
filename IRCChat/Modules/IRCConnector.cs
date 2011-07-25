@@ -492,7 +492,7 @@ namespace OpenSim.Region.OptionalModules.Avatar.Chat
 
         public void ListenerRun()
         {
-
+            Culture.SetCurrentCulture ();
             string inputLine;
             int    resetk = m_resetk;
 

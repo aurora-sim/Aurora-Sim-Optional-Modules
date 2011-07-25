@@ -55,7 +55,7 @@ namespace OpenSimSearch.Modules.OpenSearch
         // Module vars
         //
         private IConfigSource m_gConfig;
-        private List<Scene> m_Scenes = new List<Scene>();
+        private List<IScene> m_Scenes = new List<IScene>();
         private string m_SearchServer = "";
         private bool m_Enabled = true;
 
@@ -88,28 +88,26 @@ namespace OpenSimSearch.Modules.OpenSearch
         {
         }
 
-        public void AddRegion(Scene scene)
+        public void AddRegion(IScene scene)
         {
             if (!m_Enabled)
                 return;
 
-            if (!m_Scenes.Contains(scene))
-                m_Scenes.Add(scene);
+            m_Scenes.Add(scene);
 
             // Hook up events
             scene.EventManager.OnNewClient += OnNewClient;
         }
 
-        public void RemoveRegion(Scene scene)
+        public void RemoveRegion(IScene scene)
         {
-            if (m_Scenes.Contains(scene))
-                m_Scenes.Remove(scene);
+            m_Scenes.Remove(scene);
 
             // Hook up events
             scene.EventManager.OnNewClient -= OnNewClient;
         }
 
-        public void RegionLoaded(Scene scene)
+        public void RegionLoaded(IScene scene)
         {
         }
 
@@ -648,7 +646,7 @@ namespace OpenSimSearch.Modules.OpenSearch
 
                 foreach (DirLandReplyData landDir in Landdata)
                 {
-                    foreach(Scene scene in m_Scenes)
+                    foreach(IScene scene in m_Scenes)
                     {
                         if(scene.RegionInfo.RegionID.ToString() == ParcelRegionUUID[i])
                         {

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) Contributors, http://opensimulator.org/
+ * Copyright (c) Contributors, http://aurora-sim.org/
  * See CONTRIBUTORS.TXT for a full list of copyright holders.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -9,7 +9,7 @@
  *     * Redistributions in binary form must reproduce the above copyright
  *       notice, this list of conditions and the following disclaimer in the
  *       documentation and/or other materials provided with the distribution.
- *     * Neither the name of the OpenSimulator Project nor the
+ *     * Neither the name of the Aurora-Sim Project nor the
  *       names of its contributors may be used to endorse or promote products
  *       derived from this software without specific prior written permission.
  *
@@ -56,7 +56,7 @@ namespace OpenSim.Region.UserStatistics
         
         //private static SqliteConnection dbConn;
         private Dictionary<UUID, UserSessionID> m_sessions = new Dictionary<UUID, UserSessionID>();
-        private List<Scene> m_scene = new List<Scene>();
+        private List<IScene> m_scenes = new List<IScene> ();
         private Dictionary<string, IStatsController> reports = new Dictionary<string, IStatsController>();
         private Dictionary<UUID, USimStatsData> m_simstatsCounters = new Dictionary<UUID, USimStatsData>(); 
         private const int updateStatsMod = 6;
@@ -75,14 +75,14 @@ namespace OpenSim.Region.UserStatistics
                 enabled = cnfg.GetBoolean("enabled", false);
         }
 
-        public void AddRegion(Scene scene)
+        public void AddRegion (IScene scene)
         {
             if (!enabled)
                 return;
             
-            lock (m_scene)
+            lock (m_scenes)
             {
-                if (m_scene.Count == 0)
+                if (m_scenes.Count == 0)
                 {
                     dataConnector = Aurora.DataManager.DataManager.RequestPlugin<IWebStatsDataConnector>();
                     if (dataConnector == null)
@@ -124,7 +124,7 @@ namespace OpenSim.Region.UserStatistics
                     MainServer.Instance.AddHTTPHandler("/CAPS/VS/", HandleUnknownCAPSRequest);
                 }
 
-                m_scene.Add(scene);
+                m_scenes.Add(scene);
                 if (m_simstatsCounters.ContainsKey(scene.RegionInfo.RegionID))
                     m_simstatsCounters.Remove(scene.RegionInfo.RegionID);
 
@@ -135,18 +135,18 @@ namespace OpenSim.Region.UserStatistics
             }
         }
 
-        public void RemoveRegion(Scene scene)
+        public void RemoveRegion (IScene scene)
         {
             if (!enabled)
                 return;
 
             m_sessions.Clear();
-            m_scene.Clear();
+            m_scenes.Clear();
             reports.Clear();
             m_simstatsCounters.Clear(); 
         }
 
-        public void RegionLoaded(Scene scene)
+        public void RegionLoaded (IScene scene)
         {
             if (!enabled)
                 return;
@@ -234,7 +234,7 @@ namespace OpenSim.Region.UserStatistics
 
 
                 //repParams["DatabaseConnection"] = dbConn;
-                repParams["Scenes"] = m_scene;
+                repParams["Scenes"] = m_scenes;
                 repParams["SimStats"] = m_simstatsCounters;
                 repParams["LogLines"] = m_loglines;
                 repParams["Reports"] = reports;
@@ -308,16 +308,15 @@ namespace OpenSim.Region.UserStatistics
 
         protected virtual void AddHandlers()
         {
-            lock (m_scene)
+            lock (m_scenes)
             {
-                updateLogMod = m_scene.Count * 2;
-                foreach (Scene scene in m_scene)
+                updateLogMod = m_scenes.Count * 2;
+                foreach (IScene scene in m_scenes)
                 {
                     scene.EventManager.OnRegisterCaps += OnRegisterCaps;
                     scene.EventManager.OnDeregisterCaps += OnDeRegisterCaps;
                     scene.EventManager.OnClientClosed += OnClientClosed;
                     scene.EventManager.OnMakeRootAgent += OnMakeRootAgent;
-                    scene.EventManager.OnMakeChildAgent += OnMakeChildAgent;
                 }
             }
         }
@@ -349,10 +348,6 @@ namespace OpenSim.Region.UserStatistics
                     m_sessions[agent.UUID] = uid;
                 }
             }
-        }
-
-        public void OnMakeChildAgent(IScenePresence agent)
-        {
         }
 
         public void OnClientClosed(UUID agentID, IScene scene)
@@ -408,9 +403,9 @@ namespace OpenSim.Region.UserStatistics
 
         public UUID GetRegionUUIDFromHandle(ulong regionhandle)
         {
-            lock (m_scene)
+            lock (m_scenes)
             {
-                foreach (Scene scene in m_scene)
+                foreach (IScene scene in m_scenes)
                 {
                     if (scene.RegionInfo.RegionHandle == regionhandle)
                         return scene.RegionInfo.RegionID;

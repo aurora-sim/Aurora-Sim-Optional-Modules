@@ -106,7 +106,7 @@ namespace FreeswitchVoice
         {
         }
 
-        public void AddRegion(Scene scene)
+        public void AddRegion (IScene scene)
         {
             // We generate these like this: The region's external host name
             // as defined in Regions.ini is a good address to use. It's a
@@ -217,11 +217,11 @@ namespace FreeswitchVoice
             }
         }
 
-        public void RemoveRegion(Scene scene)
+        public void RemoveRegion(IScene scene)
         {
         }
 
-        public void RegionLoaded(Scene scene)
+        public void RegionLoaded(IScene scene)
         {
             if (m_Enabled)
             {
@@ -285,7 +285,7 @@ namespace FreeswitchVoice
         // delegate containing the scene of the respective region (see
         // Initialise()).
         // </summary>
-        public OSDMap OnRegisterCaps(Scene scene, UUID agentID, IHttpServer server)
+        public OSDMap OnRegisterCaps(IScene scene, UUID agentID, IHttpServer server)
         {
             m_log.DebugFormat("[FreeSwitchVoice] OnRegisterCaps: agentID {0}", agentID);
 
@@ -307,14 +307,14 @@ namespace FreeswitchVoice
                                                            return ParcelVoiceInfoRequest(scene, request, path, param,
                                                                                          agentID);
                                                        }));
-            retVal["ChatSessionRequest"] = CapsUtil.CreateCAPS("ChatSessionRequest", "");
+            /*retVal["ChatSessionRequest"] = CapsUtil.CreateCAPS("ChatSessionRequest", "");
             server.AddStreamHandler(new RestStreamHandler("POST", retVal["ChatSessionRequest"],
                                                        delegate(string request, string path, string param,
                                                                 OSHttpRequest httpRequest, OSHttpResponse httpResponse)
                                                        {
                                                            return ChatSessionRequest(scene, request, path, param,
                                                                                      agentID);
-                                                       }));
+                                                       }));*/
             return retVal;
         }
 
@@ -328,7 +328,7 @@ namespace FreeswitchVoice
         /// <param name="agentID"></param>
         /// <param name="caps"></param>
         /// <returns></returns>
-        public string ProvisionVoiceAccountRequest(Scene scene, string request, string path, string param,
+        public string ProvisionVoiceAccountRequest(IScene scene, string request, string path, string param,
                                                    UUID agentID)
         {
             IScenePresence avatar = scene.GetScenePresence (agentID);
@@ -399,7 +399,7 @@ namespace FreeswitchVoice
         /// <param name="agentID"></param>
         /// <param name="caps"></param>
         /// <returns></returns>
-        public string ParcelVoiceInfoRequest(Scene scene, string request, string path, string param,
+        public string ParcelVoiceInfoRequest(IScene scene, string request, string path, string param,
                                              UUID agentID)
         {
             IScenePresence avatar = scene.GetScenePresence (agentID);
@@ -479,7 +479,7 @@ namespace FreeswitchVoice
         /// <param name="agentID"></param>
         /// <param name="caps"></param>
         /// <returns></returns>
-        public string ChatSessionRequest(Scene scene, string request, string path, string param,
+        public string ChatSessionRequest(IScene scene, string request, string path, string param,
                                          UUID agentID)
         {
             IScenePresence avatar = scene.GetScenePresence (agentID);
@@ -756,7 +756,7 @@ namespace FreeswitchVoice
             return bodyParams;
         }
 
-        private string ChannelUri(Scene scene, LandData land)
+        private string ChannelUri(IScene scene, LandData land)
         {
             string channelUri = null;
 

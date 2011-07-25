@@ -1,5 +1,5 @@
-﻿/*
- * Copyright (c) Contributors, http://opensimulator.org/
+/*
+ * Copyright (c) Contributors, http://aurora-sim.org/
  * See CONTRIBUTORS.TXT for a full list of copyright holders.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -9,7 +9,7 @@
  *     * Redistributions in binary form must reproduce the above copyright
  *       notice, this list of conditions and the following disclaimer in the
  *       documentation and/or other materials provided with the distribution.
- *     * Neither the name of the OpenSimulator Project nor the
+ *     * Neither the name of the Aurora-Sim Project nor the
  *       names of its contributors may be used to endorse or promote products
  *       derived from this software without specific prior written permission.
  *
@@ -33,6 +33,7 @@ using Mono.Data.SqliteClient;
 using OpenMetaverse;
 using OpenSim.Region.Framework.Scenes;
 using Aurora.Framework;
+using OpenSim.Framework;
 
 namespace OpenSim.Region.UserStatistics
 {
@@ -86,7 +87,7 @@ namespace OpenSim.Region.UserStatistics
             int totalclients = (int)pModelResult["Total"];
             Hashtable regionTotals = (Hashtable) pModelResult["RegionTotals"];
             List<ClientVersionData> cliRegData = (List<ClientVersionData>) pModelResult["ClientRegionData"];
-            List<Scene> m_scenes = (List<Scene>)pModelResult["Scenes"];
+            List<IScene> m_scenes = (List<IScene>)pModelResult["Scenes"];
             Dictionary<string, IStatsController> reports = (Dictionary<string, IStatsController>)pModelResult["Reports"];
 
             const string STYLESHEET =
@@ -200,10 +201,10 @@ TD.align_top { vertical-align: top; }
             output.Append("</HTML>");
             return output.ToString();
         }
-        public string regionNamefromUUID(List<Scene> scenes, UUID region_id)
+        public string regionNamefromUUID(List<IScene> scenes, UUID region_id)
         {
             string returnstring = string.Empty;
-            foreach (Scene sn in scenes)
+            foreach (IScene sn in scenes)
             {
                 if (region_id == sn.RegionInfo.RegionID)
                 {

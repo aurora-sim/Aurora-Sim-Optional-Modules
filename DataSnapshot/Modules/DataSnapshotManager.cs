@@ -53,7 +53,7 @@ namespace OpenSim.Region.DataSnapshot
         private string m_exposure_level = "minimum";
 
         //Lists of stuff we need
-        private List<Scene> m_scenes = new List<Scene>();
+        private List<IScene> m_scenes = new List<IScene>();
         private List<IDataSnapshotProvider> m_dataproviders = new List<IDataSnapshotProvider>();
 
         //Various internal objects
@@ -130,7 +130,7 @@ namespace OpenSim.Region.DataSnapshot
             }
         }
 
-        public void AddRegion(Scene scene)
+        public void AddRegion (IScene scene)
         {
             if (m_enabled)
             {
@@ -186,13 +186,13 @@ namespace OpenSim.Region.DataSnapshot
             }
         }
 
-        public void RemoveRegion(Scene scene)
+        public void RemoveRegion(IScene scene)
         {
             if (m_enabled && m_dataServices != "" && m_dataServices != "noservices")
                 NotifyDataServices(m_dataServices, "offline");
         }
 
-        public void RegionLoaded(Scene scene)
+        public void RegionLoaded(IScene scene)
         {
 
         }
@@ -226,18 +226,18 @@ namespace OpenSim.Region.DataSnapshot
 
         #region Associated helper functions
 
-        public Scene SceneForName(string name)
+        public IScene SceneForName(string name)
         {
-            foreach (Scene scene in m_scenes)
+            foreach (IScene scene in m_scenes)
                 if (scene.RegionInfo.RegionName == name)
                     return scene;
 
             return null;
         }
 
-        public Scene SceneForUUID(UUID id)
+        public IScene SceneForUUID(UUID id)
         {
-            foreach (Scene scene in m_scenes)
+            foreach (IScene scene in m_scenes)
                 if (scene.RegionInfo.RegionID == id)
                     return scene;
 
@@ -269,14 +269,14 @@ namespace OpenSim.Region.DataSnapshot
                     regiondata.AppendChild(timerblock);
 
                     regiondata.AppendChild(requestedSnap.CreateWhitespace("\r\n"));
-                    foreach (Scene scene in m_scenes)
+                    foreach (IScene scene in m_scenes)
                     {
                         regiondata.AppendChild(m_snapStore.GetScene(scene, requestedSnap));
                     }
                 }
                 else
                 {
-                    Scene scene = SceneForName(regionName);
+                    IScene scene = SceneForName(regionName);
                     regiondata.AppendChild(m_snapStore.GetScene(scene, requestedSnap));
                 }
                 requestedSnap.AppendChild(regiondata);
@@ -404,7 +404,7 @@ namespace OpenSim.Region.DataSnapshot
         public void MakeEverythingStale()
         {
             //m_log.Debug("[DATASNAPSHOT]: Marking all scenes as stale.");
-            foreach (Scene scene in m_scenes)
+            foreach (IScene scene in m_scenes)
             {
                 m_snapStore.ForceSceneStale(scene);
             }
@@ -415,7 +415,7 @@ namespace OpenSim.Region.DataSnapshot
         public void OnSimRestart(RegionInfo thisRegion)
         {
             //m_log.Info("[DATASNAPSHOT]: Region " + thisRegion.RegionName + " is restarting, removing from indexing");
-            Scene restartedScene = SceneForUUID(thisRegion.RegionID);
+            IScene restartedScene = SceneForUUID(thisRegion.RegionID);
 
             m_scenes.Remove(restartedScene);
             m_snapStore.RemoveScene(restartedScene);

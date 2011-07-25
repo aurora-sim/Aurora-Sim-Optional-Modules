@@ -77,18 +77,18 @@ namespace OpenSim.Region.OptionalModules.Scripting.XmlRpcGridRouterModule
             }
         }
 
-        public void AddRegion(Scene scene)
+        public void AddRegion(IScene scene)
         {
             if(m_Enabled)
                 scene.RegisterModuleInterface<IXmlRpcRouter>(this);
         }
 
-        public void RemoveRegion(Scene scene)
+        public void RemoveRegion(IScene scene)
         {
 
         }
 
-        public void RegionLoaded(Scene scene)
+        public void RegionLoaded(IScene scene)
         {
 
         }

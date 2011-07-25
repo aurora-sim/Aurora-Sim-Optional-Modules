@@ -44,7 +44,7 @@ namespace OpenSim.Region.DataSnapshot.Providers
          *
          * I don't think anything changes the fields beyond RegionModule PostInit, however.
          */
-        private Scene m_scene = null;
+        private IScene m_scene = null;
         // private DataSnapshotManager m_parent = null;
         private bool m_stale = true;
 
@@ -114,13 +114,13 @@ namespace OpenSim.Region.DataSnapshot.Providers
             return estatedata;
         }
 
-        public void Initialize(Scene scene, DataSnapshotManager parent)
+        public void Initialize(IScene scene, DataSnapshotManager parent)
         {
             m_scene = scene;
             // m_parent = parent;
         }
 
-        public Scene GetParentScene
+        public IScene GetParentScene
         {
             get { return m_scene; }
         }

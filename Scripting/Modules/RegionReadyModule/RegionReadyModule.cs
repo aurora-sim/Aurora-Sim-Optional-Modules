@@ -51,7 +51,7 @@ namespace OpenSim.Region.OptionalModules.Scripting.RegionReady
         private int m_channelNotify = -1000;
         private bool m_enabled = false;
         
-        Scene m_scene = null;
+        IScene m_scene = null;
         
         #region INonSharedRegionModule interface
 
@@ -78,7 +78,7 @@ namespace OpenSim.Region.OptionalModules.Scripting.RegionReady
 //                m_log.Info("[RegionReady] disabled.");
         }
 
-        public void AddRegion(Scene scene)
+        public void AddRegion(IScene scene)
         {
             if (!m_enabled)
                 return;
@@ -96,7 +96,7 @@ namespace OpenSim.Region.OptionalModules.Scripting.RegionReady
             m_log.DebugFormat("[RegionReady]: Enabled for region {0}", scene.RegionInfo.RegionName);
         }
 
-        public void RemoveRegion(Scene scene)
+        public void RemoveRegion(IScene scene)
         {
             if (!m_enabled)
                 return;
@@ -112,7 +112,7 @@ namespace OpenSim.Region.OptionalModules.Scripting.RegionReady
         {
         }
 
-        public void RegionLoaded(Scene scene)
+        public void RegionLoaded(IScene scene)
         {
         }
 

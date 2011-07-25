@@ -33,6 +33,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml;
 using log4net;
+using OpenSim.Framework;
 using OpenSim.Region.DataSnapshot.Interfaces;
 using OpenSim.Region.Framework.Scenes;
 
@@ -42,7 +43,7 @@ namespace OpenSim.Region.DataSnapshot
     {
         #region Class Members
         private String m_directory = "unyuu"; //not an attempt at adding RM references to core SVN, honest
-        private Dictionary<Scene, bool> m_scenes = null;
+        private Dictionary<IScene, bool> m_scenes = null;
         private List<IDataSnapshotProvider> m_providers = null;
         private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         private Dictionary<String, String> m_gridinfo = null;
@@ -53,7 +54,7 @@ namespace OpenSim.Region.DataSnapshot
 
         public SnapshotStore(string directory, Dictionary<String, String> gridinfo, string port, string hostname) {
             m_directory = directory;
-            m_scenes = new Dictionary<Scene, bool>();
+            m_scenes = new Dictionary<IScene, bool>();
             m_providers = new List<IDataSnapshotProvider>();
             m_gridinfo = gridinfo;
             m_listener_port = port;
@@ -82,7 +83,7 @@ namespace OpenSim.Region.DataSnapshot
             }
         }
 
-        public void ForceSceneStale(Scene scene) {
+        public void ForceSceneStale(IScene scene) {
             m_scenes[scene] = true;
         }
 
@@ -142,7 +143,7 @@ namespace OpenSim.Region.DataSnapshot
         #endregion
 
         #region Response storage
-        public XmlNode GetScene(Scene scene, XmlDocument factory)
+        public XmlNode GetScene(IScene scene, XmlDocument factory)
         {
             //m_log.Debug("[DATASNAPSHOT]: Data requested for scene " + scene.RegionInfo.RegionName);
 
@@ -220,12 +221,12 @@ namespace OpenSim.Region.DataSnapshot
         #endregion
 
         #region Helpers
-        private string DataFileNameFragment(Scene scene, String fragmentName)
+        private string DataFileNameFragment(IScene scene, String fragmentName)
         {
             return Path.Combine(m_directory, Path.ChangeExtension(Sanitize(scene.RegionInfo.RegionName + "_" + fragmentName), "xml"));
         }
 
-        private string DataFileNameScene(Scene scene)
+        private string DataFileNameScene(IScene scene)
         {
             return Path.Combine(m_directory, Path.ChangeExtension(Sanitize(scene.RegionInfo.RegionName), "xml"));
             //return (m_snapsDir + Path.DirectorySeparatorChar + scene.RegionInfo.RegionName + ".xml");
@@ -239,7 +240,7 @@ namespace OpenSim.Region.DataSnapshot
             return newname.Replace('.', '_');
         }
 
-        private XmlNode MakeRegionNode(Scene scene, XmlDocument basedoc)
+        private XmlNode MakeRegionNode(IScene scene, XmlDocument basedoc)
         {
             XmlNode docElement = basedoc.CreateNode(XmlNodeType.Element, "region", "");
 
@@ -280,7 +281,7 @@ namespace OpenSim.Region.DataSnapshot
             return docElement;
         }
 
-        private String GetRegionCategory(Scene scene)
+        private String GetRegionCategory(IScene scene)
         {
             //Fixes Adult regions - patch from kcozens in mantis 0004848 .
             //Boolean choice between:
@@ -317,12 +318,12 @@ namespace OpenSim.Region.DataSnapshot
         #endregion
 
         #region Manage internal collections
-        public void AddScene(Scene newScene)
+        public void AddScene(IScene newScene)
         {
             m_scenes.Add(newScene, true);
         }
 
-        public void RemoveScene(Scene deadScene)
+        public void RemoveScene(IScene deadScene)
         {
             m_scenes.Remove(deadScene);
         }

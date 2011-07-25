@@ -1,5 +1,5 @@
 /*
- * Copyright (c) Contributors, http://opensimulator.org/
+ * Copyright (c) Contributors, http://aurora-sim.org/
  * See CONTRIBUTORS.TXT for a full list of copyright holders.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -9,7 +9,7 @@
  *     * Redistributions in binary form must reproduce the above copyright
  *       notice, this list of conditions and the following disclaimer in the
  *       documentation and/or other materials provided with the distribution.
- *     * Neither the name of the OpenSimulator Project nor the
+ *     * Neither the name of the Aurora-Sim Project nor the
  *       names of its contributors may be used to endorse or promote products
  *       derived from this software without specific prior written permission.
  *
@@ -51,8 +51,7 @@ namespace OpenSim.Region.UserStatistics
 
         public Hashtable ProcessModel(Hashtable pParams)
         {
-            
-            List<Scene> m_scene = (List<Scene>)pParams["Scenes"];
+            List<IScene> m_scene = (List<IScene>)pParams["Scenes"];
 
             Hashtable nh = new Hashtable();
             nh.Add("hdata", m_scene);
@@ -62,11 +61,11 @@ namespace OpenSim.Region.UserStatistics
 
         public string RenderView(Hashtable pModelResult)
         {
-            List<Scene> all_scenes = (List<Scene>) pModelResult["hdata"];
+            List<IScene> all_scenes = (List<IScene>) pModelResult["hdata"];
 
             StringBuilder output = new StringBuilder();
             HTMLUtil.OL_O(ref output, "");
-            foreach (Scene scene in all_scenes)
+            foreach (IScene scene in all_scenes)
             {
                 HTMLUtil.LI_O(ref output, String.Empty);
                 output.Append(scene.RegionInfo.RegionName);

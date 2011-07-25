@@ -46,16 +46,16 @@ namespace OpenSim.Region.OptionalModules.Scripting.ScriptModuleComms
         {
         }
 
-        public void AddRegion(Scene scene)
+        public void AddRegion(IScene scene)
         {
             scene.RegisterModuleInterface<IScriptModuleComms>(this);
         }
 
-        public void RemoveRegion(Scene scene)
+        public void RemoveRegion(IScene scene)
         {
         }
 
-        public void RegionLoaded(Scene scene)
+        public void RegionLoaded(IScene scene)
         {
             m_scriptModule = scene.RequestModuleInterface<IScriptModule>();
             

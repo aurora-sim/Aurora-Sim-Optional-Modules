@@ -48,7 +48,7 @@ namespace OpenSim.Region.OptionalModules.World.TreePopulator
     public class TreePopulatorModule : INonSharedRegionModule, IVegetationModule
     {
         private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-        private Scene m_scene;
+        private IScene m_scene;
 
         [XmlRootAttribute(ElementName = "Copse", IsNullable = false)]
         public class Copse
@@ -181,7 +181,7 @@ namespace OpenSim.Region.OptionalModules.World.TreePopulator
             }
         }
 
-        public void AddRegion(Scene scene)
+        public void AddRegion (IScene scene)
         {
             if (m_active_trees)
             {
@@ -193,11 +193,11 @@ namespace OpenSim.Region.OptionalModules.World.TreePopulator
             }
         }
 
-        public void RemoveRegion(Scene scene)
+        public void RemoveRegion (IScene scene)
         {
         }
 
-        public void RegionLoaded(Scene scene)
+        public void RegionLoaded (IScene scene)
         {
             if (m_active_trees)
             {
