@@ -45,6 +45,7 @@
 	<Reference name="OpenSim.Region.Framework"/>
 	<Reference name="OpenSim.Region.Physics.Manager"/>
 
+	<Reference name="MetaBuilders.Irc.dll"/>
 	<Reference name="log4net" path="../../../bin/"/>
 	<Reference name="Nini" path="../../../bin/"/>
 	<Reference name="OpenMetaverse" path="../../../bin/"/>
@@ -54,7 +55,6 @@
 
 	<Files>
 		<Match pattern="*.cs" recurse="true">
-			<Exclude name="Tests" pattern="Tests"/>
 		</Match>
 	</Files>
 </Project>
