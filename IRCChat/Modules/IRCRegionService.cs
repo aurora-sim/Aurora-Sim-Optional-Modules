@@ -75,6 +75,8 @@ namespace Aurora.Addon.IRCChat
 
         public void AddRegion (IScene scene)
         {
+            if(!m_enabled)
+                return;
             m_scene = scene;
             scene.EventManager.OnMakeRootAgent += EventManager_OnMakeRootAgent;
             scene.EventManager.OnMakeChildAgent += EventManager_OnMakeChildAgent;
@@ -88,6 +90,8 @@ namespace Aurora.Addon.IRCChat
 
         public void RemoveRegion (IScene scene)
         {
+            if(!m_enabled)
+                return;
             scene.EventManager.OnMakeRootAgent -= EventManager_OnMakeRootAgent;
             scene.EventManager.OnMakeChildAgent -= EventManager_OnMakeChildAgent;
             scene.EventManager.OnRemovePresence -= EventManager_OnRemovePresence;
@@ -182,7 +186,10 @@ namespace Aurora.Addon.IRCChat
             {
                 Client client = clients[sp.UUID];
                 clients.Remove(sp.UUID);
-                client.SendQuit("Left the region");
+                Util.FireAndForget(delegate(object o)
+                {
+                    client.SendQuit("Left the region");
+                });
             }
         }
 
