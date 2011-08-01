@@ -47,9 +47,9 @@ namespace Aurora.DefaultLibraryLoaders
         protected static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         protected ILibraryService m_service;
 
-        protected AssetBase CreateAsset(string assetIdStr, string name, string path, sbyte type)
+        protected AssetBase CreateAsset(string assetIdStr, string name, string path, AssetType type)
         {
-            AssetBase asset = new AssetBase(new UUID(assetIdStr), name, type, m_service.LibraryOwner.ToString());
+            AssetBase asset = new AssetBase(new UUID(assetIdStr), name, type, m_service.LibraryOwner);
 
             if (!String.IsNullOrEmpty(path))
             {
@@ -149,12 +149,12 @@ namespace Aurora.DefaultLibraryLoaders
                     {
                         string assetIdStr = source.Configs[i].GetString("assetID", UUID.Random().ToString());
                         string name = source.Configs[i].GetString("name", String.Empty);
-                        sbyte type = (sbyte)source.Configs[i].GetInt("assetType", 0);
+                        AssetType type = (AssetType)source.Configs[i].GetInt("assetType", 0);
                         string assetPath = Path.Combine(dir, source.Configs[i].GetString("fileName", String.Empty));
 
                         AssetBase newAsset = CreateAsset(assetIdStr, name, assetPath, type);
 
-                        newAsset.Type = type;
+                        newAsset.Type = (int)type;
                         assets.Add(newAsset);
                     }
                 }
@@ -192,7 +192,7 @@ namespace Aurora.DefaultLibraryLoaders
             ForEachDefaultXmlAsset(loaderArgs,
                     delegate(AssetBase a)
                     {
-                        if (!assetLoaderEnabled && assetService.GetExists(a.ID))
+                        if (!assetLoaderEnabled && assetService.GetExists(a.IDString))
                             return;
                         assetService.Store(a);
                     });

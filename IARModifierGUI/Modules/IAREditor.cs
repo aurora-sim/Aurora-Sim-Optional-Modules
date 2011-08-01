@@ -410,15 +410,15 @@ namespace IARModifierGUI
 
             if (ArchiveConstants.EXTENSION_TO_ASSET_TYPE.ContainsKey (extension))
             {
-                sbyte assetType = ArchiveConstants.EXTENSION_TO_ASSET_TYPE[extension];
+                AssetType assetType = ArchiveConstants.EXTENSION_TO_ASSET_TYPE[extension];
 
                 //m_log.DebugFormat("[INVENTORY ARCHIVER]: Importing asset {0}, type {1}", uuid, assetType);
 
-                AssetBase asset = new AssetBase (new UUID (uuid), "RandomName", assetType, UUID.Zero.ToString ());
+                AssetBase asset = new AssetBase (new UUID (uuid), "RandomName", assetType, UUID.Zero);
                 asset.Data = data;
                 asset.Flags = AssetFlags.Normal;
 
-                m_loadedAssets[asset.ID] = asset;
+                m_loadedAssets[asset.IDString] = asset;
 
                 return true;
             }
@@ -798,7 +798,7 @@ namespace IARModifierGUI
 
         public void AddAsset (string id, byte[] data)
         {
-            AssetBase a = new AssetBase (id, "Unknown asset", (sbyte)AssetType.Texture, UUID.Zero.ToString ());
+            AssetBase a = new AssetBase (id, "Unknown asset", (sbyte)AssetType.Texture, UUID.Zero);
             a.Data = data;
             m_loadedAssets[id] = a;
         }
@@ -912,7 +912,7 @@ namespace IARModifierGUI
             }
 
             m_archiveWriter.WriteFile (
-                ArchiveConstants.ASSETS_PATH + asset.FullID.ToString () + extension,
+                ArchiveConstants.ASSETS_PATH + asset.IDString + extension,
                 asset.Data);
         }
 
