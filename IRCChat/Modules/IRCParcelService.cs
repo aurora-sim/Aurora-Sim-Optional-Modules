@@ -81,7 +81,6 @@ namespace Aurora.Addon.IRCChat
             if(!m_enabled)
                 return;
             m_scene = scene;
-            scene.EventManager.OnMakeRootAgent += EventManager_OnMakeRootAgent;
             scene.EventManager.OnMakeChildAgent += EventManager_OnMakeChildAgent;
             scene.EventManager.OnRemovePresence += EventManager_OnRemovePresence;
             scene.EventManager.OnChatFromClient += EventManager_OnChatFromClient;
@@ -96,7 +95,6 @@ namespace Aurora.Addon.IRCChat
         {
             if(!m_enabled)
                 return;
-            scene.EventManager.OnMakeRootAgent -= EventManager_OnMakeRootAgent;
             scene.EventManager.OnMakeChildAgent -= EventManager_OnMakeChildAgent;
             scene.EventManager.OnRemovePresence -= EventManager_OnRemovePresence;
             scene.EventManager.OnChatFromClient -= EventManager_OnChatFromClient;
@@ -119,12 +117,15 @@ namespace Aurora.Addon.IRCChat
 
         private bool TryGetNetwork(IScenePresence avatar, out string network)
         {
+            network = "";
+            if(avatar.CurrentParcel == null)
+                return false;
             if (m_network.TryGetValue(avatar.CurrentParcel.LandData.GlobalID, out network))
             {
                 string channel = "";
                 if (m_channel.TryGetValue(avatar.CurrentParcel.LandData.GlobalID, out channel))
                     return true;
-                channel = m_config.GetString(avatar.CurrentParcel.LandData.Name.Replace(' ', '_') + "_channel", "");
+                channel = m_config.GetString(avatar.CurrentParcel.LandData.Name.Replace(' ', '_') + "_Channel", "");
                 if (channel == "")
                 {
                     if (m_channel.TryGetValue(UUID.Zero, out channel) && channel != "")
@@ -138,7 +139,7 @@ namespace Aurora.Addon.IRCChat
             }
             else
             {
-                network = m_config.GetString(avatar.CurrentParcel.LandData.Name.Replace(' ', '_') + "_network", "");
+                network = m_config.GetString(avatar.CurrentParcel.LandData.Name.Replace(' ', '_') + "_Network", "");
                 if (network == "")
                 {
                     if (m_network.TryGetValue(UUID.Zero, out network) && network != "")
@@ -148,7 +149,7 @@ namespace Aurora.Addon.IRCChat
                         return false;
                 }
                 m_network[avatar.CurrentParcel.LandData.GlobalID] = network;
-                string channel = m_config.GetString(avatar.CurrentParcel.LandData.Name.Replace(' ', '_') + "_channel", "");
+                string channel = m_config.GetString(avatar.CurrentParcel.LandData.Name.Replace(' ', '_') + "_Channel", "");
                 if (channel == "")
                 {
                     if (m_channel.TryGetValue(UUID.Zero, out channel) && channel != "")
@@ -164,10 +165,33 @@ namespace Aurora.Addon.IRCChat
 
         void EventManager_OnAvatarEnteringNewParcel (IScenePresence presence, ILandObject oldParcel)
         {
-            CloseClient(presence);
             string network;
-            if (TryGetNetwork(presence, out network))
-                CreateIRCConnection(presence, network);
+            if(TryGetNetwork(presence, out network))
+            {
+                if(clients.ContainsKey(presence.UUID))
+                {
+                    Client client = clients[presence.UUID];
+                    if(client.Connection.Address == network)
+                        SwitchChannels(presence, oldParcel, client);
+                }
+                else
+                {
+                    CloseClient(presence);
+                    CreateIRCConnection(presence, network);
+                }
+            }
+            else
+                CloseClient(presence);
+        }
+
+        private void SwitchChannels (IScenePresence presence, ILandObject oldParcel, Client client)
+        {
+            string channel;
+            string oldchannel;
+            m_channel.TryGetValue(presence.CurrentParcel.LandData.GlobalID, out channel);
+            m_channel.TryGetValue(oldParcel.LandData.GlobalID, out oldchannel);
+            JoinChannel(client, channel, presence);
+            client.SendPart(oldchannel);
         }
 
         void EventManager_OnRemovePresence (IScenePresence presence)
@@ -178,13 +202,6 @@ namespace Aurora.Addon.IRCChat
         void EventManager_OnMakeChildAgent (IScenePresence presence, OpenSim.Services.Interfaces.GridRegion destination)
         {
             CloseClient(presence);
-        }
-
-        void EventManager_OnMakeRootAgent (IScenePresence presence)
-        {
-            string network;
-            if (TryGetNetwork(presence, out network))
-                CreateIRCConnection(presence, network);
         }
 
         void EventManager_OnChatFromClient (IClientAPI sender, OSChatMessage chat)
@@ -312,8 +329,19 @@ namespace Aurora.Addon.IRCChat
         private void welcomed(Object sender, IrcMessageEventArgs<WelcomeMessage> e, Client client, IScenePresence sp)
         {
             string channel;
-            if (m_channel.TryGetValue(sp.CurrentParcel.LandData.GlobalID, out channel))
-                client.SendJoin(channel);
+            if(m_channel.TryGetValue(sp.CurrentParcel.LandData.GlobalID, out channel))
+                JoinChannel(client, channel, sp);
+        }
+
+        private static void JoinChannel (Client client, string channel, IScenePresence presence)
+        {
+            client.SendJoin(channel);
+            Aurora.Framework.IChatModule chatModule = presence.Scene.RequestModuleInterface<Aurora.Framework.IChatModule>();
+            if(chatModule != null)
+            {
+                chatModule.TrySendChatMessage(presence, presence.AbsolutePosition, presence.AbsolutePosition, UUID.Zero,
+                        "System", ChatTypeEnum.Say, "You joined " + channel, ChatSourceType.Agent, 20);
+            }
         }
     }
 }
