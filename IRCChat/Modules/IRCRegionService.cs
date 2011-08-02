@@ -116,16 +116,43 @@ namespace Aurora.Addon.IRCChat
         void EventManager_OnRemovePresence (IScenePresence presence)
         {
             CloseClient(presence);
+            presence.ControllingClient.OnPreSendInstantMessage -= ControllingClient_OnInstantMessage;
         }
 
         void EventManager_OnMakeChildAgent (IScenePresence presence, OpenSim.Services.Interfaces.GridRegion destination)
         {
             CloseClient(presence);
+            presence.ControllingClient.OnPreSendInstantMessage -= ControllingClient_OnInstantMessage;
         }
 
         void EventManager_OnMakeRootAgent (IScenePresence presence)
         {
             CreateIRCConnection(presence);
+            presence.ControllingClient.OnPreSendInstantMessage += ControllingClient_OnInstantMessage;
+        }
+
+        bool ControllingClient_OnInstantMessage (IClientAPI remoteclient, GridInstantMessage im)
+        {
+            foreach(KeyValuePair<string, UUID> fakeID in m_ircUsersToFakeUUIDs)
+            {
+                if(im.toAgentID == fakeID.Value)
+                {
+                    Client client;
+                    if(TryGetClient(remoteclient.AgentId, out client))
+                    {
+                        User user = client.Peers.Find(delegate(User u)
+                        {
+                            if(u.UserName == fakeID.Key)
+                                return true;
+                            return false;
+                        });
+                        if(im.message != "" && im.dialog == (byte)InstantMessageDialog.MessageFromAgent)
+                            client.SendChat(im.message, user.Nick);
+                        return true;
+                    }
+                }
+            }
+            return false;
         }
 
         void EventManager_OnChatFromClient (IClientAPI sender, OSChatMessage chat)
@@ -224,13 +251,27 @@ namespace Aurora.Addon.IRCChat
             }
         }
 
+        private Dictionary<string, UUID> m_ircUsersToFakeUUIDs = new Dictionary<string, UUID>();
         private void chatting (Object sender, IrcMessageEventArgs<TextMessage> e, IScenePresence sp)
         {
             Aurora.Framework.IChatModule chatModule = m_scene.RequestModuleInterface<Aurora.Framework.IChatModule>();
             if(chatModule != null)
             {
-                chatModule.TrySendChatMessage(sp, sp.AbsolutePosition, sp.AbsolutePosition, UUID.Zero,
-                    e.Message.Targets[0] + " - " + e.Message.Sender.Nick, ChatTypeEnum.Say, e.Message.Text, ChatSourceType.Agent, 20);
+                if(e.Message.Targets.Count > 0 && e.Message.Targets[0] == clients[sp.UUID].User.Nick)
+                {
+                    UUID fakeUUID;
+                    if(!m_ircUsersToFakeUUIDs.TryGetValue(e.Message.Sender.UserName, out fakeUUID))
+                    {
+                        fakeUUID = UUID.Random();
+                        m_ircUsersToFakeUUIDs[e.Message.Sender.UserName] = fakeUUID;
+                    }
+                    sp.ControllingClient.SendInstantMessage(new GridInstantMessage(null,
+                        fakeUUID, e.Message.Sender.Nick, sp.UUID, (byte)InstantMessageDialog.MessageFromAgent,
+                        e.Message.Text, false, Vector3.Zero));
+                }
+                else
+                    chatModule.TrySendChatMessage(sp, sp.AbsolutePosition, sp.AbsolutePosition, UUID.Zero,
+                        e.Message.Targets[0] + " - " + e.Message.Sender.Nick, ChatTypeEnum.Say, e.Message.Text, ChatSourceType.Agent, 20);
             }
         }
 

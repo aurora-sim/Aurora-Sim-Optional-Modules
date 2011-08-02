@@ -80,7 +80,9 @@ namespace Aurora.Addon.IRCChat
         {
             if(!m_enabled)
                 return;
+
             m_scene = scene;
+            scene.EventManager.OnMakeRootAgent += EventManager_OnMakeRootAgent;
             scene.EventManager.OnMakeChildAgent += EventManager_OnMakeChildAgent;
             scene.EventManager.OnRemovePresence += EventManager_OnRemovePresence;
             scene.EventManager.OnChatFromClient += EventManager_OnChatFromClient;
@@ -95,6 +97,8 @@ namespace Aurora.Addon.IRCChat
         {
             if(!m_enabled)
                 return;
+
+            scene.EventManager.OnMakeRootAgent -= EventManager_OnMakeRootAgent;
             scene.EventManager.OnMakeChildAgent -= EventManager_OnMakeChildAgent;
             scene.EventManager.OnRemovePresence -= EventManager_OnRemovePresence;
             scene.EventManager.OnChatFromClient -= EventManager_OnChatFromClient;
@@ -194,14 +198,69 @@ namespace Aurora.Addon.IRCChat
             client.SendPart(oldchannel);
         }
 
+        void EventManager_OnMakeRootAgent (IScenePresence presence)
+        {
+            presence.ControllingClient.OnPreSendInstantMessage += ControllingClient_OnInstantMessage;
+        }
+
         void EventManager_OnRemovePresence (IScenePresence presence)
         {
             CloseClient(presence);
+            presence.ControllingClient.OnPreSendInstantMessage -= ControllingClient_OnInstantMessage;
         }
 
         void EventManager_OnMakeChildAgent (IScenePresence presence, OpenSim.Services.Interfaces.GridRegion destination)
         {
             CloseClient(presence);
+            presence.ControllingClient.OnPreSendInstantMessage -= ControllingClient_OnInstantMessage;
+        }
+
+        private Dictionary<string, UUID> m_ircUsersToFakeUUIDs = new Dictionary<string, UUID>();
+        bool ControllingClient_OnInstantMessage (IClientAPI remoteclient, GridInstantMessage im)
+        {
+            foreach(KeyValuePair<string, UUID> fakeID in m_ircUsersToFakeUUIDs)
+            {
+                if(im.toAgentID == fakeID.Value)
+                {
+                    Client client;
+                    if(TryGetClient(remoteclient.AgentId, out client))
+                    {
+                        User user = client.Peers.Find(delegate(User u)
+                        {
+                            if(u.UserName == fakeID.Key)
+                                return true;
+                            return false;
+                        });
+                        if(im.message != "" && im.dialog == (byte)InstantMessageDialog.MessageFromAgent)
+                            client.SendChat(im.message, user.Nick);
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        private void chatting (Object sender, IrcMessageEventArgs<TextMessage> e, IScenePresence presence)
+        {
+            Aurora.Framework.IChatModule chatModule = m_scene.RequestModuleInterface<Aurora.Framework.IChatModule>();
+            if(chatModule != null)
+            {
+                if(e.Message.Targets.Count > 0 && e.Message.Targets[0] == clients[presence.UUID].User.Nick)
+                {
+                    UUID fakeUUID;
+                    if(!m_ircUsersToFakeUUIDs.TryGetValue(e.Message.Sender.UserName, out fakeUUID))
+                    {
+                        fakeUUID = UUID.Random();
+                        m_ircUsersToFakeUUIDs[e.Message.Sender.UserName] = fakeUUID;
+                    }
+                    presence.ControllingClient.SendInstantMessage(new GridInstantMessage(null,
+                        fakeUUID, e.Message.Sender.Nick, presence.UUID, (byte)InstantMessageDialog.MessageFromAgent,
+                        e.Message.Text, false, Vector3.Zero));
+                }
+                else
+                    chatModule.TrySendChatMessage(presence, presence.AbsolutePosition, presence.AbsolutePosition, UUID.Zero,
+                        e.Message.Targets[0] + " - " + e.Message.Sender.Nick, ChatTypeEnum.Say, e.Message.Text, ChatSourceType.Agent, 20);
+            }
         }
 
         void EventManager_OnChatFromClient (IClientAPI sender, OSChatMessage chat)
@@ -305,16 +364,6 @@ namespace Aurora.Addon.IRCChat
             {
                 String data = "*** Sent: " + e.Data;
                 m_log.Warn("[RegionIRC]: " + data);
-            }
-        }
-
-        private void chatting(Object sender, IrcMessageEventArgs<TextMessage> e, IScenePresence presence)
-        {
-            Aurora.Framework.IChatModule chatModule = m_scene.RequestModuleInterface<Aurora.Framework.IChatModule>();
-            if(chatModule != null)
-            {
-                chatModule.TrySendChatMessage(presence, presence.AbsolutePosition, presence.AbsolutePosition, UUID.Zero,
-                        e.Message.Targets[0] + " - " + e.Message.Sender.Nick, ChatTypeEnum.Say, e.Message.Text, ChatSourceType.Agent, 20);
             }
         }
 
