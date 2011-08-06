@@ -307,14 +307,6 @@ namespace FreeswitchVoice
                                                            return ParcelVoiceInfoRequest(scene, request, path, param,
                                                                                          agentID);
                                                        }));
-            /*retVal["ChatSessionRequest"] = CapsUtil.CreateCAPS("ChatSessionRequest", "");
-            server.AddStreamHandler(new RestStreamHandler("POST", retVal["ChatSessionRequest"],
-                                                       delegate(string request, string path, string param,
-                                                                OSHttpRequest httpRequest, OSHttpResponse httpResponse)
-                                                       {
-                                                           return ChatSessionRequest(scene, request, path, param,
-                                                                                     agentID);
-                                                       }));*/
             return retVal;
         }
 
@@ -467,27 +459,6 @@ namespace FreeswitchVoice
 
                 return "<llsd>undef</llsd>";
             }
-        }
-
-        /// <summary>
-        /// Callback for a client request for ChatSessionRequest
-        /// </summary>
-        /// <param name="scene">current scene object of the client</param>
-        /// <param name="request"></param>
-        /// <param name="path"></param>
-        /// <param name="param"></param>
-        /// <param name="agentID"></param>
-        /// <param name="caps"></param>
-        /// <returns></returns>
-        public string ChatSessionRequest(IScene scene, string request, string path, string param,
-                                         UUID agentID)
-        {
-            IScenePresence avatar = scene.GetScenePresence (agentID);
-            string avatarName = avatar.Name;
-
-            m_log.DebugFormat("[FreeSwitchVoice][CHATSESSION]: avatar \"{0}\": request: {1}, path: {2}, param: {3}",
-                              avatarName, request, path, param);
-            return "<llsd>true</llsd>";
         }
 
         public Hashtable ForwardProxyRequest(Hashtable request)

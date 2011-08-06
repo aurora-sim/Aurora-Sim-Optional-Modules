@@ -408,7 +408,7 @@ namespace OpenSim.Region.OptionalModules.World.TreePopulator
                 IBackupModule backup = m_scene.RequestModuleInterface<IBackupModule>();
                 if (backup != null)
                 {
-                    backup.DeleteSceneObjects(groups.ToArray(), true);
+                    backup.DeleteSceneObjects(groups.ToArray(), true, true);
                 }
                 copseIdentity.m_trees = new List<UUID>();
                 m_copse.Remove(copseIdentity);
@@ -776,7 +776,7 @@ namespace OpenSim.Region.OptionalModules.World.TreePopulator
                     IBackupModule backup = m_scene.RequestModuleInterface<IBackupModule>();
                     if (backup != null)
                     {
-                        backup.DeleteSceneObjects(groups.ToArray(), true);
+                        backup.DeleteSceneObjects(groups.ToArray(), true, true);
                     }
                 }
             }

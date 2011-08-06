@@ -63,8 +63,8 @@ namespace Aurora.Addon.IRCChat
             {
                 string moduleEnabled = ircConfig.GetString("Module", "");
                 m_spamDebug = ircConfig.GetBoolean("DebugMode", m_spamDebug);
-                m_network.Add(UUID.Zero, ircConfig.GetString("Network", ""));
-                m_channel.Add(UUID.Zero, ircConfig.GetString("Channel", ""));
+                m_network[UUID.Zero] = ircConfig.GetString("Network", "");
+                m_channel[UUID.Zero] = ircConfig.GetString("Channel", "");
                 m_chatToIRCChannel = ircConfig.GetInt("ChatToIRCChannel", m_chatToIRCChannel);
 
                 m_enabled = moduleEnabled == "Parcel";
