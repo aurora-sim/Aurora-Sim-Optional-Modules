@@ -315,7 +315,7 @@ namespace OpenSim.Region.UserStatistics
                 {
                     scene.EventManager.OnRegisterCaps += OnRegisterCaps;
                     scene.EventManager.OnDeregisterCaps += OnDeRegisterCaps;
-                    scene.EventManager.OnClientClosed += OnClientClosed;
+                    scene.EventManager.OnRemovePresence += OnRemovePresence;
                     scene.EventManager.OnMakeRootAgent += OnMakeRootAgent;
                 }
             }
@@ -350,13 +350,13 @@ namespace OpenSim.Region.UserStatistics
             }
         }
 
-        public void OnClientClosed(UUID agentID, IScene scene)
+        public void OnRemovePresence (IScenePresence sp)
         {
             lock (m_sessions)
             {
-                if (m_sessions.ContainsKey(agentID))
+                if (m_sessions.ContainsKey(sp.UUID))
                 {
-                    m_sessions.Remove(agentID);
+                    m_sessions.Remove(sp.UUID);
                 }
             }
 
