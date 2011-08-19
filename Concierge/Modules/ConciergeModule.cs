@@ -321,7 +321,6 @@ namespace OpenSim.Region.OptionalModules.Avatar.Concierge
             }
         }
 
-
         public void OnMakeRootAgent (IScenePresence agent)
         {
             if (m_conciergedScenes.Contains(agent.Scene))

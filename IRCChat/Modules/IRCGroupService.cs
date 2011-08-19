@@ -164,7 +164,14 @@ namespace Aurora.Addon.IRCChat
                 Client client;
                 if(clients.TryGetValue(im.imSessionID, out client))
                 {
-                    client.SendChat("(grid:" + m_gridName[im.imSessionID] + ") " + name + ": " + im.message, m_channel[im.imSessionID]);
+                    try
+                    {
+                        if(client.Connection.Status == ConnectionStatus.Connected)
+                            client.SendChat("(grid:" + m_gridName[im.imSessionID] + ") " + name + ": " + im.message, m_channel[im.imSessionID]);
+                    }
+                    catch
+                    {
+                    }
                 }
             }
             return false;

@@ -129,78 +129,74 @@ namespace OpenSim.Region.DataSnapshot.Providers
             XmlNode node;
 
             ISceneEntity[] entities = m_scene.Entities.GetEntities();
-            foreach (ISceneEntity entity in entities)
+            foreach(ISceneEntity obj in entities)
             {
                 // only objects, not avatars
-                if (entity is SceneObjectGroup)
+
+                //                    m_log.Debug("[DATASNAPSHOT]: Found object " + obj.Name + " in scene");
+
+                // libomv will complain about PrimFlags.JointWheel
+                // being obsolete, so we...
+#pragma warning disable 0612
+                if((obj.RootChild.Flags & PrimFlags.JointWheel) == PrimFlags.JointWheel)
                 {
-                    SceneObjectGroup obj = (SceneObjectGroup)entity;
+                    ISceneChildEntity m_rootPart = obj.RootChild;
 
-//                    m_log.Debug("[DATASNAPSHOT]: Found object " + obj.Name + " in scene");
-
-                    // libomv will complain about PrimFlags.JointWheel
-                    // being obsolete, so we...
-                    #pragma warning disable 0612
-                    if ((obj.RootPart.Flags & PrimFlags.JointWheel) == PrimFlags.JointWheel)
+                    if(m_rootPart != null)
                     {
-                        SceneObjectPart m_rootPart = obj.RootPart;
+                        ILandObject land = m_scene.RequestModuleInterface<IParcelManagementModule>().GetLandObject(m_rootPart.AbsolutePosition.X, m_rootPart.AbsolutePosition.Y);
 
-                        if (m_rootPart != null)
+                        XmlNode xmlobject = nodeFactory.CreateNode(XmlNodeType.Element, "object", "");
+                        node = nodeFactory.CreateNode(XmlNodeType.Element, "uuid", "");
+                        node.InnerText = obj.UUID.ToString();
+                        xmlobject.AppendChild(node);
+
+                        node = nodeFactory.CreateNode(XmlNodeType.Element, "title", "");
+                        node.InnerText = m_rootPart.Name;
+                        xmlobject.AppendChild(node);
+
+                        node = nodeFactory.CreateNode(XmlNodeType.Element, "description", "");
+                        node.InnerText = m_rootPart.Description;
+                        xmlobject.AppendChild(node);
+
+                        node = nodeFactory.CreateNode(XmlNodeType.Element, "flags", "");
+                        node.InnerText = String.Format("{0:x}", (uint)m_rootPart.Flags);
+                        xmlobject.AppendChild(node);
+
+                        node = nodeFactory.CreateNode(XmlNodeType.Element, "regionuuid", "");
+                        node.InnerText = m_scene.RegionInfo.RegionSettings.RegionUUID.ToString();
+                        xmlobject.AppendChild(node);
+
+                        if(land != null && land.LandData != null)
                         {
-                            ILandObject land = m_scene.RequestModuleInterface < IParcelManagementModule>().GetLandObject(m_rootPart.AbsolutePosition.X, m_rootPart.AbsolutePosition.Y);
-
-                            XmlNode xmlobject = nodeFactory.CreateNode(XmlNodeType.Element, "object", "");
-                            node = nodeFactory.CreateNode(XmlNodeType.Element, "uuid", "");
-                            node.InnerText = obj.UUID.ToString();
+                            node = nodeFactory.CreateNode(XmlNodeType.Element, "parceluuid", "");
+                            node.InnerText = land.LandData.GlobalID.ToString();
                             xmlobject.AppendChild(node);
-
-                            node = nodeFactory.CreateNode(XmlNodeType.Element, "title", "");
-                            node.InnerText = m_rootPart.Name;
-                            xmlobject.AppendChild(node);
-
-                            node = nodeFactory.CreateNode(XmlNodeType.Element, "description", "");
-                            node.InnerText = m_rootPart.Description;
-                            xmlobject.AppendChild(node);
-
-                            node = nodeFactory.CreateNode(XmlNodeType.Element, "flags", "");
-                            node.InnerText = String.Format("{0:x}", (uint)m_rootPart.Flags);
-                            xmlobject.AppendChild(node);
-
-                            node = nodeFactory.CreateNode(XmlNodeType.Element, "regionuuid", "");
-                            node.InnerText = m_scene.RegionInfo.RegionSettings.RegionUUID.ToString();
-                            xmlobject.AppendChild(node);
-
-                            if (land != null && land.LandData != null)
-                            {
-                                node = nodeFactory.CreateNode(XmlNodeType.Element, "parceluuid", "");
-                                node.InnerText = land.LandData.GlobalID.ToString();
-                                xmlobject.AppendChild(node);
-                            }
-                            else
-                            {
-                                // Something is wrong with this object. Let's not list it.
-                                m_log.WarnFormat("[DATASNAPSHOT]: Bad data for object {0} ({1}) in region {2}", obj.Name, obj.UUID, m_scene.RegionInfo.RegionName);
-                                continue;
-                            }
-
-                            node = nodeFactory.CreateNode(XmlNodeType.Element, "location", "");
-                            Vector3 loc = obj.AbsolutePosition;
-                            node.InnerText = loc.X.ToString() + "/" + loc.Y.ToString() + "/" + loc.Z.ToString();
-                            xmlobject.AppendChild(node);
-
-                            string bestImage = GuessImage(obj);
-                            if (bestImage != string.Empty)
-                            {
-                                node = nodeFactory.CreateNode(XmlNodeType.Element, "image", "");
-                                node.InnerText = bestImage;
-                                xmlobject.AppendChild(node);
-                            }
-
-                            parent.AppendChild(xmlobject);
                         }
+                        else
+                        {
+                            // Something is wrong with this object. Let's not list it.
+                            m_log.WarnFormat("[DATASNAPSHOT]: Bad data for object {0} ({1}) in region {2}", obj.Name, obj.UUID, m_scene.RegionInfo.RegionName);
+                            continue;
+                        }
+
+                        node = nodeFactory.CreateNode(XmlNodeType.Element, "location", "");
+                        Vector3 loc = obj.AbsolutePosition;
+                        node.InnerText = loc.X.ToString() + "/" + loc.Y.ToString() + "/" + loc.Z.ToString();
+                        xmlobject.AppendChild(node);
+
+                        string bestImage = GuessImage(obj);
+                        if(bestImage != string.Empty)
+                        {
+                            node = nodeFactory.CreateNode(XmlNodeType.Element, "image", "");
+                            node.InnerText = bestImage;
+                            xmlobject.AppendChild(node);
+                        }
+
+                        parent.AppendChild(xmlobject);
                     }
-                    #pragma warning disable 0612
                 }
+#pragma warning disable 0612
             }
             this.Stale = false;
             return parent;
@@ -236,12 +232,12 @@ namespace OpenSim.Region.DataSnapshot.Providers
         /// </summary>
         /// <param name="sog"></param>
         /// <returns></returns>
-        private string GuessImage(SceneObjectGroup sog)
+        private string GuessImage(ISceneEntity sog)
         {
             string bestguess = string.Empty;
             Dictionary<UUID, int> counts = new Dictionary<UUID, int>();
 
-            PrimitiveBaseShape shape = sog.RootPart.Shape;
+            PrimitiveBaseShape shape = sog.RootChild.Shape;
             if (shape != null && shape.ProfileShape == ProfileShape.Square)
             {
                 Primitive.TextureEntry textures = shape.Textures;
