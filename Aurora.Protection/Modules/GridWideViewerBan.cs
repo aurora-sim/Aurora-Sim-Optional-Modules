@@ -26,11 +26,10 @@ namespace Aurora.Protection
     {
         private List<string> m_bannedViewers = new List<string> ();
         private List<string> m_allowedViewers = new List<string> ();
-        private bool m_banEvilViewersByDefault = true;
         private bool m_enabled = true;
         private bool m_useIncludeList = false;
         private OSDMap m_map = null;
-        private string m_viewerTagURL = "http://viewertags.com/app/client_list.xml";
+        private string m_viewerTagURL = "http://phoenixviewer.com/app/client_list.xml";
         private IRegistryCore m_registry;
 
         public void Initialize(IConfigSource source, IRegistryCore registry)
@@ -40,10 +39,9 @@ namespace Aurora.Protection
             if (config != null)
             {
                 string bannedViewers = config.GetString ("ViewersToBan", "");
-                m_bannedViewers = new List<string> (bannedViewers.Split (new string[1] { "," }, StringSplitOptions.RemoveEmptyEntries));
+                m_bannedViewers = Util.ConvertToList(bannedViewers);
                 string allowedViewers = config.GetString ("ViewersToAllow", "");
-                m_allowedViewers = new List<string> (allowedViewers.Split (new string[1] { "," }, StringSplitOptions.RemoveEmptyEntries));
-                m_banEvilViewersByDefault = config.GetBoolean ("BanKnownEvilViewers", true);
+                m_allowedViewers = Util.ConvertToList(allowedViewers);
                 m_viewerTagURL = config.GetString ("ViewerXMLURL", m_viewerTagURL);
                 m_enabled = config.GetBoolean ("Enabled", true);
                 m_useIncludeList = config.GetBoolean ("UseAllowListInsteadOfBanList", false);
@@ -98,7 +96,7 @@ namespace Aurora.Protection
                         {
                             OSDMap viewerMap = (OSDMap)m_map[textureEntry.FaceTextures[i].TextureID.ToString ()];
                             //Check the names
-                            if (IsViewerBanned (viewerMap["name"].ToString (), viewerMap["evil"].AsBoolean ()))
+                            if (IsViewerBanned (viewerMap["name"].ToString ()))
                             {
                                 IGridWideMessageModule messageModule = m_registry.RequestModuleInterface<IGridWideMessageModule> ();
                                 if (messageModule != null)
@@ -113,7 +111,7 @@ namespace Aurora.Protection
             catch { }
         }
 
-        public bool IsViewerBanned(string name, bool isEvil)
+        public bool IsViewerBanned(string name)
         {
             if (m_useIncludeList)
             {
@@ -123,8 +121,6 @@ namespace Aurora.Protection
             else
             {
                 if (m_bannedViewers.Contains (name))
-                    return true;
-                else if (m_banEvilViewersByDefault && isEvil)
                     return true;
             }
             return false;

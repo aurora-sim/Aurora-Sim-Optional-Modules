@@ -10,6 +10,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Net;
 using System.Reflection;
 using System.Text;
 using OpenSim.Framework;
@@ -87,6 +88,8 @@ namespace Aurora.OptionalModules
         private AllowLevel GrieferAllowLevel = AllowLevel.AllowCleanOnly;
         private IUserAccountService m_accountService = null;
         private List<string> m_bannedViewers = new List<string>();
+        private List<string> m_allowedViewers = new List<string>();
+        private bool m_useIncludeList = false;
         private bool m_debug = false;
         private bool m_checkOnLogin = false;
         private bool m_checkOnTimer = true;
@@ -119,8 +122,11 @@ namespace Aurora.OptionalModules
             if (!m_enabled)
                 return;
 
-            string bannedViewers = config.GetString ("ViewersToBan", "");
-            m_bannedViewers = new List<string> (bannedViewers.Split (new string[] { "," }, StringSplitOptions.RemoveEmptyEntries));
+            string bannedViewers = config.GetString("ViewersToBan", "");
+            m_bannedViewers = Util.ConvertToList(bannedViewers);
+            string allowedViewers = config.GetString("ViewersToAllow", "");
+            m_allowedViewers = Util.ConvertToList(allowedViewers);
+            m_useIncludeList = config.GetBoolean("UseAllowListInsteadOfBanList", false);
 
             m_checkOnLogin = config.GetBoolean ("CheckForSimilaritiesOnLogin", m_checkOnLogin);
             m_checkOnTimer = config.GetBoolean ("CheckForSimilaritiesOnTimer", m_checkOnTimer);
@@ -157,12 +163,12 @@ namespace Aurora.OptionalModules
 
         void CheckOnTimer(object sender, System.Timers.ElapsedEventArgs e)
         {
-            presenceInfo.Check(m_bannedViewers);
+            presenceInfo.Check(m_useIncludeList ? m_allowedViewers : m_bannedViewers, m_useIncludeList);
         }
 
         private void CheckForSimilarities(PresenceInfo info)
         {
-            presenceInfo.Check(info, m_bannedViewers);
+            presenceInfo.Check(info, m_useIncludeList ? m_allowedViewers : m_bannedViewers, m_useIncludeList);
         }
 
         private PresenceInfo UpdatePresenceInfo(UUID AgentID, PresenceInfo oldInfo, string ip, string version, string platform, string mac, string id0)
@@ -362,11 +368,8 @@ namespace Aurora.OptionalModules
         private bool CheckViewer(PresenceInfo info)
         {
             //Check for banned viewers
-            foreach (string viewer in m_bannedViewers)
-            {
-                if (info.LastKnownViewer.Contains(viewer.StartsWith(" ") ? viewer.Remove(1) : viewer))
-                    return false;
-            }
+            if (IsViewerBanned(info.LastKnownViewer))
+                return false;
             foreach (string mac in info.KnownMacs)
             {
                 if (mac.Contains("000"))
@@ -389,6 +392,21 @@ namespace Aurora.OptionalModules
             }
             
             return true;
+        }
+
+        public bool IsViewerBanned(string name)
+        {
+            if (m_useIncludeList)
+            {
+                if (!m_allowedViewers.Contains(name))
+                    return true;
+            }
+            else
+            {
+                if (m_bannedViewers.Contains(name))
+                    return true;
+            }
+            return false;
         }
 
         private bool CheckThreatLevel(PresenceInfo info, out string message)
@@ -457,6 +475,69 @@ namespace Aurora.OptionalModules
             info.Flags = presenceInfoFlags;
             //Save
             presenceInfo.UpdatePresenceInfo(info);
+        }
+
+        #endregion
+    }
+
+    #endregion
+
+    #region IP block check
+
+    public class IPBanCheck : ILoginModule
+    {
+        #region Declares
+
+        private ILoginService m_service;
+        private IConfigSource m_source;
+        private List<IPAddress> IPBans = new List<IPAddress>();
+        private List<string> IPRangeBans = new List<string>();
+
+        #endregion
+
+        #region ILoginModule Members
+
+        public void Initialize(ILoginService service, IConfigSource source, IUserAccountService UASerivce)
+        {
+            m_source = source;
+            m_service = service;
+
+            IConfig config = source.Configs["GrieferProtection"];
+            if (config != null)
+            {
+                List<string> iPBans = Util.ConvertToList(config.GetString("IPBans", ""));
+                foreach (string ip in iPBans)
+                {
+                    IPAddress ipa;
+                    if(IPAddress.TryParse(ip, out ipa))
+                        IPBans.Add(ipa);
+                }
+                IPRangeBans = Util.ConvertToList(config.GetString("IPRangeBans", ""));
+            }
+        }
+
+        public bool Login(Hashtable request, UUID User, out string message)
+        {
+            message = "";
+            string ip = (string)request["ip"];
+            if (ip == null)
+                ip = "";
+            ip = ip.Split(':')[0];//Remove the port
+            IPAddress userIP = IPAddress.Parse(ip);
+            if (IPBans.Contains(userIP))
+                return false;
+            foreach (string ipRange in IPRangeBans)
+            {
+                string[] split = ipRange.Split('-');
+                if (split.Length != 2)
+                    continue;
+                IPAddress low = IPAddress.Parse(ip);
+                IPAddress high = IPAddress.Parse(ip);
+                NetworkUtils.IPAddressRange range = new NetworkUtils.IPAddressRange(low, high);
+                if (range.IsInRange(userIP))
+                    return false;
+            }
+            return true;
         }
 
         #endregion

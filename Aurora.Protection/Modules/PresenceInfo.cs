@@ -50,7 +50,7 @@ namespace Aurora.OptionalModules
     {
         PresenceInfo GetPresenceInfo(UUID agentID);
         void UpdatePresenceInfo(PresenceInfo agent);
-        void Check(PresenceInfo info, List<string> bannedViewers);
-        void Check(List<string> bannedViewers);
+        void Check(PresenceInfo info, List<string> viewers, bool includeList);
+        void Check(List<string> viewers, bool includeList);
     }
 }

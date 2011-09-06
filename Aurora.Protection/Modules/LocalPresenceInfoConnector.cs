@@ -64,11 +64,11 @@ namespace Aurora.OptionalModules
             agent.AgentID = agentID;
             if(query[1] != "")
                 agent.Flags = (PresenceInfo.PresenceInfoFlags)Enum.Parse(typeof(PresenceInfo.PresenceInfoFlags),query[1]);
-            agent.KnownAlts = ConvertToList(query[2]);
-            agent.KnownID0s = ConvertToList(query[3]);
-            agent.KnownIPs = ConvertToList(query[4]);
-            agent.KnownMacs = ConvertToList(query[5]);
-            agent.KnownViewers = ConvertToList(query[6]);
+            agent.KnownAlts = Util.ConvertToList(query[2]);
+            agent.KnownID0s = Util.ConvertToList(query[3]);
+            agent.KnownIPs = Util.ConvertToList(query[4]);
+            agent.KnownMacs = Util.ConvertToList(query[5]);
+            agent.KnownViewers = Util.ConvertToList(query[6]);
             agent.LastKnownID0 = query[7];
             agent.LastKnownIP = query[8];
             agent.LastKnownMac = query[9];
@@ -96,11 +96,11 @@ namespace Aurora.OptionalModules
             SetRows.Add("twelve"/*"Platform"*/);
             SetValues.Add(agent.AgentID);
             SetValues.Add(agent.Flags);
-            SetValues.Add(ConvertToString(agent.KnownAlts));
-            SetValues.Add(ConvertToString(agent.KnownID0s));
-            SetValues.Add(ConvertToString(agent.KnownIPs));
-            SetValues.Add(ConvertToString(agent.KnownMacs));
-            SetValues.Add(ConvertToString(agent.KnownViewers));
+            SetValues.Add(Util.ConvertToString(agent.KnownAlts));
+            SetValues.Add(Util.ConvertToString(agent.KnownID0s));
+            SetValues.Add(Util.ConvertToString(agent.KnownIPs));
+            SetValues.Add(Util.ConvertToString(agent.KnownMacs));
+            SetValues.Add(Util.ConvertToString(agent.KnownViewers));
             SetValues.Add(agent.LastKnownID0);
             SetValues.Add(agent.LastKnownIP);
             SetValues.Add(agent.LastKnownMac);
@@ -109,34 +109,18 @@ namespace Aurora.OptionalModules
             GD.Replace("presenceInfo", SetRows.ToArray(), SetValues.ToArray());
         }
 
-        private string ConvertToString(List<string> list)
-        {
-            StringBuilder builder = new StringBuilder();
-            foreach (string val in list)
-            {
-                builder.Append(val + ",");
-            }
-            return builder.ToString();
-        }
-
-        private List<string> ConvertToList(string listAsString)
-        {
-            List<string> value = new List<string>(listAsString.Split(new string[]{","},StringSplitOptions.RemoveEmptyEntries));
-            return value;
-        }
-
-        public void Check(List<string> bannedViewers)
+        public void Check(List<string> viewers, bool includeList)
         {
             //Get all UUIDS
             List<string> query = GD.Query("", "", "presenceinfo", "one"/*"AgentID"*/);
             foreach (string ID in query)
             {
                 //Check all
-                Check(GetPresenceInfo(UUID.Parse(ID)), bannedViewers);
+                Check(GetPresenceInfo(UUID.Parse(ID)), viewers, includeList);
             }
         }
 
-        public void Check (PresenceInfo info, List<string> bannedViewers)
+        public void Check (PresenceInfo info, List<string> viewers, bool includeList)
         {
             //
             //Check passwords
@@ -207,7 +191,7 @@ namespace Aurora.OptionalModules
 
             foreach (string viewer in info.KnownViewers)
             {
-                if (bannedViewers.Contains(viewer.StartsWith(" ") ? viewer.Remove(1) : viewer))
+                if (IsViewerBanned(viewer, includeList, viewers))
                 {
                     if ((info.Flags & PresenceInfo.PresenceInfoFlags.Clean) == PresenceInfo.PresenceInfoFlags.Clean)
                     {
@@ -234,6 +218,21 @@ namespace Aurora.OptionalModules
             //Now update ours
             if (needsUpdated)
                 UpdatePresenceInfo(info);
+        }
+
+        public bool IsViewerBanned(string name, bool include, List<string> list)
+        {
+            if (include)
+            {
+                if (!list.Contains(name))
+                    return true;
+            }
+            else
+            {
+                if (list.Contains(name))
+                    return true;
+            }
+            return false;
         }
 
         private bool DoGC(PresenceInfo info)
