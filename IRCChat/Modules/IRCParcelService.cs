@@ -257,7 +257,7 @@ namespace Aurora.Addon.IRCChat
                         fakeUUID, e.Message.Sender.Nick, presence.UUID, (byte)InstantMessageDialog.MessageFromAgent,
                         e.Message.Text, false, Vector3.Zero));
                 }
-                else
+                else if(e.Message.Sender.Nick != presence.Name.Replace(' ', '_'))//Don't echo your own messages
                     chatModule.TrySendChatMessage(presence, presence.AbsolutePosition, presence.AbsolutePosition, UUID.Zero,
                         e.Message.Targets[0] + " - " + e.Message.Sender.Nick, ChatTypeEnum.Say, e.Message.Text, ChatSourceType.Agent, 20);
             }

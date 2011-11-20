@@ -194,7 +194,7 @@ namespace Aurora.Addon.IRCChat
             {
                 welcomed(sender, e, client);
             };
-            // People are chatting, pay attention so I can be a lame echobot :)
+            // People are c, pay attention so I can be a lame echobot :)
             client.Messages.Chat += delegate(Object sender, IrcMessageEventArgs<TextMessage> e)
             {
                 chatting(sender, e, sp);
@@ -269,7 +269,7 @@ namespace Aurora.Addon.IRCChat
                         fakeUUID, e.Message.Sender.Nick, sp.UUID, (byte)InstantMessageDialog.MessageFromAgent,
                         e.Message.Text, false, Vector3.Zero));
                 }
-                else
+                else if(e.Message.Sender.Nick != sp.Name.Replace(' ', '_'))//Don't echo your own messages
                     chatModule.TrySendChatMessage(sp, sp.AbsolutePosition, sp.AbsolutePosition, UUID.Zero,
                         e.Message.Targets[0] + " - " + e.Message.Sender.Nick, ChatTypeEnum.Say, e.Message.Text, ChatSourceType.Agent, 20);
             }
