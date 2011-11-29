@@ -137,7 +137,7 @@ namespace OpenSim.Region.DataSnapshot
                 //Hand it the first scene, assuming that all scenes have the same BaseHTTPServer
                 new DataRequestHandler(scene, this);
 
-                m_hostname = scene.RegionInfo.ExternalHostName;
+                m_hostname = MainServer.Instance.HostName;
                 m_snapStore = new SnapshotStore(m_snapsDir, m_gridinfo, m_listener_port, m_hostname);
 
                 MakeEverythingStale();

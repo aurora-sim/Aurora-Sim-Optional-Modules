@@ -93,16 +93,22 @@ namespace Aurora.StandaloneLoader
         {
             if (m_enabled)
             {
-                //Register the extention
-                string ext = ".abackup";
-                RegistryKey key = Registry.ClassesRoot.CreateSubKey(ext);
-                key.SetValue("", "abackup file");
-                key.Close();
+                try
+                {
+                    //Register the extention
+                    string ext = ".abackup";
+                    RegistryKey key = Registry.ClassesRoot.CreateSubKey(ext);
+                    key.SetValue("", "abackup file");
+                    key.Close();
 
-                key = Registry.ClassesRoot.CreateSubKey(ext + "\\Shell\\Open\\command");
+                    key = Registry.ClassesRoot.CreateSubKey(ext + "\\Shell\\Open\\command");
 
-                key.SetValue("", "\"" + Application.ExecutablePath + "\" \"%L\"");
-                key.Close();
+                    key.SetValue("", "\"" + Application.ExecutablePath + "\" \"%L\"");
+                    key.Close();
+                }
+                catch
+                {
+                }
             }
         }
 
@@ -190,17 +196,7 @@ namespace Aurora.StandaloneLoader
                 regionInfo.RegionName = MainConsole.Instance.CmdPrompt("Region Name: ", regionInfo.RegionName);
                 regionInfo.RegionLocX = int.Parse(MainConsole.Instance.CmdPrompt("Region Position X: ", regionInfo.RegionLocX.ToString()));
                 regionInfo.RegionLocY = int.Parse(MainConsole.Instance.CmdPrompt("Region Position Y: ", regionInfo.RegionLocY.ToString()));
-                regionInfo.HttpPort = uint.Parse(MainConsole.Instance.CmdPrompt("HTTP Port: ", regionInfo.HttpPort.ToString()));
-
-                string externalName = MainConsole.Instance.CmdPrompt("IP: ", "DEFAULT");
-                if (externalName == "DEFAULT")
-                {
-                    externalName = Aurora.Framework.Utilities.GetExternalIp();
-                    regionInfo.FindExternalAutomatically = true;
-                }
-                else
-                    regionInfo.FindExternalAutomatically = false;
-                regionInfo.ExternalHostName = externalName;
+                regionInfo.InternalEndPoint.Port = int.Parse(MainConsole.Instance.CmdPrompt("HTTP Port: ", regionInfo.InternalEndPoint.Port.ToString()));
             }
 
             //ISimulationDataStore simulationStore = sceneManager.SimulationDataService;

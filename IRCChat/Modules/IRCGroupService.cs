@@ -4,9 +4,9 @@
  *  Copyright 2011 Matthew Beardmore
  *
  *  This file is part of Aurora.Addon.IRCChat.
- *  Foobar is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- *  Foobar is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
- *  You should have received a copy of the GNU General Public License along with Foobar. If not, see http://www.gnu.org/licenses/.
+ *  Aurora.Addon.IRCChat is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *  Aurora.Addon.IRCChat is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ *  You should have received a copy of the GNU General Public License along with Aurora.Addon.IRCChat. If not, see http://www.gnu.org/licenses/.
  *
  * 
  * MetaBuilders.Irc.dll License:
@@ -94,7 +94,7 @@ namespace Aurora.Addon.IRCChat
                     string networkvalue = m_config.GetString(s);
                     string channelvalue = m_config.GetString(s.Replace("_Network", "_Channel"));
                     string nickvalue = m_config.GetString(s.Replace("_Network", "_Nick"));
-                    string gridName = m_config.GetString(s.Replace("_Network", "_GridName"), MainServer.Instance.HostName.Remove(0, 7) + ":" + MainServer.Instance.Port);
+                    string gridName = m_config.GetString(s.Replace("_Network", "_GridName"), MainServer.Instance.ServerURI.Remove(0, 7));
                     GroupRecord g = conn.GetGroupRecord(UUID.Zero, UUID.Zero, s.Replace("_Network", "").Replace('_',' '));
                     if(g != null)
                     {

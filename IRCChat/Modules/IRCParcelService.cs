@@ -4,9 +4,9 @@
  *  Copyright 2011 Matthew Beardmore
  *
  *  This file is part of Aurora.Addon.IRCChat.
- *  Foobar is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- *  Foobar is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
- *  You should have received a copy of the GNU General Public License along with Foobar. If not, see http://www.gnu.org/licenses/.
+ *  Aurora.Addon.IRCChat is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *  Aurora.Addon.IRCChat is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ *  You should have received a copy of the GNU General Public License along with Aurora.Addon.IRCChat. If not, see http://www.gnu.org/licenses/.
  *
  * 
  * MetaBuilders.Irc.dll License:
@@ -257,7 +257,7 @@ namespace Aurora.Addon.IRCChat
                         fakeUUID, e.Message.Sender.Nick, presence.UUID, (byte)InstantMessageDialog.MessageFromAgent,
                         e.Message.Text, false, Vector3.Zero));
                 }
-                else if(e.Message.Sender.Nick != presence.Name.Replace(' ', '_'))//Don't echo your own messages
+                else
                     chatModule.TrySendChatMessage(presence, presence.AbsolutePosition, presence.AbsolutePosition, UUID.Zero,
                         e.Message.Targets[0] + " - " + e.Message.Sender.Nick, ChatTypeEnum.Say, e.Message.Text, ChatSourceType.Agent, 20);
             }
@@ -279,7 +279,7 @@ namespace Aurora.Addon.IRCChat
                         if (m_channel.TryGetValue(sp.CurrentParcel.LandData.GlobalID, out channel))
                         {
                             client.SendChat("(grid: " +
-                                MainServer.Instance.HostName.Remove(0, 7) + ":" + MainServer.Instance.Port + ") - " +
+                                MainServer.Instance.ServerURI.Remove(0, 7) + ") - " +
                                 chat.Message, channel);
                         }
                     }

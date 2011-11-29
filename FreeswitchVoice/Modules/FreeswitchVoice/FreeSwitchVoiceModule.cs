@@ -112,7 +112,7 @@ namespace FreeswitchVoice
             // as defined in Regions.ini is a good address to use. It's a
             // dotted quad (or should be!) and it can reach this host from
             // a client. The port is grabbed from the region's HTTP server.
-            m_openSimWellKnownHTTPAddress = scene.RegionInfo.ExternalHostName;
+            m_openSimWellKnownHTTPAddress = MainServer.Instance.HostName;
             m_freeSwitchServicePort = MainServer.Instance.Port;
 
             if (m_Enabled)
