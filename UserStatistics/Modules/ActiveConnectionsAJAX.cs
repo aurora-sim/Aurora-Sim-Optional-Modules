@@ -32,7 +32,7 @@ using System.Reflection;
 using System.Text;
 using System.Data.SQLite;
 using OpenMetaverse;
-using OpenSim.Framework;
+using Aurora.Framework;
 using OpenSim.Region.Framework.Scenes;
 using Aurora.Framework;
 

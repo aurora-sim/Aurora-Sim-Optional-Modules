@@ -31,7 +31,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Data.SQLite;
 using OpenMetaverse;
-using OpenSim.Framework;
+using Aurora.Framework;
 using Aurora.Framework;
 
 namespace OpenSim.Region.UserStatistics

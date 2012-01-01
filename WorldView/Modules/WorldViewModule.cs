@@ -35,11 +35,11 @@ using log4net;
 using Nini.Config;
 using OpenMetaverse;
 using OpenMetaverse.Imaging;
-using OpenSim.Framework;
+using Aurora.Framework;
 using OpenSim.Region.Framework.Interfaces;
 using OpenSim.Region.Framework.Scenes;
 using Aurora.Simulation.Base;
-using OpenSim.Framework.Servers.HttpServer;
+using Aurora.Framework.Servers.HttpServer;
 using OpenSim.Services.Interfaces;
 
 namespace OpenSim.Region.OptionalModules.World.WorldView

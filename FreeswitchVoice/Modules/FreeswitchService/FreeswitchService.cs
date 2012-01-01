@@ -30,7 +30,7 @@ using System.Text;
 using System.Reflection;
 using Nini.Config;
 using log4net;
-using OpenSim.Framework;
+using Aurora.Framework;
 using OpenSim.Services.Interfaces;
 using OpenMetaverse;
 using OpenMetaverse.StructuredData;

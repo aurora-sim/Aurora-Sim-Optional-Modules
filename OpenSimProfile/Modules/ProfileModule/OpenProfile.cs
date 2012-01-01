@@ -37,7 +37,7 @@ using OpenMetaverse;
 using log4net;
 using Nini.Config;
 using Nwc.XmlRpc;
-using OpenSim.Framework;
+using Aurora.Framework;
 using OpenSim.Region.Framework.Interfaces;
 using OpenSim.Region.Framework.Scenes;
 using OpenSim.Services.Interfaces;

@@ -34,7 +34,7 @@ using System.Xml;
 using System.Windows.Forms;
 using Microsoft.Win32;
 
-using OpenSim.Framework;
+using Aurora.Framework;
 using OpenSim.Services.Interfaces;
 
 using log4net;

@@ -42,8 +42,6 @@
 	<Reference name="Aurora.Modules"/>
 	<Reference name="Aurora.Services.DataService"/>
 	<Reference name="Aurora.Simulation.Base"/>
-	<Reference name="OpenSim.Framework"/>
-	<Reference name="OpenSim.Region.CoreModules"/>
 	<Reference name="OpenSim.Region.Framework"/>
 
 	<Reference name="log4net" path="../../../bin/"/>

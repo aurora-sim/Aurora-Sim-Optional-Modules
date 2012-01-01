@@ -31,7 +31,7 @@ using System.Reflection;
 using System.Text;
 using log4net;
 using OpenMetaverse;
-using OpenSim.Framework;
+using Aurora.Framework;
 using OpenSim.Services.Interfaces;
 
 namespace OpenSim.Region.CoreModules.Avatar.Inventory.Archiver

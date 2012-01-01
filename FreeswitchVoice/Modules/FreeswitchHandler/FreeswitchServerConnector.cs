@@ -32,11 +32,11 @@ using System.Reflection;
 using Nini.Config;
 using Aurora.Simulation.Base;
 using OpenSim.Services.Interfaces;
-using OpenSim.Framework.Servers.HttpServer;
+using Aurora.Framework.Servers.HttpServer;
 using log4net;
 using OpenMetaverse;
 using OpenMetaverse.StructuredData;
-using OpenSim.Framework;
+using Aurora.Framework;
 
 namespace FreeswitchVoice
 {

@@ -33,7 +33,7 @@ using System.Text;
 using OpenMetaverse;
 using Aurora.DataManager;
 using Aurora.Framework;
-using OpenSim.Framework;
+using Aurora.Framework;
 using Nini.Config;
 
 namespace Aurora.Services.DataService

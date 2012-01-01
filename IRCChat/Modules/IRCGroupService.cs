@@ -32,7 +32,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using OpenSim.Framework;
+using Aurora.Framework;
 using OpenSim.Region.Framework.Interfaces;
 using Nini.Config;
 using MetaBuilders.Irc.Messages;

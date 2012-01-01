@@ -31,9 +31,9 @@ using System.IO;
 using System.Reflection;
 using System.Xml;
 
-using OpenSim.Framework;
+using Aurora.Framework;
 using Aurora.Simulation.Base;
-using OpenSim.Framework.Servers.HttpServer;
+using Aurora.Framework.Servers.HttpServer;
 using OpenSim.Region.Framework.Scenes;
 using OpenSim.Region.Framework.Interfaces;
 

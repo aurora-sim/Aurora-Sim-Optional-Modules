@@ -31,9 +31,8 @@ using System.Reflection;
 using System.Xml;
 using log4net;
 using OpenMetaverse;
-using OpenSim.Framework;
+using Aurora.Framework;
 
-using OpenSim.Region.CoreModules.World.Land;
 using OpenSim.Region.DataSnapshot.Interfaces;
 using OpenSim.Region.Framework.Interfaces;
 using OpenSim.Region.Framework.Scenes;
@@ -129,14 +128,8 @@ namespace OpenSim.Region.DataSnapshot.Providers
             {
 
                 //foreach (KeyValuePair<int, Land> curParcel in m_landIndexed)
-                foreach (ILandObject parcel_interface in parcels)
+                foreach (ILandObject land in parcels)
                 {
-                    // Play it safe
-                    if (!(parcel_interface is LandObject))
-                        continue;
-
-                    LandObject land = (LandObject)parcel_interface;
-
                     LandData parcel = land.LandData;
                     if (m_parent.ExposureLevel.Equals("all") ||
                         (m_parent.ExposureLevel.Equals("minimum") && 

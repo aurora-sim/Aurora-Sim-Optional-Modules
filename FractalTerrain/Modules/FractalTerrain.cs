@@ -25,7 +25,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using LandscapeGenCore;
-using OpenSim.Framework;
+using Aurora.Framework;
 using OpenSim.Region.Framework.Interfaces;
 using OpenSim.Region.Framework.Scenes;
 
@@ -87,34 +87,34 @@ namespace Aurora.Addon.FractalTerrain
                 PerlinNoiseSettings pns = new PerlinNoiseSettings();
                 pns.ResultX = MainConsole.Instance.ConsoleScene.RegionInfo.RegionSizeX;
                 pns.ResultY = MainConsole.Instance.ConsoleScene.RegionInfo.RegionSizeY;
-                pns.RandomSeed = int.Parse(MainConsole.Instance.CmdPrompt("Random Seed (0-infinity)", "10"));
-                pns.CorsenessX = int.Parse(MainConsole.Instance.CmdPrompt("Corseness (X direction) (2-1000)", "100"));
-                pns.CorsenessY = int.Parse(MainConsole.Instance.CmdPrompt("Corseness (Y direction) (2-1000)", "100"));
-                pns.FlatEdges = MainConsole.Instance.CmdPrompt("Flat Edges (recommended)", "true", new List<string>(new[] { "true", "false" })) == "true";
-                pns.Octaves = int.Parse(MainConsole.Instance.CmdPrompt("Octaves (0-infinity)", "5"));
-                pns.Persistence = float.Parse(MainConsole.Instance.CmdPrompt("Persistence", "0.8"));
+                pns.RandomSeed = int.Parse(MainConsole.Instance.Prompt("Random Seed (0-infinity)", "10"));
+                pns.CorsenessX = int.Parse(MainConsole.Instance.Prompt("Corseness (X direction) (2-1000)", "100"));
+                pns.CorsenessY = int.Parse(MainConsole.Instance.Prompt("Corseness (Y direction) (2-1000)", "100"));
+                pns.FlatEdges = MainConsole.Instance.Prompt("Flat Edges (recommended)", "true", new List<string>(new[] { "true", "false" })) == "true";
+                pns.Octaves = int.Parse(MainConsole.Instance.Prompt("Octaves (0-infinity)", "5"));
+                pns.Persistence = float.Parse(MainConsole.Instance.Prompt("Persistence", "0.8"));
                 _noiseGen.Settings = pns;
             }
             /*else
             {
                 _noiseGen = m_kochLikeNoise;
                 KochLikeNoiseSettings kns = new KochLikeNoiseSettings();
-                kns.ResultX = MainConsole.Instance.ConsoleScene.RegionInfo.RegionSizeX;
-                kns.ResultY = MainConsole.Instance.ConsoleScene.RegionInfo.RegionSizeY;
-                kns.H = double.Parse(MainConsole.Instance.CmdPrompt("H", "1.0"));
-                kns.InitalGridX = int.Parse(MainConsole.Instance.CmdPrompt("Initial Grid X", "2"));
+                kns.ResultX = MainConsole.Instance.Prompt.RegionInfo.RegionSizeX;
+                kns.ResultY = MainConsole.Instance.Prompt.RegionInfo.RegionSizeY;
+                kns.H = double.Parse(MainConsole.Instance.Prompt("H", "1.0"));
+                kns.InitalGridX = int.Parse(MainConsole.Instance.Prompt("Initial Grid X", "2"));
                 if(kns.InitalGridX < 2)
                     kns.InitalGridX = 2;
-                kns.InitalGridY = int.Parse(MainConsole.Instance.CmdPrompt("Initial Grid Y", "2"));
+                kns.InitalGridY = int.Parse(MainConsole.Instance.Prompt("Initial Grid Y", "2"));
                 if(kns.InitalGridY < 2)
                     kns.InitalGridY = 2;
-                kns.RandomMin = int.Parse(MainConsole.Instance.CmdPrompt("Random Min", "-1"));
-                kns.RandomMax = int.Parse(MainConsole.Instance.CmdPrompt("Random Max", "1"));
-                kns.RandomSeed = int.Parse(MainConsole.Instance.CmdPrompt("Random Seed", "0"));
-                kns.Scale = double.Parse(MainConsole.Instance.CmdPrompt("Scale", "1.0"));
+                kns.RandomMin = int.Parse(MainConsole.Instance.Prompt("Random Min", "-1"));
+                kns.RandomMax = int.Parse(MainConsole.Instance.Prompt("Random Max", "1"));
+                kns.RandomSeed = int.Parse(MainConsole.Instance.Prompt("Random Seed", "0"));
+                kns.Scale = double.Parse(MainConsole.Instance.Prompt("Scale", "1.0"));
                 _noiseGen.Settings = kns;
             }*/
-            float scaling = float.Parse(MainConsole.Instance.CmdPrompt("Fractal Scaling", "50"));
+            float scaling = float.Parse(MainConsole.Instance.Prompt("Fractal Scaling", "50"));
             float[,] land = _noiseGen.Generate();
             ITerrainChannel c = new TerrainChannel(MainConsole.Instance.ConsoleScene);
             for(int x = 0; x < MainConsole.Instance.ConsoleScene.RegionInfo.RegionSizeX; x++)

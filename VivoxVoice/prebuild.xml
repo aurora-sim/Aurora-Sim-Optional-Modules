@@ -37,15 +37,13 @@
   <Reference name="System.Drawing"/>
   <Reference name="System.Web"/>
   <Reference name="System.Runtime.Remoting"/>
-  <Reference name="OpenMetaverseTypes" path="../../../bin/"/>
-  <Reference name="OpenMetaverse" path="../../../bin/"/>
+  
   <Reference name="Aurora.DataManager"/>
   <Reference name="Aurora.Framework"/>
   <Reference name="Aurora.Simulation.Base"/>
   <Reference name="Aurora.Services.DataService"/>
-  <Reference name="OpenSim.Framework"/>
   <Reference name="OpenSim.Region.Framework"/>
-  <Reference name="OpenSim.Region.Physics.Manager"/>
+  
   <Reference name="log4net" path="../../../bin/"/>
   <Reference name="Nini" path="../../../bin/"/>
   <Reference name="OpenMetaverse" path="../../../bin/"/>

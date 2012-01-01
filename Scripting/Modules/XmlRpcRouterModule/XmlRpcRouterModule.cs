@@ -32,7 +32,7 @@ using log4net;
 using Nini.Config;
 using OpenMetaverse;
 
-using OpenSim.Framework;
+using Aurora.Framework;
 using OpenSim.Region.Framework.Interfaces;
 using OpenSim.Region.Framework.Scenes;
 

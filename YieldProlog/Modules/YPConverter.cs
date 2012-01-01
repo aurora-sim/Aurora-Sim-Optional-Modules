@@ -48,7 +48,7 @@ namespace Aurora.ScriptEngine.AuroraDotNetEngine.CompilerTools
         {
         }
 
-        public void Convert(string Script, out string CompiledScript, out Dictionary<KeyValuePair<int, int>, KeyValuePair<int, int>> PositionMap)
+        public void Convert(string Script, out string CompiledScript, out object PositionMap)
         {
             CompiledScript = YP_Converter.Convert(Script);
             CompiledScript = CreateCompilerScript(Script);
@@ -127,6 +127,12 @@ namespace Aurora.ScriptEngine.AuroraDotNetEngine.CompilerTools
 
         public void FinishCompile(IScriptModulePlugin plugin, ScriptData data, IScript Script)
         {
+        }
+
+        public void FindErrorLine(CompilerError CompErr, object PositionMap, string script, out int LineN, out int CharN)
+        {
+            LineN = CompErr.Line;
+            CharN = CompErr.Column;
         }
     }
 }

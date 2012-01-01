@@ -31,10 +31,8 @@ using System.IO;
 using System.IO.Compression;
 using System.Text;
 using System.Reflection;
-using OpenSim.Framework;
-using OpenSim.Framework.Serialization;
-using OpenSim.Framework.Serialization.External;
 using Aurora.Framework;
+using Aurora.Framework.Serialization;
 using Aurora.DataManager;
 using Aurora.Simulation.Base;
 using OpenSim.Services.Interfaces;
@@ -45,7 +43,6 @@ using Microsoft.Win32;
 using System.Windows.Forms;
 using OpenMetaverse;
 using OpenMetaverse.StructuredData;
-using OpenSim.Region.CoreModules.World.Terrain;
 using OpenSim.Region.Framework.Scenes.Serialization;
 
 namespace Aurora.StandaloneLoader
@@ -64,6 +61,10 @@ namespace Aurora.StandaloneLoader
         #endregion
 
         #region IApplicationPlugin Members
+
+        public void PreStartup(ISimulationBase openSim)
+        {
+        }
 
         public void Initialize(ISimulationBase openSim)
         {
@@ -193,10 +194,10 @@ namespace Aurora.StandaloneLoader
             if (!m_useExistingRegionInfo)
             {
                 regionInfo.RegionID = UUID.Random();
-                regionInfo.RegionName = MainConsole.Instance.CmdPrompt("Region Name: ", regionInfo.RegionName);
-                regionInfo.RegionLocX = int.Parse(MainConsole.Instance.CmdPrompt("Region Position X: ", regionInfo.RegionLocX.ToString()));
-                regionInfo.RegionLocY = int.Parse(MainConsole.Instance.CmdPrompt("Region Position Y: ", regionInfo.RegionLocY.ToString()));
-                regionInfo.InternalEndPoint.Port = int.Parse(MainConsole.Instance.CmdPrompt("HTTP Port: ", regionInfo.InternalEndPoint.Port.ToString()));
+                regionInfo.RegionName = MainConsole.Instance.Prompt("Region Name: ", regionInfo.RegionName);
+                regionInfo.RegionLocX = int.Parse(MainConsole.Instance.Prompt("Region Position X: ", regionInfo.RegionLocX.ToString()));
+                regionInfo.RegionLocY = int.Parse(MainConsole.Instance.Prompt("Region Position Y: ", regionInfo.RegionLocY.ToString()));
+                regionInfo.InternalEndPoint.Port = int.Parse(MainConsole.Instance.Prompt("HTTP Port: ", regionInfo.InternalEndPoint.Port.ToString()));
             }
 
             //ISimulationDataStore simulationStore = sceneManager.SimulationDataService;
@@ -209,7 +210,7 @@ namespace Aurora.StandaloneLoader
         }
     }
 
-    public class OverridenFileBasedSimulationData : Aurora.Modules.FileBasedSimulationData.FileBasedSimulationData
+    public class OverridenFileBasedSimulationData : Aurora.Modules.Startup.FileBasedSimulationData.FileBasedSimulationData
     {
         private string fileName;
         private bool saveOnShutdown;

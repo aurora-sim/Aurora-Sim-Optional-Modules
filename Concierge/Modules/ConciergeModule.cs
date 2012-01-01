@@ -39,15 +39,14 @@ using log4net;
 using Nini.Config;
 using Nwc.XmlRpc;
 using OpenMetaverse;
-using OpenSim.Framework;
-using OpenSim.Framework.Servers;
+using Aurora.Framework;
 using OpenSim.Region.Framework.Interfaces;
 using OpenSim.Region.Framework.Scenes;
-using OpenSim.Region.CoreModules.Avatar.Chat;
+using Aurora.Modules.Chat;
 
 namespace OpenSim.Region.OptionalModules.Avatar.Concierge
 {
-    public class ConciergeModule : ChatModule, ISharedRegionModule
+    public class ConciergeModule : AuroraChatModule, ISharedRegionModule
     {
         private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
@@ -219,7 +218,7 @@ namespace OpenSim.Region.OptionalModules.Avatar.Concierge
         #endregion
 
         #region ISimChat Members
-        public override void OnChatBroadcast(Object sender, OSChatMessage c)
+        protected override void OnChatBroadcast(Object sender, OSChatMessage c)
         {
             if (m_replacingChatModule)
             {
@@ -232,7 +231,7 @@ namespace OpenSim.Region.OptionalModules.Avatar.Concierge
             return;
         }
 
-        public override void OnChatFromClient (IClientAPI sender, OSChatMessage c)
+        protected override void OnChatFromClient (IClientAPI sender, OSChatMessage c)
         {
             if (m_replacingChatModule)
             {

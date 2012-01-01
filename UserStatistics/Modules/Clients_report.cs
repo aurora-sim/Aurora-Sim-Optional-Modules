@@ -33,7 +33,7 @@ using System.Data.SQLite;
 using OpenMetaverse;
 using OpenSim.Region.Framework.Scenes;
 using Aurora.Framework;
-using OpenSim.Framework;
+using Aurora.Framework;
 
 namespace OpenSim.Region.UserStatistics
 {

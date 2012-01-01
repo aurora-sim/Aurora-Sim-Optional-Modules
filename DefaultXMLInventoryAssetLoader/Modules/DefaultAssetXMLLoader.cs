@@ -34,7 +34,7 @@ using log4net;
 using Nini.Config;
 using OpenMetaverse;
 using OpenSim.Services.Interfaces;
-using OpenSim.Framework;
+using Aurora.Framework;
 
 /// <summary>
 /// Loads assets from the filesystem location.  Not yet a plugin, though it should be.

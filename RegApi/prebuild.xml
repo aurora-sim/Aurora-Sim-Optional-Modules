@@ -33,19 +33,19 @@
 
   <ReferencePath>../../../bin/</ReferencePath>
   <Reference localCopy="false" name="System"/>
-  <Reference name="System.Xml"/>
   <Reference name="System.Drawing"/>
   <Reference name="System.Runtime.Remoting"/>
+  <Reference name="System.Xml"/>
+  
+  <Reference name="Aurora.Simulation.Base"/>
+  <Reference name="Aurora.Framework"/>
+  <Reference name="OpenSim.Region.Framework"/>
+  
+  <Reference name="log4net" path="../../../bin/"/>
+  <Reference name="Nini" path="../../../bin/"/>
   <Reference name="OpenMetaverseTypes" path="../../../bin/"/>
   <Reference name="OpenMetaverse" path="../../../bin/"/>
   <Reference name="OpenMetaverse.StructuredData" path="../../../bin/"/>
-  <Reference name="Aurora.Simulation.Base"/>
-  <Reference name="Aurora.Framework"/>
-  <Reference name="OpenSim.Framework"/>
-  <Reference name="OpenSim.Region.Framework"/>
-  <Reference name="OpenSim.Region.Physics.Manager"/>
-  <Reference name="Nini" path="../../../bin/"/>
-  <Reference name="log4net" path="../../../bin/"/>
   <Reference name="XMLRPC" path="../../../bin/"/>
 
   <Files>

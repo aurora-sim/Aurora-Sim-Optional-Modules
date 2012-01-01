@@ -36,8 +36,8 @@ using log4net;
 using Nini.Config;
 using Aurora.Simulation.Base;
 using OpenSim.Services.Interfaces;
-using OpenSim.Framework;
-using OpenSim.Framework.Servers.HttpServer;
+using Aurora.Framework;
+using Aurora.Framework.Servers.HttpServer;
 
 using Aurora.DataManager;
 using Aurora.Framework;

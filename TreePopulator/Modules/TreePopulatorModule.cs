@@ -32,7 +32,7 @@ using System.Timers;
 using OpenMetaverse;
 using log4net;
 using Nini.Config;
-using OpenSim.Framework;
+using Aurora.Framework;
 using OpenSim.Region.Framework.Interfaces;
 using OpenSim.Region.Framework.Scenes;
 
@@ -554,7 +554,7 @@ namespace OpenSim.Region.OptionalModules.World.TreePopulator
 
             m_scene.SceneGraph.AddPrimToScene(sceneObject);
             sceneObject.ScheduleGroupUpdate (PrimUpdateFlags.ForcedFullUpdate);
-            sceneObject.SetGroup(groupID, null);
+            sceneObject.SetGroup(groupID, UUID.Zero);
 
             return sceneObject;
         }

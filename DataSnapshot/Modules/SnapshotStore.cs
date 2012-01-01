@@ -33,7 +33,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml;
 using log4net;
-using OpenSim.Framework;
+using Aurora.Framework;
 using OpenSim.Region.DataSnapshot.Interfaces;
 using OpenSim.Region.Framework.Scenes;
 

@@ -32,16 +32,17 @@ using System.IO.Compression;
 using System.Reflection;
 using System.Xml;
 
-using OpenSim.Framework;
+using Aurora.Framework;
 using OpenSim.Services.Interfaces;
 
 using log4net;
 using Nini.Config;
 using OpenMetaverse;
 using Aurora.Simulation.Base;
+using Aurora.Framework.Serialization;
 
 using OpenSim.Region.Framework.Scenes;
-using OpenSim.Region.CoreModules.Avatar.Inventory.Archiver;
+using Aurora.Modules.Archivers;
 
 namespace OpenSim.Services.InventoryService
 {

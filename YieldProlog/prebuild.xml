@@ -37,9 +37,9 @@
   <Reference name="System.Web"/>
   <Reference name="System.Xml"/>
 
-  <Reference name="OpenSim.Framework"/>
-  <Reference name="OpenSim.Region.Framework"/>
+  <Reference name="Aurora.Framework"/>
   <Reference name="Aurora.ScriptEngine.AuroraDotNetEngine"/>
+  <Reference name="OpenSim.Region.Framework"/>
 
   <Reference name="log4net" path="../../../bin/"/>
   <Reference name="Nini" path="../../../bin/"/>
