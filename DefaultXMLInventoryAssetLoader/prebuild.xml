@@ -39,6 +39,7 @@
   <Reference name="System.Runtime.Remoting"/>
   
   <Reference name="Aurora.Framework"/>
+  <Reference name="Aurora.Modules"/>
   <Reference name="Aurora.Simulation.Base"/>
   <Reference name="OpenSim.Region.Framework"/>
   
