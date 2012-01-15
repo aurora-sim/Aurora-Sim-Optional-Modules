@@ -66,6 +66,9 @@ namespace Aurora.Services
         public IHttpServer m_server2 = null;
         string m_servernick = "hippogrid";
         protected IRegistryCore m_registry;
+
+        protected UUID AdminAgentID = UUID.Zero;
+
         public string Name
         {
             get { return GetType().Name; }
@@ -123,12 +126,12 @@ namespace Aurora.Services
             gridInfo[Name + "TextureServer"] = m_server2.ServerURI;
 
             m_server = simBase.GetHttpServer(handlerConfig.GetUInt(Name + "Port", 8007));
-            m_server.AddStreamHandler(new WebUIHTTPHandler(this, Password, registry, gridInfo, UUID.Zero, runLocally, httpPort)); //This handler allows sims to post CAPS for their sims on the CAPS server.
+            m_server.AddStreamHandler(new WebUIHTTPHandler(this, Password, registry, gridInfo, AdminAgentID, runLocally, httpPort)); //This handler allows sims to post CAPS for their sims on the CAPS server.
 
             MainConsole.Instance.Commands.AddCommand("webui promote user", "Grants the specified user administrative powers within webui.", "webui promote user", PromoteUser);
             MainConsole.Instance.Commands.AddCommand("webui demote user", "Revokes administrative powers for webui from the specified user.", "webui demote user", DemoteUser);
-//            MainConsole.Instance.Commands.AddCommand("webui add user", "Deprecated alias for webui promote user.", "webui add user", PromoteUser);
-//            MainConsole.Instance.Commands.AddCommand("webui remove user", "Deprecated alias for webui demote user.", "webui remove user", DemoteUser);
+            MainConsole.Instance.Commands.AddCommand("webui add group as news source", "Sets a group as a news source so in-world group notices can be used as a publishing tool for the website.", "webui add group as news source", AddGroupAsNewsSource);
+            MainConsole.Instance.Commands.AddCommand("webui remove group as news source", "Removes a group as a news source so it's notices will stop showing up on the news page.", "webui remove group as news source", RemoveGroupAsNewsSource);
         }
 
         private void SetUpWebUIPHP(uint port, string phpBinPath)
@@ -354,6 +357,8 @@ namespace Aurora.Services
 
         #region Console Commands
 
+        #region WebUI Admin
+
         private void PromoteUser (string[] cmd)
         {
             string name = MainConsole.Instance.Prompt ("Name of user");
@@ -383,6 +388,42 @@ namespace Aurora.Services
             Aurora.DataManager.DataManager.RequestPlugin<IAgentConnector> ().UpdateAgent (agent);
             MainConsole.Instance.Warn ("Admin removed");
         }
+
+        #endregion
+
+        #region Groups
+
+        private void AddGroupAsNewsSource(string[] cmd)
+        {
+            string name = MainConsole.Instance.Prompt("Name of group");
+            GroupRecord group = Aurora.DataManager.DataManager.RequestPlugin<IGroupsServiceConnector>().GetGroupRecord(AdminAgentID, UUID.Zero, name);
+            if (group == null)
+            {
+                MainConsole.Instance.Warn("[WebUI] You must create the group before adding it as a news source");
+                return;
+            }
+            IGenericsConnector generics = Aurora.DataManager.DataManager.RequestPlugin<IGenericsConnector>();
+            OSDMap useValue = new OSDMap();
+            useValue["Use"] = OSD.FromBoolean(true);
+            generics.AddGeneric(group.GroupID, "Group", "WebUI_newsSource", useValue);
+            MainConsole.Instance.Warn(string.Format("[WebUI]: \"{0}\" was added as a news source", group.GroupName));
+        }
+
+        private void RemoveGroupAsNewsSource(string[] cmd)
+        {
+            string name = MainConsole.Instance.Prompt("Name of group");
+            GroupRecord group = Aurora.DataManager.DataManager.RequestPlugin<IGroupsServiceConnector>().GetGroupRecord(AdminAgentID, UUID.Zero, name);
+            if (group == null)
+            {
+                MainConsole.Instance.Warn(string.Format("[WebUI] \"{0}\" did not appear to be a Group, cannot remove as news source", name));
+                return;
+            }
+            IGenericsConnector generics = Aurora.DataManager.DataManager.RequestPlugin<IGenericsConnector>();
+            generics.RemoveGeneric(group.GroupID, "Group", "WebUI_newsSource");
+            MainConsole.Instance.Warn(string.Format("[WebUI]: \"{0}\" was removed as a news source", group.GroupName));
+        }
+
+        #endregion
 
         #endregion
     }
