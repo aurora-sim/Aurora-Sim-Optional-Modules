@@ -1346,9 +1346,6 @@ namespace Aurora.Services
         {
             OSDMap es = ES.ToOSD();
 
-            es["RedirectGridX"] = (ES.RedirectGridX == 0) ? null : es["RedirectGridX"];
-            es["RedirectGridY"] = (ES.RedirectGridY == 0) ? null : es["RedirectGridY"];
-
             OSDArray bans = (OSDArray)es["EstateBans"];
             OSDArray Bans = new OSDArray(bans.Count);
             foreach (OSDMap ban in bans)
