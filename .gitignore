@@ -1,0 +1,3 @@
+*.csproj
+*.csproj.user
+*/Modules/obj/
