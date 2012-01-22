@@ -287,7 +287,7 @@ namespace OpenSim.Services
             string dob = map["dob"];
 
             //Optional params
-            //int limited_to_estate = map["limited_to_estate"];
+            int limited_to_estate = map["limited_to_estate"];
             string start_region_name = map["start_region_name"];
             float start_local_x = map["start_local_x"];
             float start_local_y = map["start_local_y"];
@@ -314,6 +314,18 @@ namespace OpenSim.Services
                         //Update the dob
                         user.Created = Util.ToUnixTime(time);
                         accountService.StoreUserAccount(user);
+
+                        IAgentConnector agentConnector = Aurora.DataManager.DataManager.RequestPlugin<IAgentConnector>();
+                        if (agentConnector != null)
+                        {
+                            agentConnector.CreateNewAgent(user.PrincipalID);
+                            if (map.ContainsKey("limited_to_estate"))
+                            {
+                                IAgentInfo agentInfo = agentConnector.GetAgent(user.PrincipalID);
+                                agentInfo.OtherAgentInformation["LimitedToEstate"] = limited_to_estate;
+                                agentConnector.UpdateAgent(agentInfo);
+                            }
+                        }
 
                         m_log.Info("[RegApi]: Created new user " + user.Name);
                         try
