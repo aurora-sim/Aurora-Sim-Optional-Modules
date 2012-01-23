@@ -32,7 +32,6 @@ using System.Text;
 using System.Data.SQLite;
 using OpenMetaverse;
 using Aurora.Framework;
-using Aurora.Framework;
 
 namespace OpenSim.Region.UserStatistics
 {
