@@ -296,9 +296,7 @@ namespace OpenSimSearch.Modules.OpenSearch
             remoteClient.SendDirPopularReply(queryID, data);
         }
 
-        public void DirLandQuery(IClientAPI remoteClient, UUID queryID,
-                uint queryFlags, uint searchType, int price, int area,
-                int queryStart)
+        public void DirLandQuery(IClientAPI remoteClient, UUID queryID, uint queryFlags, uint searchType, uint price, uint area, int queryStart)
         {
             Hashtable ReqHash = new Hashtable();
             ReqHash["flags"] = queryFlags.ToString();
