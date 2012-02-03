@@ -40,7 +40,6 @@ using Aurora.Framework;
 using Aurora.Framework.Servers.HttpServer;
 
 using Aurora.DataManager;
-using Aurora.Framework;
 using OpenMetaverse;
 using OpenMetaverse.StructuredData;
 using System.Collections.Specialized;
