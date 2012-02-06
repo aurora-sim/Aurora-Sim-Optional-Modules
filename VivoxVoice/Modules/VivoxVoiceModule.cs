@@ -637,16 +637,17 @@ namespace Aurora.OptionalModules
                     channel_uri = String.Empty;
                 }
 
-                if ((land.Flags & (uint)ParcelFlags.AllowVoiceChat) == 0)
+                //Disable this, force voice chat on only configurable via estate
+                /*if ((land.Flags & (uint)ParcelFlags.AllowVoiceChat) == 0)
                 {
                     m_log.DebugFormat("[VivoxVoice][PARCELVOICE]: region \"{0}\": Parcel \"{1}\" ({2}): avatar \"{3}\": voice not enabled for parcel",
                                       scene.RegionInfo.RegionName, land.Name, land.LocalID, avatarName);
                     channel_uri = String.Empty;
                 }
                 else
-                {
+                {*/
                     channel_uri = RegionGetOrCreateChannel(scene, land);
-                }
+                //}
 
                 // fill in our response to the client
                 OSDMap map = new OSDMap();
