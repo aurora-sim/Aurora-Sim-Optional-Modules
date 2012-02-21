@@ -1846,6 +1846,37 @@ namespace Aurora.Services
             return GroupNotices(args);
         }
 
+        private OSDMap GetGroupNotice(OSDMap map)
+        {
+            OSDMap resp = new OSDMap();
+            UUID noticeID = map.ContainsKey("NoticeID") ? UUID.Parse(map["NoticeID"]) : UUID.Zero;
+            IGroupsServiceConnector groups = Aurora.DataManager.DataManager.RequestPlugin<IGroupsServiceConnector>();
+
+            if (noticeID != UUID.Zero && groups != null)
+            {
+                GroupNoticeData GND = groups.GetGroupNoticeData(AdminAgentID, noticeID);
+                if (GND != null)
+                {
+                    OSDMap gnd = new OSDMap();
+                    gnd["GroupID"] = OSD.FromUUID(GND.GroupID);
+                    gnd["NoticeID"] = OSD.FromUUID(GND.NoticeID);
+                    gnd["Timestamp"] = OSD.FromInteger((int)GND.Timestamp);
+                    gnd["FromName"] = OSD.FromString(GND.FromName);
+                    gnd["Subject"] = OSD.FromString(GND.Subject);
+                    gnd["HasAttachment"] = OSD.FromBoolean(GND.HasAttachment);
+                    gnd["ItemID"] = OSD.FromUUID(GND.ItemID);
+                    gnd["AssetType"] = OSD.FromInteger((int)GND.AssetType);
+                    gnd["ItemName"] = OSD.FromString(GND.ItemName);
+                    GroupNoticeInfo notice = groups.GetGroupNotice(AdminAgentID, GND.NoticeID);
+                    gnd["Message"] = OSD.FromString(notice.Message);
+
+                    resp["GroupNotice"] = gnd;
+                }
+            }
+
+            return resp;
+        }
+
         #endregion
 
         #endregion
