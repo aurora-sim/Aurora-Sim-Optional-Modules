@@ -60,8 +60,136 @@ using RegionFlags = Aurora.Framework.RegionFlags;
 
 namespace Aurora.Services
 {
+    public class WebUIConnector : IAuroraDataPlugin
+    {
+        private bool m_enabled = false;
+        public bool Enabled
+        {
+            get { return m_enabled; }
+        }
+
+        private string m_Handler = string.Empty;
+        public string Handler
+        {
+            get
+            {
+                return m_Handler;
+            }
+        }
+
+        private string m_HandlerPassword = string.Empty;
+        public string HandlerPassword
+        {
+            get
+            {
+                return m_HandlerPassword;
+            }
+        }
+
+        private uint m_HandlerPort = 0;
+        public uint HandlerPort
+        {
+            get
+            {
+                return m_HandlerPort;
+            }
+        }
+
+        private uint m_TexturePort = 0;
+        public uint TexturePort
+        {
+            get
+            {
+                return m_TexturePort;
+            }
+        }
+
+        private IGenericData GD;
+        private string ConnectionString = "";
+
+        #region console wrappers
+
+        private void Info(object message)
+        {
+            MainConsole.Instance.Info("[" + Name + "]: " + message.ToString());
+        }
+
+        private void Warn(object message)
+        {
+            MainConsole.Instance.Warn("[" + Name + "]: " + message.ToString());
+        }
+
+        #endregion
+
+        #region IAuroraDataPlugin Members
+
+        public string Name
+        {
+            get
+            {
+                return "WebUIConnector";
+            }
+        }
+
+        private void handleConfig(IConfigSource m_config)
+        {
+            IConfig config = m_config.Configs["Handlers"];
+            if (config == null)
+            {
+                m_enabled = false;
+                Warn("not loaded, no configuration found.");
+                return;
+            }
+
+            m_Handler = config.GetString("WebUIHandler", string.Empty);
+            m_HandlerPassword = config.GetString("WebUIHandlerPassword", string.Empty);
+            m_HandlerPort = config.GetUInt("WebUIHandlerPort", 0);
+            m_TexturePort = config.GetUInt("WebUIHandlerTextureServerPort", 0);
+
+            if (Handler == string.Empty || HandlerPassword == string.Empty || HandlerPort == 0 || TexturePort == 0)
+            {
+                m_enabled = false;
+                Warn("Not loaded, configuration missing.");
+                return;
+            }
+
+            IConfig dbConfig = m_config.Configs["DatabaseService"];
+            if (dbConfig != null)
+            {
+                ConnectionString = dbConfig.GetString("ConnectionString", String.Empty);
+            }
+
+            if (ConnectionString == string.Empty)
+            {
+                m_enabled = false;
+                Warn("not loaded, no storage parameters found");
+                return;
+            }
+
+            m_enabled = true;
+        }
+
+        public void Initialize(IGenericData GenericData, IConfigSource source, IRegistryCore simBase, string DefaultConnectionString)
+        {
+            handleConfig(source);
+            if (!Enabled)
+            {
+                Warn("not loaded, disabled in config.");
+                return;
+            }
+            DataManager.DataManager.RegisterPlugin(this);
+
+            GD = GenericData;
+            GD.ConnectToDatabase(ConnectionString, "Wiredux", true);
+        }
+
+        #endregion
+    }
+
     public class WebUIHandler : IService
     {
+        private WebUIConnector m_connector;
+
         public IHttpServer m_server = null;
         public IHttpServer m_server2 = null;
         string m_servernick = "hippogrid";
@@ -82,6 +210,12 @@ namespace Aurora.Services
 
         public void Start(IConfigSource config, IRegistryCore registry)
         {
+            m_connector = DataManager.DataManager.RequestPlugin<WebUIConnector>();
+            if (m_connector == null || m_connector.Enabled == false || m_connector.Handler != Name)
+            {
+                return;
+            }
+
             IConfig handlerConfig = config.Configs["Handlers"];
             string name = handlerConfig.GetString(Name, "");
             string Password = handlerConfig.GetString(Name + "Password", String.Empty);
@@ -120,13 +254,13 @@ namespace Aurora.Services
 
             ISimulationBase simBase = registry.RequestModuleInterface<ISimulationBase>();
 
-            m_server2 = simBase.GetHttpServer(handlerConfig.GetUInt(Name + "TextureServerPort", 8002));
+            m_server = simBase.GetHttpServer(handlerConfig.GetUInt(Name + "Port", m_connector.HandlerPort));
+            //This handler allows sims to post CAPS for their sims on the CAPS server.
+            m_server.AddStreamHandler(new WebUIHTTPHandler(this, m_connector.HandlerPassword, registry, gridInfo, AdminAgentID, runLocally, httpPort));
+            m_server2 = simBase.GetHttpServer(handlerConfig.GetUInt(Name + "TextureServerPort", m_connector.TexturePort));
             m_server2.AddHTTPHandler("GridTexture", OnHTTPGetTextureImage);
             m_server2.AddHTTPHandler("MapTexture", OnHTTPGetMapImage);
             gridInfo[Name + "TextureServer"] = m_server2.ServerURI;
-
-            m_server = simBase.GetHttpServer(handlerConfig.GetUInt(Name + "Port", 8007));
-            m_server.AddStreamHandler(new WebUIHTTPHandler(this, Password, registry, gridInfo, AdminAgentID, runLocally, httpPort)); //This handler allows sims to post CAPS for their sims on the CAPS server.
 
             MainConsole.Instance.Commands.AddCommand("webui promote user", "Grants the specified user administrative powers within webui.", "webui promote user", PromoteUser);
             MainConsole.Instance.Commands.AddCommand("webui demote user", "Revokes administrative powers for webui from the specified user.", "webui demote user", DemoteUser);
