@@ -1402,6 +1402,24 @@ namespace Aurora.Services
             return resp;
         }
 
+        #region statistics
+
+        private OSDMap RecentlyOnlineUsers(OSDMap map)
+        {
+            uint secondsAgo = map.ContainsKey("secondsAgo") ? uint.Parse(map["secondsAgo"]) : 0;
+            bool stillOnline = map.ContainsKey("stillOnline") ? uint.Parse(map["stillOnline"]) == 1 : false;
+            IAgentInfoConnector users = DataManager.DataManager.RequestPlugin<IAgentInfoConnector>();
+
+            OSDMap resp = new OSDMap();
+            resp["secondsAgo"] = OSD.FromInteger((int)secondsAgo);
+            resp["stillOnline"] = OSD.FromBoolean(stillOnline);
+            resp["result"] = OSD.FromInteger(users != null ? (int)users.RecentlyOnline(secondsAgo, stillOnline) : 0);
+
+            return resp;
+        }
+
+        #endregion
+
         #endregion
 
         #region IAbuseReports
