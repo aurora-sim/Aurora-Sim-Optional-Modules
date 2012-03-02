@@ -1621,6 +1621,47 @@ namespace Aurora.Services
             return resp;
         }
 
+        private OSDMap GetRegionsByXY(OSDMap map)
+        {
+            OSDMap resp = new OSDMap();
+
+            if(!map.ContainsKey("X") || !map.ContainsKey("Y")){
+                resp["Failed"] = new OSDString("X and Y coordinates not specified");
+            }else{
+                int x = map["X"].AsInteger();
+                int y = map["Y"].AsInteger();
+                UUID scope = map.ContainsKey("ScopeID") ? UUID.Parse(map["ScopeID"].AsString()) : UUID.Zero;
+                RegionFlags include = map.Keys.Contains("RegionFlags") ? (RegionFlags)map["RegionFlags"].AsInteger() : RegionFlags.RegionOnline;
+                RegionFlags? exclude = null;
+                if (map.Keys.Contains("ExcludeRegionFlags"))
+                {
+                    exclude = (RegionFlags)map["ExcludeRegionFlags"].AsInteger();
+                }
+
+                IRegionData regiondata = Aurora.DataManager.DataManager.RequestPlugin<IRegionData>();
+
+                if (regiondata == null)
+                {
+                    resp["Failed"] = new OSDString("Could not get IRegionData plugin");
+                }else
+                {
+                    List<GridRegion> regions = regiondata.Get(x, y, scope);
+                    OSDArray Regions = new OSDArray();
+                    foreach (GridRegion region in regions)
+                    {
+                        if (((int)region.Flags & (int)include) == (int)include && (!exclude.HasValue || ((int)region.Flags & (int)exclude.Value) != (int)exclude))
+                        {
+                            Regions.Add(GridRegion2WebOSD(region));
+                        }
+                    }
+                    resp["Total"] = Regions.Count;
+                    resp["Regions"] = Regions; 
+                }
+            }
+
+            return resp;
+        }
+
         private OSDMap GetRegionsInEstate(OSDMap map)
         {
             OSDMap resp = new OSDMap();
