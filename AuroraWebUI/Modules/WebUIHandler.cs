@@ -1181,7 +1181,7 @@ namespace Aurora.Services
 
                 resp["UUID"] = OSD.FromUUID(user.PrincipalID);
                 resp["HomeUUID"] = OSD.FromUUID((userinfo == null) ? UUID.Zero : userinfo.HomeRegionID);
-                resp["HomeName"] = OSD.FromString((userinfo == null) ? "" : gr.RegionName);
+                resp["HomeName"] = OSD.FromString((userinfo == null || gr == null) ? "" : gr.RegionName);
                 resp["Online"] = OSD.FromBoolean((userinfo == null) ? false : userinfo.IsOnline);
                 resp["Email"] = OSD.FromString(user.Email);
                 resp["Name"] = OSD.FromString(user.Name);
@@ -1719,6 +1719,28 @@ namespace Aurora.Services
                 {
                     resp["Region"] = GridRegion2WebOSD(region);
                 }
+            }
+            return resp;
+        }
+
+        private OSDMap GetRegionNeighbours(OSDMap map)
+        {
+            OSDMap resp = new OSDMap();
+            IRegionData regiondata = Aurora.DataManager.DataManager.RequestPlugin<IRegionData>();
+            if (regiondata != null && map.ContainsKey("RegionID"))
+            {
+                List<GridRegion> regions = regiondata.GetNeighbours(
+                    UUID.Parse(map["RegionID"].ToString()),
+                    map.ContainsKey("ScopeID") ? UUID.Parse(map["ScopeID"].ToString()) : UUID.Zero,
+                    map.ContainsKey("Range") ? uint.Parse(map["Range"].ToString()) : 128
+                );
+                OSDArray Regions = new OSDArray(regions.Count);
+                foreach (GridRegion region in regions)
+                {
+                    Regions.Add(GridRegion2WebOSD(region));
+                }
+                resp["Total"] = Regions.Count;
+                resp["Regions"] = Regions;
             }
             return resp;
         }
