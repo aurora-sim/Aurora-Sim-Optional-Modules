@@ -184,6 +184,48 @@ namespace Aurora.Services
         }
 
         #endregion
+
+        public Dictionary<string, bool> adminmodules()
+        {
+            Dictionary<string, bool> resp = new Dictionary<string, bool>();
+
+            string[] keys = new string[20]{
+                "id",
+                "displayTopPanelSlider", 
+                "displayTemplateSelector",
+                "displayStyleSwitcher",
+                "displayStyleSizer",
+                "displayFontSizer",
+                "displayLanguageSelector",
+                "displayScrollingText",
+                "displayWelcomeMessage",
+                "displayLogo",
+                "displayLogoEffect",
+                "displaySlideShow",
+                "displayMegaMenu",
+                "displayDate",
+                "displayTime",
+                "displayRoundedCorner",
+                "displayBackgroundColorAnimation",
+                "displayPageLoadTime",
+                "displayW3c",
+                "displayRss"
+            };
+
+            List<string> result = GD.Query(keys, "wi_adminmodules", null, null, 0, 1);
+
+            if (result.Count != keys.Length)
+            {
+                return null;
+            }
+
+            for (int i = 0; i < result.Count; ++i)
+            {
+                resp[keys.GetValue(i).ToString()] = uint.Parse(result[i]) == 1;
+            }
+
+            return resp;
+        }
     }
 
     public class WebUIHandler : IService
@@ -560,6 +602,11 @@ namespace Aurora.Services
         #endregion
 
         #endregion
+
+        public Dictionary<string, bool> adminmodules()
+        {
+            return m_connector.adminmodules();
+        }
     }
 
     public class WebUIHTTPHandler : BaseStreamHandler
@@ -659,6 +706,26 @@ namespace Aurora.Services
         #endregion
 
         #region WebUI API methods
+
+        #region module-specific
+
+        private OSDMap adminmodules(OSDMap map)
+        {
+            OSDMap resp = new OSDMap(1);
+            OSDMap settings = new OSDMap();
+
+            Dictionary<string, bool> am = WebUI.adminmodules();
+            foreach (KeyValuePair<string, bool> kvp in am)
+            {
+                settings[kvp.Key] = OSD.FromBoolean(kvp.Value);
+            }
+
+            resp["Settings"] = settings;
+
+            return resp;
+        }
+
+        #endregion
 
         #region Grid
 
