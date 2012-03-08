@@ -85,11 +85,6 @@ namespace Aurora.OptionalModules
             LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         private static readonly Object vlock  = new Object();
 
-        // Capability strings
-        private static readonly string m_parcelVoiceInfoRequestPath = "0107/";
-        private static readonly string m_provisionVoiceAccountRequestPath = "0108/";
-        private static readonly string m_chatSessionRequestPath = "0109/";
-
         // Control info, e.g. vivox server, admin user, admin password
         private static bool   m_pluginEnabled  = false;
         private static bool   m_adminConnected = false;
