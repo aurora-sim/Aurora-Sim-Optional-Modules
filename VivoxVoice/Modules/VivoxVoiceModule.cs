@@ -636,8 +636,7 @@ namespace Aurora.OptionalModules
                                       scene.RegionInfo.RegionName);
                     channel_uri = String.Empty;
                 }
-
-                if ((land.Flags & (uint)ParcelFlags.AllowVoiceChat) == 0)
+                else if ((land.Flags & (uint)ParcelFlags.AllowVoiceChat) == 0)
                 {
                     m_log.DebugFormat("[VivoxVoice][PARCELVOICE]: region \"{0}\": Parcel \"{1}\" ({2}): avatar \"{3}\": voice not enabled for parcel",
                                       scene.RegionInfo.RegionName, land.Name, land.LocalID, avatarName);
