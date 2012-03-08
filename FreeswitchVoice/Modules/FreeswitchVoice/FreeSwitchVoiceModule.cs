@@ -426,16 +426,17 @@ namespace FreeswitchVoice
                      channelUri = String.Empty;
                 }
 
-                if ((land.Flags & (uint)ParcelFlags.AllowVoiceChat) == 0)
+                //This option isn't really enabled anymore, disable the check for it...
+                /*if ((land.Flags & (uint)ParcelFlags.AllowVoiceChat) == 0)
                 {
                     m_log.DebugFormat("[FreeSwitchVoice][PARCELVOICE]: region \"{0}\": Parcel \"{1}\" ({2}): avatar \"{3}\": voice not enabled for parcel",
                                       scene.RegionInfo.RegionName, land.Name, land.LocalID, avatarName);
                     channelUri = String.Empty;
                 }
                 else
-                {
+                {*/
                     channelUri = ChannelUri(scene, land);
-                }
+                //}
 
                 // fill in our response to the client
                 OSDMap map = new OSDMap();

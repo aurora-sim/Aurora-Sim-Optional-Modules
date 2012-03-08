@@ -60,8 +60,136 @@ using RegionFlags = Aurora.Framework.RegionFlags;
 
 namespace Aurora.Services
 {
+    public class WebUIConnector : IAuroraDataPlugin
+    {
+        private bool m_enabled = false;
+        public bool Enabled
+        {
+            get { return m_enabled; }
+        }
+
+        private string m_Handler = string.Empty;
+        public string Handler
+        {
+            get
+            {
+                return m_Handler;
+            }
+        }
+
+        private string m_HandlerPassword = string.Empty;
+        public string HandlerPassword
+        {
+            get
+            {
+                return m_HandlerPassword;
+            }
+        }
+
+        private uint m_HandlerPort = 0;
+        public uint HandlerPort
+        {
+            get
+            {
+                return m_HandlerPort;
+            }
+        }
+
+        private uint m_TexturePort = 0;
+        public uint TexturePort
+        {
+            get
+            {
+                return m_TexturePort;
+            }
+        }
+
+        private IGenericData GD;
+        private string ConnectionString = "";
+
+        #region console wrappers
+
+        private void Info(object message)
+        {
+            MainConsole.Instance.Info("[" + Name + "]: " + message.ToString());
+        }
+
+        private void Warn(object message)
+        {
+            MainConsole.Instance.Warn("[" + Name + "]: " + message.ToString());
+        }
+
+        #endregion
+
+        #region IAuroraDataPlugin Members
+
+        public string Name
+        {
+            get
+            {
+                return "WebUIConnector";
+            }
+        }
+
+        private void handleConfig(IConfigSource m_config)
+        {
+            IConfig config = m_config.Configs["Handlers"];
+            if (config == null)
+            {
+                m_enabled = false;
+                Warn("not loaded, no configuration found.");
+                return;
+            }
+
+            m_Handler = config.GetString("WebUIHandler", string.Empty);
+            m_HandlerPassword = config.GetString("WebUIHandlerPassword", string.Empty);
+            m_HandlerPort = config.GetUInt("WebUIHandlerPort", 0);
+            m_TexturePort = config.GetUInt("WebUIHandlerTextureServerPort", 0);
+
+            if (Handler == string.Empty || HandlerPassword == string.Empty || HandlerPort == 0 || TexturePort == 0)
+            {
+                m_enabled = false;
+                Warn("Not loaded, configuration missing.");
+                return;
+            }
+
+            IConfig dbConfig = m_config.Configs["DatabaseService"];
+            if (dbConfig != null)
+            {
+                ConnectionString = dbConfig.GetString("ConnectionString", String.Empty);
+            }
+
+            if (ConnectionString == string.Empty)
+            {
+                m_enabled = false;
+                Warn("not loaded, no storage parameters found");
+                return;
+            }
+
+            m_enabled = true;
+        }
+
+        public void Initialize(IGenericData GenericData, IConfigSource source, IRegistryCore simBase, string DefaultConnectionString)
+        {
+            handleConfig(source);
+            if (!Enabled)
+            {
+                Warn("not loaded, disabled in config.");
+                return;
+            }
+            DataManager.DataManager.RegisterPlugin(this);
+
+            GD = GenericData;
+            GD.ConnectToDatabase(ConnectionString, "Wiredux", true);
+        }
+
+        #endregion
+    }
+
     public class WebUIHandler : IService
     {
+        private WebUIConnector m_connector;
+
         public IHttpServer m_server = null;
         public IHttpServer m_server2 = null;
         string m_servernick = "hippogrid";
@@ -82,6 +210,12 @@ namespace Aurora.Services
 
         public void Start(IConfigSource config, IRegistryCore registry)
         {
+            m_connector = DataManager.DataManager.RequestPlugin<WebUIConnector>();
+            if (m_connector == null || m_connector.Enabled == false || m_connector.Handler != Name)
+            {
+                return;
+            }
+
             IConfig handlerConfig = config.Configs["Handlers"];
             string name = handlerConfig.GetString(Name, "");
             string Password = handlerConfig.GetString(Name + "Password", String.Empty);
@@ -120,13 +254,13 @@ namespace Aurora.Services
 
             ISimulationBase simBase = registry.RequestModuleInterface<ISimulationBase>();
 
-            m_server2 = simBase.GetHttpServer(handlerConfig.GetUInt(Name + "TextureServerPort", 8002));
+            m_server = simBase.GetHttpServer(handlerConfig.GetUInt(Name + "Port", m_connector.HandlerPort));
+            //This handler allows sims to post CAPS for their sims on the CAPS server.
+            m_server.AddStreamHandler(new WebUIHTTPHandler(this, m_connector.HandlerPassword, registry, gridInfo, AdminAgentID, runLocally, httpPort));
+            m_server2 = simBase.GetHttpServer(handlerConfig.GetUInt(Name + "TextureServerPort", m_connector.TexturePort));
             m_server2.AddHTTPHandler("GridTexture", OnHTTPGetTextureImage);
             m_server2.AddHTTPHandler("MapTexture", OnHTTPGetMapImage);
             gridInfo[Name + "TextureServer"] = m_server2.ServerURI;
-
-            m_server = simBase.GetHttpServer(handlerConfig.GetUInt(Name + "Port", 8007));
-            m_server.AddStreamHandler(new WebUIHTTPHandler(this, Password, registry, gridInfo, AdminAgentID, runLocally, httpPort)); //This handler allows sims to post CAPS for their sims on the CAPS server.
 
             MainConsole.Instance.Commands.AddCommand("webui promote user", "Grants the specified user administrative powers within webui.", "webui promote user", PromoteUser);
             MainConsole.Instance.Commands.AddCommand("webui demote user", "Revokes administrative powers for webui from the specified user.", "webui demote user", DemoteUser);
@@ -1047,7 +1181,7 @@ namespace Aurora.Services
 
                 resp["UUID"] = OSD.FromUUID(user.PrincipalID);
                 resp["HomeUUID"] = OSD.FromUUID((userinfo == null) ? UUID.Zero : userinfo.HomeRegionID);
-                resp["HomeName"] = OSD.FromString((userinfo == null) ? "" : gr.RegionName);
+                resp["HomeName"] = OSD.FromString((userinfo == null || gr == null) ? "" : gr.RegionName);
                 resp["Online"] = OSD.FromBoolean((userinfo == null) ? false : userinfo.IsOnline);
                 resp["Email"] = OSD.FromString(user.Email);
                 resp["Name"] = OSD.FromString(user.Name);
@@ -1268,6 +1402,24 @@ namespace Aurora.Services
             return resp;
         }
 
+        #region statistics
+
+        private OSDMap RecentlyOnlineUsers(OSDMap map)
+        {
+            uint secondsAgo = map.ContainsKey("secondsAgo") ? uint.Parse(map["secondsAgo"]) : 0;
+            bool stillOnline = map.ContainsKey("stillOnline") ? uint.Parse(map["stillOnline"]) == 1 : false;
+            IAgentInfoConnector users = DataManager.DataManager.RequestPlugin<IAgentInfoConnector>();
+
+            OSDMap resp = new OSDMap();
+            resp["secondsAgo"] = OSD.FromInteger((int)secondsAgo);
+            resp["stillOnline"] = OSD.FromBoolean(stillOnline);
+            resp["result"] = OSD.FromInteger(users != null ? (int)users.RecentlyOnline(secondsAgo, stillOnline) : 0);
+
+            return resp;
+        }
+
+        #endregion
+
         #endregion
 
         #region IAbuseReports
@@ -1469,6 +1621,47 @@ namespace Aurora.Services
             return resp;
         }
 
+        private OSDMap GetRegionsByXY(OSDMap map)
+        {
+            OSDMap resp = new OSDMap();
+
+            if(!map.ContainsKey("X") || !map.ContainsKey("Y")){
+                resp["Failed"] = new OSDString("X and Y coordinates not specified");
+            }else{
+                int x = map["X"].AsInteger();
+                int y = map["Y"].AsInteger();
+                UUID scope = map.ContainsKey("ScopeID") ? UUID.Parse(map["ScopeID"].AsString()) : UUID.Zero;
+                RegionFlags include = map.Keys.Contains("RegionFlags") ? (RegionFlags)map["RegionFlags"].AsInteger() : RegionFlags.RegionOnline;
+                RegionFlags? exclude = null;
+                if (map.Keys.Contains("ExcludeRegionFlags"))
+                {
+                    exclude = (RegionFlags)map["ExcludeRegionFlags"].AsInteger();
+                }
+
+                IRegionData regiondata = Aurora.DataManager.DataManager.RequestPlugin<IRegionData>();
+
+                if (regiondata == null)
+                {
+                    resp["Failed"] = new OSDString("Could not get IRegionData plugin");
+                }else
+                {
+                    List<GridRegion> regions = regiondata.Get(x, y, scope);
+                    OSDArray Regions = new OSDArray();
+                    foreach (GridRegion region in regions)
+                    {
+                        if (((int)region.Flags & (int)include) == (int)include && (!exclude.HasValue || ((int)region.Flags & (int)exclude.Value) != (int)exclude))
+                        {
+                            Regions.Add(GridRegion2WebOSD(region));
+                        }
+                    }
+                    resp["Total"] = Regions.Count;
+                    resp["Regions"] = Regions; 
+                }
+            }
+
+            return resp;
+        }
+
         private OSDMap GetRegionsInEstate(OSDMap map)
         {
             OSDMap resp = new OSDMap();
@@ -1526,6 +1719,28 @@ namespace Aurora.Services
                 {
                     resp["Region"] = GridRegion2WebOSD(region);
                 }
+            }
+            return resp;
+        }
+
+        private OSDMap GetRegionNeighbours(OSDMap map)
+        {
+            OSDMap resp = new OSDMap();
+            IRegionData regiondata = Aurora.DataManager.DataManager.RequestPlugin<IRegionData>();
+            if (regiondata != null && map.ContainsKey("RegionID"))
+            {
+                List<GridRegion> regions = regiondata.GetNeighbours(
+                    UUID.Parse(map["RegionID"].ToString()),
+                    map.ContainsKey("ScopeID") ? UUID.Parse(map["ScopeID"].ToString()) : UUID.Zero,
+                    map.ContainsKey("Range") ? uint.Parse(map["Range"].ToString()) : 128
+                );
+                OSDArray Regions = new OSDArray(regions.Count);
+                foreach (GridRegion region in regions)
+                {
+                    Regions.Add(GridRegion2WebOSD(region));
+                }
+                resp["Total"] = Regions.Count;
+                resp["Regions"] = Regions;
             }
             return resp;
         }
@@ -1844,6 +2059,37 @@ namespace Aurora.Services
             args["Groups"] = new OSDArray(GroupIDs.ConvertAll(x=>OSD.FromString(x.ToString())));
 
             return GroupNotices(args);
+        }
+
+        private OSDMap GetGroupNotice(OSDMap map)
+        {
+            OSDMap resp = new OSDMap();
+            UUID noticeID = map.ContainsKey("NoticeID") ? UUID.Parse(map["NoticeID"]) : UUID.Zero;
+            IGroupsServiceConnector groups = Aurora.DataManager.DataManager.RequestPlugin<IGroupsServiceConnector>();
+
+            if (noticeID != UUID.Zero && groups != null)
+            {
+                GroupNoticeData GND = groups.GetGroupNoticeData(AdminAgentID, noticeID);
+                if (GND != null)
+                {
+                    OSDMap gnd = new OSDMap();
+                    gnd["GroupID"] = OSD.FromUUID(GND.GroupID);
+                    gnd["NoticeID"] = OSD.FromUUID(GND.NoticeID);
+                    gnd["Timestamp"] = OSD.FromInteger((int)GND.Timestamp);
+                    gnd["FromName"] = OSD.FromString(GND.FromName);
+                    gnd["Subject"] = OSD.FromString(GND.Subject);
+                    gnd["HasAttachment"] = OSD.FromBoolean(GND.HasAttachment);
+                    gnd["ItemID"] = OSD.FromUUID(GND.ItemID);
+                    gnd["AssetType"] = OSD.FromInteger((int)GND.AssetType);
+                    gnd["ItemName"] = OSD.FromString(GND.ItemName);
+                    GroupNoticeInfo notice = groups.GetGroupNotice(AdminAgentID, GND.NoticeID);
+                    gnd["Message"] = OSD.FromString(notice.Message);
+
+                    resp["GroupNotice"] = gnd;
+                }
+            }
+
+            return resp;
         }
 
         #endregion
