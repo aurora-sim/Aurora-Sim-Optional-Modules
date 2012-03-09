@@ -212,8 +212,7 @@ namespace Aurora.OptionalModules
             }
             catch (Exception e)
             {
-                m_log.ErrorFormat("[VivoxVoice] plugin initialization failed: {0}", e.Message);
-                m_log.DebugFormat("[VivoxVoice] plugin initialization failed: {0}", e.ToString());
+                m_log.ErrorFormat("[VivoxVoice] plugin initialization failed: {0}", e.ToString());
                 return;
             }
         }
@@ -466,8 +465,8 @@ namespace Aurora.OptionalModules
 
                 avatarName = avatar.Name;
 
-                m_log.DebugFormat("[VivoxVoice][PROVISIONVOICE]: scene = {0}, agentID = {1}", scene, agentID);
-                m_log.DebugFormat("[VivoxVoice][PROVISIONVOICE]: request: {0}, path: {1}, param: {2}",
+                m_log.TraceFormat("[VivoxVoice][PROVISIONVOICE]: scene = {0}, agentID = {1}", scene, agentID);
+                m_log.TraceFormat("[VivoxVoice][PROVISIONVOICE]: request: {0}, path: {1}, param: {2}",
                                   request, path, param);
 
                 XmlElement    resp;
@@ -576,14 +575,13 @@ namespace Aurora.OptionalModules
                 map["voice_account_server_name"] = m_vivoxVoiceAccountApi;
                 string r = OSDParser.SerializeLLSDXmlString(map);
 
-                m_log.DebugFormat("[VivoxVoice][PROVISIONVOICE]: avatar \"{0}\": {1}", avatarName, r);
+                m_log.TraceFormat("[VivoxVoice][PROVISIONVOICE]: avatar \"{0}\" added: {1}", avatarName, r);
 
                 return r;
             }
             catch (Exception e)
             {
-                m_log.ErrorFormat("[VivoxVoice][PROVISIONVOICE]: : {0}, retry later", e.Message);
-                m_log.DebugFormat("[VivoxVoice][PROVISIONVOICE]: : {0} failed", e.ToString());
+                m_log.ErrorFormat("[VivoxVoice][PROVISIONVOICE]: : {0}, retry later", e.ToString());
                 return "<llsd><undef /></llsd>";
             }
         }
@@ -639,6 +637,8 @@ namespace Aurora.OptionalModules
                 }*/
                 else
                 {
+                    m_log.DebugFormat("[VivoxVoice]: region \"{0}\": voice enabled in estate settings, creating parcel voice",
+                                      scene.RegionInfo.RegionName);
                     channel_uri = RegionGetOrCreateChannel(scene, land);
                 }
 
@@ -709,14 +709,14 @@ namespace Aurora.OptionalModules
             {
                 landName = String.Format("{0}:{1}", scene.RegionInfo.RegionName, land.Name);
                 landUUID = land.GlobalID.ToString();
-                m_log.DebugFormat("[VivoxVoice]: Region:Parcel \"{0}\": parcel id {1}: using channel name {2}",
+                m_log.TraceFormat("[VivoxVoice]: Region:Parcel \"{0}\": parcel id {1}: using channel name {2}",
                                   landName, land.LocalID, landUUID);
             }
             else
             {
                 landName = String.Format("{0}:{1}", scene.RegionInfo.RegionName, scene.RegionInfo.RegionName);
                 landUUID = scene.RegionInfo.RegionID.ToString();
-                m_log.DebugFormat("[VivoxVoice]: Region:Parcel \"{0}\": parcel id {1}: using channel name {2}",
+                m_log.TraceFormat("[VivoxVoice]: Region:Parcel \"{0}\": parcel id {1}: using channel name {2}",
                                   landName, land.LocalID, landUUID);
             }
 
@@ -730,7 +730,7 @@ namespace Aurora.OptionalModules
                 else
                     throw new Exception("vivox channel uri not available");
 
-                m_log.DebugFormat("[VivoxVoice]: Region:Parcel \"{0}\": parent channel id {1}: retrieved parcel channel_uri {2} ",
+                m_log.TraceFormat("[VivoxVoice]: Region:Parcel \"{0}\": parent channel id {1}: retrieved parcel channel_uri {2} ",
                                   landName, parentId, channelUri);
 
 
@@ -1125,7 +1125,7 @@ namespace Aurora.OptionalModules
             try
             {
                 // Otherwise prepare the request
-                m_log.DebugFormat("[VivoxVoice] Sending request <{0}>", requrl);
+                m_log.TraceFormat("[VivoxVoice] Sending request <{0}>", requrl);
 
                 HttpWebRequest  req = (HttpWebRequest)WebRequest.Create(requrl);
                 HttpWebResponse rsp = null;
@@ -1188,7 +1188,7 @@ namespace Aurora.OptionalModules
                             m_log.Info("[VivoxVoice] Admin connection established");
                             if (XmlFind(resp, "response.level0.body.auth_token", out m_authToken))
                             {
-                                if (m_dumpXml) m_log.DebugFormat("[VivoxVoice] Auth Token <{0}>",
+                                if (m_dumpXml) m_log.TraceFormat("[VivoxVoice] Auth Token <{0}>",
                                                             m_authToken);
                                 m_adminConnected = true;
                             }
@@ -1216,7 +1216,7 @@ namespace Aurora.OptionalModules
         {
             if (e.HasChildNodes)
             {
-                m_log.DebugFormat("<{0}>".PadLeft(index+5), e.Name);
+                m_log.TraceFormat("<{0}>".PadLeft(index+5), e.Name);
                 XmlNodeList children = e.ChildNodes;
                 foreach (XmlNode node in children)
                    switch (node.NodeType)
@@ -1230,11 +1230,11 @@ namespace Aurora.OptionalModules
                         default :
                             break;
                    }
-                m_log.DebugFormat("</{0}>".PadLeft(index+6), e.Name);
+                m_log.TraceFormat("</{0}>".PadLeft(index+6), e.Name);
             }
             else
             {
-                m_log.DebugFormat("<{0}/>".PadLeft(index+6), e.Name);
+                m_log.TraceFormat("<{0}/>".PadLeft(index+6), e.Name);
             }
         }
 
