@@ -619,8 +619,8 @@ namespace Aurora.OptionalModules
                 // voice channel
                 LandData land = avatar.CurrentParcel.LandData;
 
-                m_log.DebugFormat("[VivoxVoice][PARCELVOICE]: region \"{0}\": Parcel \"{1}\" ({2}): avatar \"{3}\": request: {4}, path: {5}, param: {6}",
-                                  scene.RegionInfo.RegionName, land.Name, land.LocalID, avatarName, request, path, param);
+                //m_log.DebugFormat("[VivoxVoice][PARCELVOICE]: region \"{0}\": Parcel \"{1}\" ({2}): avatar \"{3}\": request: {4}, path: {5}, param: {6}",
+                //                  scene.RegionInfo.RegionName, land.Name, land.LocalID, avatarName, request, path, param);
                 // m_log.DebugFormat("[VivoxVoice][PARCELVOICE]: avatar \"{0}\": location: {1} {2} {3}",
                 //                   avatarName, avatar.AbsolutePosition.X, avatar.AbsolutePosition.Y, avatar.AbsolutePosition.Z);
 
@@ -684,7 +684,9 @@ namespace Aurora.OptionalModules
 
             m_log.DebugFormat("[VivoxVoice][CHATSESSION]: avatar \"{0}\": request: {1}, path: {2}, param: {3}",
                               avatarName, request, path, param);
-            return "<llsd>true</llsd>";
+            if (avatar.Scene.RegionInfo.EstateSettings.AllowVoice)
+                return "<llsd>true</llsd>";
+            return "<llsd>false</llsd>";
         }
 
 
