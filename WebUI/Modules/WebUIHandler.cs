@@ -242,6 +242,44 @@ namespace Aurora.Services
             return resp;
         }
 
+        public Dictionary<string, uint> adminsetting()
+        {
+            Dictionary<string, uint> resp = new Dictionary<string, uint>();
+
+            string[] keys = new string[7]{
+                "id",
+                "lastnames",
+                "adress",
+                "region",
+                "allowRegistrations",
+                "verifyUsers",
+                "ForceAge"
+            };
+
+            List<string> result = GD.Query(keys, "wi_adminsetting", null, null, 0, 1);
+
+            if (result.Count != keys.Length)
+            {
+                return null;
+            }
+
+            for (int i = 0; i < result.Count; ++i)
+            {
+                resp[keys.GetValue(i).ToString()] = uint.Parse(result[i]);
+            }
+
+            return resp;
+        }
+
+        public UUID adminsetting_startregion()
+        {
+            UUID resp;
+
+            List<string> result = GD.Query(new string[1] { "startregion" }, "wi_adminsetting", null, null, 0, 1);
+
+            return UUID.TryParse(result[0], out resp) ? resp : UUID.Zero;
+        }
+
         private void garbageCollection()
         {
             int now = (int)Utils.DateTimeToUnixTime(DateTime.Now);
@@ -640,6 +678,16 @@ namespace Aurora.Services
         {
             return m_connector.adminmodules();
         }
+
+        public Dictionary<string, uint> adminsetting()
+        {
+            return m_connector.adminsetting();
+        }
+
+        public UUID adminsetting_startregion()
+        {
+            return m_connector.adminsetting_startregion();
+        }
     }
 
     public class WebUIHTTPHandler : BaseStreamHandler
@@ -754,6 +802,23 @@ namespace Aurora.Services
             }
 
             resp["Settings"] = settings;
+
+            return resp;
+        }
+
+        private OSDMap adminsetting(OSDMap map)
+        {
+            OSDMap resp = new OSDMap(2);
+            OSDMap settings = new OSDMap();
+
+            Dictionary<string, uint> am = WebUI.adminsetting();
+            foreach (KeyValuePair<string, uint> kvp in am)
+            {
+                settings[kvp.Key] = OSD.FromUInteger(kvp.Value);
+            }
+
+            resp["Settings"] = settings;
+            resp["startregion"] = OSD.FromUUID(WebUI.adminsetting_startregion());
 
             return resp;
         }
