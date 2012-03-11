@@ -37,6 +37,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Reflection;
+using System.Timers;
 
 using BitmapProcessing;
 
@@ -106,6 +107,8 @@ namespace Aurora.Services
 
         private IGenericData GD;
         private string ConnectionString = "";
+        private Timer m_GC_timer;
+        private uint m_codes_GC = 24;
 
         #region console wrappers
 
@@ -145,6 +148,11 @@ namespace Aurora.Services
             m_HandlerPassword = config.GetString("WebUIHandlerPassword", string.Empty);
             m_HandlerPort = config.GetUInt("WebUIHandlerPort", 0);
             m_TexturePort = config.GetUInt("WebUIHandlerTextureServerPort", 0);
+            m_codes_GC = config.GetUInt("WebUIHandlerGC_codes", 24);
+            if (m_codes_GC < 1)
+            {
+                m_codes_GC = 1;
+            }
 
             if (Handler == string.Empty || HandlerPassword == string.Empty || HandlerPort == 0 || TexturePort == 0)
             {
@@ -181,6 +189,13 @@ namespace Aurora.Services
 
             GD = GenericData;
             GD.ConnectToDatabase(ConnectionString, "Wiredux", true);
+
+            m_GC_timer = new Timer(m_codes_GC * 3600000);
+            m_GC_timer.Elapsed += new ElapsedEventHandler((object sender, ElapsedEventArgs e) => {
+                garbageCollection();
+            });
+            m_GC_timer.Enabled = true;
+            garbageCollection();
         }
 
         #endregion
@@ -225,6 +240,24 @@ namespace Aurora.Services
             }
 
             return resp;
+        }
+
+        private void garbageCollection()
+        {
+            int now = (int)Utils.DateTimeToUnixTime(DateTime.Now);
+
+            QueryFilter filter = new QueryFilter();
+
+            filter.andLessThanFilters["time"] = now - (int)(m_codes_GC * 3600);
+            filter.andFilters["info"] = "pwreset";
+            filter.orMultiFilters["info"] = new List<object>
+            {
+                "pwreset",
+                "confirm",
+                "emailconfirm"
+            };
+
+            GD.Delete("wi_codetable", filter);
         }
     }
 
