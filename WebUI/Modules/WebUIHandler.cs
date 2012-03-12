@@ -265,7 +265,12 @@ namespace Aurora.Services
 
             for (int i = 0; i < result.Count; ++i)
             {
-                resp[keys.GetValue(i).ToString()] = uint.Parse(result[i]);
+                uint val;
+                if (!uint.TryParse(result[i], out val))
+                {
+                    val = (uint)((result[i] == "True") ? 1 : 0);
+                }
+                resp[keys.GetValue(i).ToString()] = val;
             }
 
             return resp;
@@ -277,7 +282,7 @@ namespace Aurora.Services
 
             List<string> result = GD.Query(new string[1] { "startregion" }, "wi_adminsetting", null, null, 0, 1);
 
-            return UUID.TryParse(result[0], out resp) ? resp : UUID.Zero;
+            return result[0].Trim() != string.Empty && UUID.TryParse(result[0], out resp) ? resp : UUID.Zero;
         }
 
         private void garbageCollection()
@@ -814,7 +819,7 @@ namespace Aurora.Services
             Dictionary<string, uint> am = WebUI.adminsetting();
             foreach (KeyValuePair<string, uint> kvp in am)
             {
-                settings[kvp.Key] = OSD.FromUInteger(kvp.Value);
+                settings[kvp.Key] = OSD.FromInteger((int)kvp.Value);
             }
 
             resp["Settings"] = settings;
