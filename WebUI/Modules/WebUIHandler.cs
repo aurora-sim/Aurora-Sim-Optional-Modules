@@ -200,11 +200,38 @@ namespace Aurora.Services
 
         #endregion
 
-        public Dictionary<string, bool> adminmodules()
+        public OSDMap WebUIClientImplementationData()
         {
-            Dictionary<string, bool> resp = new Dictionary<string, bool>();
+            OSDMap resp = new OSDMap(3);
+            List<string> result;
+            string[] keys;
 
-            string[] keys = new string[20]{
+            keys = new string[7]{
+                "id",
+                "lastnames",
+                "adress",
+                "region",
+                "allowRegistrations",
+                "verifyUsers",
+                "ForceAge"
+            };
+            result = GD.Query(keys, "wi_adminsetting", null, null, 0, 1);
+            if (result.Count == keys.Length)
+            {
+                OSDMap adminsetting = new OSDMap();
+                for (int i = 0; i < result.Count; ++i)
+                {
+                    uint val;
+                    if (!uint.TryParse(result[i], out val))
+                    {
+                        val = (uint)((result[i] == "True") ? 1 : 0);
+                    }
+                    adminsetting[keys.GetValue(i).ToString()] = OSD.FromInteger(val);
+                }
+                resp["adminsetting"] = adminsetting;
+            }
+
+            keys = new string[20]{
                 "id",
                 "displayTopPanelSlider", 
                 "displayTemplateSelector",
@@ -226,63 +253,23 @@ namespace Aurora.Services
                 "displayW3c",
                 "displayRss"
             };
-
-            List<string> result = GD.Query(keys, "wi_adminmodules", null, null, 0, 1);
-
-            if (result.Count != keys.Length)
+            result = GD.Query(keys, "wi_adminmodules", null, null, 0, 1);
+            if (result.Count == keys.Length)
             {
-                return null;
-            }
-
-            for (int i = 0; i < result.Count; ++i)
-            {
-                resp[keys.GetValue(i).ToString()] = uint.Parse(result[i]) == 1;
-            }
-
-            return resp;
-        }
-
-        public Dictionary<string, uint> adminsetting()
-        {
-            Dictionary<string, uint> resp = new Dictionary<string, uint>();
-
-            string[] keys = new string[7]{
-                "id",
-                "lastnames",
-                "adress",
-                "region",
-                "allowRegistrations",
-                "verifyUsers",
-                "ForceAge"
-            };
-
-            List<string> result = GD.Query(keys, "wi_adminsetting", null, null, 0, 1);
-
-            if (result.Count != keys.Length)
-            {
-                return null;
-            }
-
-            for (int i = 0; i < result.Count; ++i)
-            {
-                uint val;
-                if (!uint.TryParse(result[i], out val))
+                OSDMap adminmodules = new OSDMap();
+                for (int i = 0; i < result.Count; ++i)
                 {
-                    val = (uint)((result[i] == "True") ? 1 : 0);
+                    adminmodules[keys.GetValue(i).ToString()] = OSD.FromBoolean(uint.Parse(result[i]) == 1);
                 }
-                resp[keys.GetValue(i).ToString()] = val;
+                resp["adminmodules"] = adminmodules;
             }
 
+
+            UUID uuid;
+            result = GD.Query(new string[1] { "startregion" }, "wi_adminsetting", null, null, 0, 1);
+            resp["startregion"] = OSD.FromUUID(result[0].Trim() != string.Empty && UUID.TryParse(result[0], out uuid) ? uuid : UUID.Zero);
+
             return resp;
-        }
-
-        public UUID adminsetting_startregion()
-        {
-            UUID resp;
-
-            List<string> result = GD.Query(new string[1] { "startregion" }, "wi_adminsetting", null, null, 0, 1);
-
-            return result[0].Trim() != string.Empty && UUID.TryParse(result[0], out resp) ? resp : UUID.Zero;
         }
 
         private void garbageCollection()
@@ -679,19 +666,9 @@ namespace Aurora.Services
 
         #endregion
 
-        public Dictionary<string, bool> adminmodules()
+        public OSDMap WebUIClientImplementationData()
         {
-            return m_connector.adminmodules();
-        }
-
-        public Dictionary<string, uint> adminsetting()
-        {
-            return m_connector.adminsetting();
-        }
-
-        public UUID adminsetting_startregion()
-        {
-            return m_connector.adminsetting_startregion();
+            return m_connector.WebUIClientImplementationData();
         }
     }
 
@@ -795,37 +772,9 @@ namespace Aurora.Services
 
         #region module-specific
 
-        private OSDMap adminmodules(OSDMap map)
+        private OSDMap WebUIClientImplementationData(OSDMap map)
         {
-            OSDMap resp = new OSDMap(1);
-            OSDMap settings = new OSDMap();
-
-            Dictionary<string, bool> am = WebUI.adminmodules();
-            foreach (KeyValuePair<string, bool> kvp in am)
-            {
-                settings[kvp.Key] = OSD.FromBoolean(kvp.Value);
-            }
-
-            resp["Settings"] = settings;
-
-            return resp;
-        }
-
-        private OSDMap adminsetting(OSDMap map)
-        {
-            OSDMap resp = new OSDMap(2);
-            OSDMap settings = new OSDMap();
-
-            Dictionary<string, uint> am = WebUI.adminsetting();
-            foreach (KeyValuePair<string, uint> kvp in am)
-            {
-                settings[kvp.Key] = OSD.FromInteger((int)kvp.Value);
-            }
-
-            resp["Settings"] = settings;
-            resp["startregion"] = OSD.FromUUID(WebUI.adminsetting_startregion());
-
-            return resp;
+            return WebUI.WebUIClientImplementationData();
         }
 
         #endregion
