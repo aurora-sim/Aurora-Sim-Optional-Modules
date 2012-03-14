@@ -37,6 +37,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Reflection;
+using System.Timers;
 
 using BitmapProcessing;
 
@@ -106,6 +107,8 @@ namespace Aurora.Services
 
         private IGenericData GD;
         private string ConnectionString = "";
+        private Timer m_GC_timer;
+        private uint m_codes_GC = 24;
 
         #region console wrappers
 
@@ -145,6 +148,11 @@ namespace Aurora.Services
             m_HandlerPassword = config.GetString("WebUIHandlerPassword", string.Empty);
             m_HandlerPort = config.GetUInt("WebUIHandlerPort", 0);
             m_TexturePort = config.GetUInt("WebUIHandlerTextureServerPort", 0);
+            m_codes_GC = config.GetUInt("WebUIHandlerGC_codes", 24);
+            if (m_codes_GC < 1)
+            {
+                m_codes_GC = 1;
+            }
 
             if (Handler == string.Empty || HandlerPassword == string.Empty || HandlerPort == 0 || TexturePort == 0)
             {
@@ -181,15 +189,49 @@ namespace Aurora.Services
 
             GD = GenericData;
             GD.ConnectToDatabase(ConnectionString, "Wiredux", true);
+
+            m_GC_timer = new Timer(m_codes_GC * 3600000);
+            m_GC_timer.Elapsed += new ElapsedEventHandler((object sender, ElapsedEventArgs e) => {
+                garbageCollection();
+            });
+            m_GC_timer.Enabled = true;
+            garbageCollection();
         }
 
         #endregion
 
-        public Dictionary<string, bool> adminmodules()
+        public OSDMap WebUIClientImplementationData()
         {
-            Dictionary<string, bool> resp = new Dictionary<string, bool>();
+            OSDMap resp = new OSDMap(3);
+            List<string> result;
+            string[] keys;
 
-            string[] keys = new string[20]{
+            keys = new string[7]{
+                "id",
+                "lastnames",
+                "adress",
+                "region",
+                "allowRegistrations",
+                "verifyUsers",
+                "ForceAge"
+            };
+            result = GD.Query(keys, "wi_adminsetting", null, null, 0, 1);
+            if (result.Count == keys.Length)
+            {
+                OSDMap adminsetting = new OSDMap();
+                for (int i = 0; i < result.Count; ++i)
+                {
+                    uint val;
+                    if (!uint.TryParse(result[i], out val))
+                    {
+                        val = (uint)((result[i] == "True") ? 1 : 0);
+                    }
+                    adminsetting[keys.GetValue(i).ToString()] = OSD.FromInteger(val);
+                }
+                resp["adminsetting"] = adminsetting;
+            }
+
+            keys = new string[20]{
                 "id",
                 "displayTopPanelSlider", 
                 "displayTemplateSelector",
@@ -211,20 +253,41 @@ namespace Aurora.Services
                 "displayW3c",
                 "displayRss"
             };
-
-            List<string> result = GD.Query(keys, "wi_adminmodules", null, null, 0, 1);
-
-            if (result.Count != keys.Length)
+            result = GD.Query(keys, "wi_adminmodules", null, null, 0, 1);
+            if (result.Count == keys.Length)
             {
-                return null;
+                OSDMap adminmodules = new OSDMap();
+                for (int i = 0; i < result.Count; ++i)
+                {
+                    adminmodules[keys.GetValue(i).ToString()] = OSD.FromBoolean(uint.Parse(result[i]) == 1);
+                }
+                resp["adminmodules"] = adminmodules;
             }
 
-            for (int i = 0; i < result.Count; ++i)
-            {
-                resp[keys.GetValue(i).ToString()] = uint.Parse(result[i]) == 1;
-            }
+
+            UUID uuid;
+            result = GD.Query(new string[1] { "startregion" }, "wi_adminsetting", null, null, 0, 1);
+            resp["startregion"] = OSD.FromUUID(result[0].Trim() != string.Empty && UUID.TryParse(result[0], out uuid) ? uuid : UUID.Zero);
 
             return resp;
+        }
+
+        private void garbageCollection()
+        {
+            int now = (int)Utils.DateTimeToUnixTime(DateTime.Now);
+
+            QueryFilter filter = new QueryFilter();
+
+            filter.andLessThanFilters["time"] = now - (int)(m_codes_GC * 3600);
+            filter.andFilters["info"] = "pwreset";
+            filter.orMultiFilters["info"] = new List<object>
+            {
+                "pwreset",
+                "confirm",
+                "emailconfirm"
+            };
+
+            GD.Delete("wi_codetable", filter);
         }
     }
 
@@ -603,9 +666,9 @@ namespace Aurora.Services
 
         #endregion
 
-        public Dictionary<string, bool> adminmodules()
+        public OSDMap WebUIClientImplementationData()
         {
-            return m_connector.adminmodules();
+            return m_connector.WebUIClientImplementationData();
         }
     }
 
@@ -709,20 +772,9 @@ namespace Aurora.Services
 
         #region module-specific
 
-        private OSDMap adminmodules(OSDMap map)
+        private OSDMap WebUIClientImplementationData(OSDMap map)
         {
-            OSDMap resp = new OSDMap(1);
-            OSDMap settings = new OSDMap();
-
-            Dictionary<string, bool> am = WebUI.adminmodules();
-            foreach (KeyValuePair<string, bool> kvp in am)
-            {
-                settings[kvp.Key] = OSD.FromBoolean(kvp.Value);
-            }
-
-            resp["Settings"] = settings;
-
-            return resp;
+            return WebUI.WebUIClientImplementationData();
         }
 
         #endregion
@@ -960,24 +1012,24 @@ namespace Aurora.Services
 
         private OSDMap Login(OSDMap map, bool asAdmin)
         {
-            bool Verified = false;
             string Name = map["Name"].AsString();
             string Password = map["Password"].AsString();
 
             ILoginService loginService = m_registry.RequestModuleInterface<ILoginService>();
-            UUID secureSessionID;
+            IUserAccountService accountService = m_registry.RequestModuleInterface<IUserAccountService>();
             UserAccount account = null;
-            OSDMap resp = new OSDMap ();
+            OSDMap resp = new OSDMap();
             resp["Verified"] = OSD.FromBoolean(false);
 
-            if(CheckIfUserExists(map)["Verified"] != true){
+            if (accountService == null || CheckIfUserExists(map)["Verified"] != true)
+            {
                 return resp;
             }
 
-            LoginResponse loginresp = loginService.VerifyClient(Name, "UserAccount", Password, UUID.Zero, false, "", "", "", out secureSessionID);
-            //Null means it went through without an error
-            Verified = loginresp == null;
-            if (Verified)
+            account = m_registry.RequestModuleInterface<IUserAccountService>().GetUserAccount(UUID.Zero, Name);
+
+            //Null means it went through without an errorz
+            if (loginService.VerifyClient(account.PrincipalID, Name, "UserAccount", Password, account.ScopeID))
             {
                 account = m_registry.RequestModuleInterface<IUserAccountService> ().GetUserAccount (UUID.Zero, Name);
                 if (asAdmin)
@@ -991,10 +1043,12 @@ namespace Aurora.Services
                 resp["UUID"] = OSD.FromUUID (account.PrincipalID);
                 resp["FirstName"] = OSD.FromString (account.FirstName);
                 resp["LastName"] = OSD.FromString (account.LastName);
-				resp["Email"] = OSD.FromString(account.Email);
+                resp["Email"] = OSD.FromString(account.Email);
+                resp["Verified"] = OSD.FromBoolean(true);
+                MainConsole.Instance.Trace("Login for " + Name + " was successful");
+            }else{
+                MainConsole.Instance.Trace("Login for " + Name + " was not successful");
             }
-
-            resp["Verified"] = OSD.FromBoolean (Verified);
 
             return resp;
         }
@@ -1095,16 +1149,19 @@ namespace Aurora.Services
             string newPassword = map["NewPassword"].AsString();
 
             ILoginService loginService = m_registry.RequestModuleInterface<ILoginService>();
-            UUID secureSessionID;
+            IUserAccountService accountService = m_registry.RequestModuleInterface<IUserAccountService>();
             UUID userID = map["UUID"].AsUUID();
+
+
+
+            UserAccount account = m_registry.RequestModuleInterface<IUserAccountService>().GetUserAccount(UUID.Zero, userID);
 
 
             IAuthenticationService auths = m_registry.RequestModuleInterface<IAuthenticationService>();
 
-            LoginResponse loginresp = loginService.VerifyClient (userID, "UserAccount", Password, UUID.Zero, false, "", "", "", out secureSessionID);
             OSDMap resp = new OSDMap();
             //Null means it went through without an error
-            bool Verified = loginresp == null;
+            bool Verified = loginService.VerifyClient(account.PrincipalID, account.Name, "UserAccount", Password, account.ScopeID);
             resp["Verified"] = OSD.FromBoolean(Verified);
 
             if ((auths.Authenticate(userID, "UserAccount", Util.Md5Hash(Password), 100) != string.Empty) && (Verified))
