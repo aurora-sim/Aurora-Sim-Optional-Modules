@@ -40,6 +40,7 @@ using Aurora.Framework;
 using Aurora.Framework.Servers.HttpServer;
 
 using Aurora.DataManager;
+using Aurora.Framework;
 using OpenMetaverse;
 using OpenMetaverse.StructuredData;
 using System.Collections.Specialized;
@@ -135,12 +136,9 @@ namespace OpenSim.Services
             string Password = map["password"].AsString();
 
             ILoginService loginService = m_registry.RequestModuleInterface<ILoginService>();
-            UUID secureSessionID;
 
-            LoginResponse loginresp = loginService.VerifyClient (FirstName + " " + LastName, "UserAccount", Password, UUID.Zero, false, "", "", "", out secureSessionID);
-            //Null means it went through without an error
-            Verified = loginresp == null;
-
+            Verified = loginService.VerifyClient(UUID.Zero, FirstName + " " + LastName, "UserAccount", Password, UUID.Zero);
+            
             OSDMap resp = new OSDMap();
             if (Verified)
             {
