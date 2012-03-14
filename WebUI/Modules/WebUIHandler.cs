@@ -1012,24 +1012,24 @@ namespace Aurora.Services
 
         private OSDMap Login(OSDMap map, bool asAdmin)
         {
-            bool Verified = false;
             string Name = map["Name"].AsString();
             string Password = map["Password"].AsString();
 
             ILoginService loginService = m_registry.RequestModuleInterface<ILoginService>();
-            UUID secureSessionID;
+            IUserAccountService accountService = m_registry.RequestModuleInterface<IUserAccountService>();
             UserAccount account = null;
-            OSDMap resp = new OSDMap ();
+            OSDMap resp = new OSDMap();
             resp["Verified"] = OSD.FromBoolean(false);
 
-            if(CheckIfUserExists(map)["Verified"] != true){
+            if (accountService == null || CheckIfUserExists(map)["Verified"] != true)
+            {
                 return resp;
             }
 
-            LoginResponse loginresp = loginService.VerifyClient(Name, "UserAccount", Password, UUID.Zero, false, "", "", "", out secureSessionID);
-            //Null means it went through without an error
-            Verified = loginresp == null;
-            if (Verified)
+            account = m_registry.RequestModuleInterface<IUserAccountService>().GetUserAccount(UUID.Zero, Name);
+
+            //Null means it went through without an errorz
+            if (loginService.VerifyClient(account.PrincipalID, Name, "UserAccount", Password, account.ScopeID))
             {
                 account = m_registry.RequestModuleInterface<IUserAccountService> ().GetUserAccount (UUID.Zero, Name);
                 if (asAdmin)
@@ -1043,10 +1043,12 @@ namespace Aurora.Services
                 resp["UUID"] = OSD.FromUUID (account.PrincipalID);
                 resp["FirstName"] = OSD.FromString (account.FirstName);
                 resp["LastName"] = OSD.FromString (account.LastName);
-				resp["Email"] = OSD.FromString(account.Email);
+                resp["Email"] = OSD.FromString(account.Email);
+                resp["Verified"] = OSD.FromBoolean(true);
+                MainConsole.Instance.Trace("Login for " + Name + " was successful");
+            }else{
+                MainConsole.Instance.Trace("Login for " + Name + " was not successful");
             }
-
-            resp["Verified"] = OSD.FromBoolean (Verified);
 
             return resp;
         }
@@ -1147,16 +1149,19 @@ namespace Aurora.Services
             string newPassword = map["NewPassword"].AsString();
 
             ILoginService loginService = m_registry.RequestModuleInterface<ILoginService>();
-            UUID secureSessionID;
+            IUserAccountService accountService = m_registry.RequestModuleInterface<IUserAccountService>();
             UUID userID = map["UUID"].AsUUID();
+
+
+
+            UserAccount account = m_registry.RequestModuleInterface<IUserAccountService>().GetUserAccount(UUID.Zero, userID);
 
 
             IAuthenticationService auths = m_registry.RequestModuleInterface<IAuthenticationService>();
 
-            LoginResponse loginresp = loginService.VerifyClient (userID, "UserAccount", Password, UUID.Zero, false, "", "", "", out secureSessionID);
             OSDMap resp = new OSDMap();
             //Null means it went through without an error
-            bool Verified = loginresp == null;
+            bool Verified = loginService.VerifyClient(account.PrincipalID, account.Name, "UserAccount", Password, account.ScopeID);
             resp["Verified"] = OSD.FromBoolean(Verified);
 
             if ((auths.Authenticate(userID, "UserAccount", Util.Md5Hash(Password), 100) != string.Empty) && (Verified))
