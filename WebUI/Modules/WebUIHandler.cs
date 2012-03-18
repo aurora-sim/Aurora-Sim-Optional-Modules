@@ -607,7 +607,18 @@ namespace Aurora.Services
                 MainConsole.Instance.Warn ("You must create the user before promoting them.");
                 return;
             }
-            IAgentInfo agent = Aurora.DataManager.DataManager.RequestPlugin<IAgentConnector> ().GetAgent (acc.PrincipalID);
+            IAgentConnector agents = Aurora.DataManager.DataManager.RequestPlugin<IAgentConnector>();
+            if (agents == null)
+            {
+                MainConsole.Instance.Warn("Could not get IAgentConnector plugin");
+                return;
+            }
+            IAgentInfo agent = agents.GetAgent(acc.PrincipalID);
+            if (agent == null)
+            {
+                MainConsole.Instance.Warn("Could not get IAgentInfo for " + name + ", try logging the user into your grid first.");
+                return;
+            }
             agent.OtherAgentInformation["WebUIEnabled"] = true;
             Aurora.DataManager.DataManager.RequestPlugin<IAgentConnector> ().UpdateAgent (agent);
             MainConsole.Instance.Warn ("Admin added");
@@ -622,7 +633,18 @@ namespace Aurora.Services
                 MainConsole.Instance.Warn ("User does not exist, no action taken.");
                 return;
             }
-            IAgentInfo agent = Aurora.DataManager.DataManager.RequestPlugin<IAgentConnector> ().GetAgent (acc.PrincipalID);
+            IAgentConnector agents = Aurora.DataManager.DataManager.RequestPlugin<IAgentConnector>();
+            if (agents == null)
+            {
+                MainConsole.Instance.Warn("Could not get IAgentConnector plugin");
+                return;
+            }
+            IAgentInfo agent = agents.GetAgent(acc.PrincipalID);
+            if (agent == null)
+            {
+                MainConsole.Instance.Warn("Could not get IAgentInfo for " + name + ", try logging the user into your grid first.");
+                return;
+            }
             agent.OtherAgentInformation["WebUIEnabled"] = false;
             Aurora.DataManager.DataManager.RequestPlugin<IAgentConnector> ().UpdateAgent (agent);
             MainConsole.Instance.Warn ("Admin removed");
