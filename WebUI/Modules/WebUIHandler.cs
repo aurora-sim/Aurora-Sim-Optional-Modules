@@ -1808,6 +1808,49 @@ namespace Aurora.Services
             return resp;
         }
 
+        private OSDMap GetRegionsInArea(OSDMap map)
+        {
+            OSDMap resp = new OSDMap();
+
+            if (!map.ContainsKey("StartX") || !map.ContainsKey("StartY") || !map.ContainsKey("EndX") || !map.ContainsKey("EndY"))
+            {
+                resp["Failed"] = new OSDString("Start and End x/y coordinates must be specified");
+            }
+            else
+            {
+                int StartX = map["StartX"].AsInteger();
+                int StartY = map["StartY"].AsInteger();
+                int EndX = map["EndX"].AsInteger();
+                int EndY = map["EndY"].AsInteger();
+
+                UUID scope = UUID.Zero;
+                if (map.ContainsKey("ScopeID") && !UUID.TryParse(map["ScopeID"].AsString(), out scope))
+                {
+                    resp["Failed"] = new OSDString("ScopeID was specified but was not valid.");
+                    return resp;
+                }
+
+                IRegionData regiondata = Aurora.DataManager.DataManager.RequestPlugin<IRegionData>();
+                if (regiondata == null)
+                {
+                    resp["Failed"] = new OSDString("Could not get IRegionData plugin");
+                }
+                else
+                {
+                    List<GridRegion> regions = regiondata.Get(StartX, StartY, EndX, EndY, scope);
+                    OSDArray Regions = new OSDArray();
+                    foreach (GridRegion region in regions)
+                    {
+                        Regions.Add(GridRegion2WebOSD(region));
+                    }
+                    resp["Total"] = Regions.Count;
+                    resp["Regions"] = Regions;
+                }
+            }
+
+            return resp;
+        }
+
         private OSDMap GetRegionsInEstate(OSDMap map)
         {
             OSDMap resp = new OSDMap();
