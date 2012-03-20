@@ -1333,6 +1333,8 @@ namespace Aurora.Services
                 resp["Name"] = OSD.FromString(user.Name);
                 resp["FirstName"] = OSD.FromString(user.FirstName);
                 resp["LastName"] = OSD.FromString(user.LastName);
+                resp["LastLogin"] = userinfo == null ? OSD.FromBoolean(false) : OSD.FromInteger((int)Utils.DateTimeToUnixTime(userinfo.LastLogin));
+                resp["LastLogout"] = userinfo == null ? OSD.FromBoolean(false) : OSD.FromInteger((int)Utils.DateTimeToUnixTime(userinfo.LastLogout));
             }
 
             return resp;
