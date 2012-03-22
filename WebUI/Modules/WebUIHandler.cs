@@ -1267,6 +1267,10 @@ namespace Aurora.Services
                 {
                     account.Name = map["Name"];
                 }
+                if (map.ContainsKey("UserLevel"))
+                {
+                    account.UserLevel = map["UserLevel"].AsInteger();
+                }
 
                 if (editRLInfo)
                 {
@@ -1357,6 +1361,7 @@ namespace Aurora.Services
                 accountMap["Name"] = account.Name;
                 accountMap["PrincipalID"] = account.PrincipalID;
                 accountMap["Email"] = account.Email;
+                accountMap["UserLevel"] = account.UserLevel;
 
                 TimeSpan diff = DateTime.Now - Util.ToDateTime(account.Created);
                 int years = (int)diff.TotalDays / 356;
