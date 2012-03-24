@@ -858,9 +858,7 @@ namespace Aurora.Services
             if (accountService == null)
                 return null;
 
-            if (!PasswordHash.StartsWith("$1$"))
-                PasswordHash = "$1$" + Util.Md5Hash(PasswordHash);
-            PasswordHash = PasswordHash.Remove(0, 3); //remove $1$
+            PasswordHash = PasswordHash.StartsWith("$1$") ? PasswordHash.Remove(0, 3) : Util.Md5Hash(PasswordHash); //remove $1$
 
             accountService.CreateUser(Name, PasswordHash, Email);
             UserAccount user = accountService.GetUserAccount(UUID.Zero, Name);
@@ -1080,11 +1078,12 @@ namespace Aurora.Services
             OSDMap resp = new OSDMap ();
             UUID principalID = map["PrincipalID"].AsUUID();
             UUID webLoginKey = UUID.Random();
-            IAuthenticationService authService = m_registry.RequestModuleInterface<IAuthenticationService> ();
-            if (authService != null)
+            IAuthenticationService authService = m_registry.RequestModuleInterface<IAuthenticationService>();
+            IAuthenticationData authData = Aurora.DataManager.DataManager.RequestPlugin<IAuthenticationData>();
+            if (authService != null && authData != null)
             {
                 //Remove the old
-                Aurora.DataManager.DataManager.RequestPlugin<IAuthenticationData> ().Delete (principalID, "WebLoginKey");
+                authData.Delete(principalID, "WebLoginKey");
                 authService.SetPlainPassword(principalID, "WebLoginKey", webLoginKey.ToString());
                 resp["WebLoginKey"] = webLoginKey;
             }
@@ -1167,28 +1166,25 @@ namespace Aurora.Services
 
         private OSDMap ChangePassword(OSDMap map)
         {
+            OSDMap resp = new OSDMap();
+
             string Password = map["Password"].AsString();
             string newPassword = map["NewPassword"].AsString();
+            UUID userID = map["UUID"].AsUUID();
 
             ILoginService loginService = m_registry.RequestModuleInterface<ILoginService>();
             IUserAccountService accountService = m_registry.RequestModuleInterface<IUserAccountService>();
-            UUID userID = map["UUID"].AsUUID();
-
-
-
-            UserAccount account = m_registry.RequestModuleInterface<IUserAccountService>().GetUserAccount(UUID.Zero, userID);
-
-
             IAuthenticationService auths = m_registry.RequestModuleInterface<IAuthenticationService>();
 
-            OSDMap resp = new OSDMap();
+            UserAccount account = accountService.GetUserAccount(UUID.Zero, userID);
+
             //Null means it went through without an error
             bool Verified = loginService.VerifyClient(account.PrincipalID, account.Name, "UserAccount", Password, account.ScopeID);
-            resp["Verified"] = OSD.FromBoolean(Verified);
 
-            if ((auths.Authenticate(userID, "UserAccount", Util.Md5Hash(Password), 100) != string.Empty) && (Verified))
+            if ((auths.Authenticate(userID, "UserAccount", Password.StartsWith("$1$") ? Password.Remove(0, 3) : Util.Md5Hash(Password), 100) != string.Empty) && (Verified))
             {
-                auths.SetPassword (userID, "UserAccount", newPassword);
+                auths.SetPasswordHashed(userID, "UserAccount", newPassword.StartsWith("$1$") ? newPassword.Remove(0, 3) : Util.Md5Hash(newPassword));
+                resp["Verified"] = OSD.FromBoolean(Verified);
             }
 
             return resp;
