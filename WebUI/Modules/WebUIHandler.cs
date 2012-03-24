@@ -1429,6 +1429,95 @@ namespace Aurora.Services
             return resp;
         }
 
+        private OSDMap SetHomeLocation(OSDMap map)
+        {
+            OSDMap resp = new OSDMap();
+            IAgentInfoService agentService = m_registry.RequestModuleInterface<IAgentInfoService>();
+            IGridService gridService = m_registry.RequestModuleInterface<IGridService>();
+            UserInfo userinfo = (map.ContainsKey("User") && agentService != null) ? agentService.GetUserInfo(map["User"].AsString()) : null;
+
+            if (!map.ContainsKey("User"))
+            {
+                resp["Failed"] = new OSDString("No user specified");
+            }
+            else if (!map.ContainsKey("RegionID") && !map.ContainsKey("Position") && !map.ContainsKey("LookAt"))
+            {
+                resp["Failed"] = new OSDString("No position info specified");
+            }
+            else if (agentService == null)
+            {
+                resp["Failed"] = new OSDString("Could not get IAgentInfoService");
+            }
+            else if (gridService == null)
+            {
+                resp["Failed"] = new OSDString("Could not get IGridService");
+            }
+            else if (userinfo == null)
+            {
+                resp["Failed"] = new OSDString("Could not find user");
+            }
+            else
+            {
+                UUID scopeID = UUID.Zero;
+                UUID regionID = UUID.Zero;
+                Vector3 position = Vector3.Zero;
+                Vector3 lookAt = Vector3.Zero;
+
+                List<string> fail = new List<string>();
+
+                if (map.ContainsKey("ScopeID") && !UUID.TryParse(map["ScopeID"].AsString(), out scopeID))
+                {
+                    fail.Add("ScopeID was specified but was not a valid UUID");
+                }
+                if (map.ContainsKey("RegionID") && !UUID.TryParse(map["RegionID"].AsString(), out regionID))
+                {
+                    fail.Add("RegionID was specified but was not valid UUID");
+                }
+                if (map.ContainsKey("Position") && !Vector3.TryParse(map["Position"].AsString(), out position))
+                {
+                    fail.Add("Position was specified but was not valid Vector3");
+                }
+                if (map.ContainsKey("LookAt") && !Vector3.TryParse(map["LookAt"].AsString(), out lookAt))
+                {
+                    fail.Add("LookAt was specified but was not valid Vector3");
+                }
+
+                if (regionID == UUID.Zero)
+                {
+                    regionID = userinfo.HomeRegionID;
+                }
+                if (gridService.GetRegionByUUID(UUID.Zero, regionID) == null)
+                {
+                    fail.Add("region does not exist");
+                }
+
+                if (regionID == UUID.Zero && (map.ContainsKey("Position") || map.ContainsKey("LookAt")))
+                {
+                    fail.Add("Cannot change home location without specifying a region");
+                }
+
+                if (fail.Count > 0)
+                {
+                    resp["Failed"] = new OSDString(string.Join(". ", fail.ToArray()));
+                    return resp;
+                }
+
+                userinfo.HomeRegionID = regionID;
+                if (map.ContainsKey("Position"))
+                {
+                    userinfo.HomePosition = position;
+                }
+                if (map.ContainsKey("LookAt"))
+                {
+                    userinfo.HomeLookAt = lookAt;
+                }
+
+                resp["Success"] = new OSDBoolean(agentService.SetHomePosition(userinfo.UserID, userinfo.HomeRegionID, userinfo.HomePosition, userinfo.HomeLookAt));
+            }
+
+            return resp;
+        }
+
         #region banning
 
         private void doBan(UUID agentID, DateTime? until){
