@@ -1293,6 +1293,37 @@ namespace Aurora.Services
             return resp;
         }
 
+        private OSDMap ResetAvatar(OSDMap map)
+        {
+            OSDMap resp = new OSDMap();
+            UUID user = UUID.Zero;
+
+            if (!map.ContainsKey("User"))
+            {
+                resp["Failed"] = new OSDString("User not specified.");
+            }
+            else if (!UUID.TryParse(map["User"].AsString(), out user))
+            {
+                resp["Failed"] = new OSDString("User specified but was not valid UUID.");
+            }
+            else
+            {
+                IAvatarService avatarService = m_registry.RequestModuleInterface<IAvatarService>();
+
+                if (avatarService == null)
+                {
+                    resp["Failed"] = new OSDString("Avatar service could not be fetched.");
+                }
+                else
+                {
+                    resp["Success"] = new OSDBoolean(avatarService.ResetAvatar(user));
+                }
+            }
+
+
+            return resp;
+        }
+
         #endregion
 
         #region Users
