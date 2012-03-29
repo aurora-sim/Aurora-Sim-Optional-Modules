@@ -866,7 +866,8 @@ namespace Aurora.Services
             IGridService gridService = m_registry.RequestModuleInterface<IGridService> ();
             if (agentInfoService != null && gridService != null)
             {
-                GridRegion r = gridService.GetRegionByName (UUID.Zero, HomeRegion);
+                UUID homeRegion;
+                GridRegion r = UUID.TryParse(HomeRegion, out homeRegion) ? gridService.GetRegionByUUID(UUID.Zero, homeRegion) : gridService.GetRegionByName (UUID.Zero, HomeRegion);
                 if (r != null)
                 {
                     agentInfoService.SetHomePosition(user.PrincipalID.ToString(), r.RegionID, new Vector3(r.RegionSizeX / 2, r.RegionSizeY / 2, 20), Vector3.Zero);
