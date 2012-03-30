@@ -1678,7 +1678,7 @@ namespace Aurora.Services
 
         #region statistics
 
-        private OSDMap RecentlyOnlineUsers(OSDMap map)
+        private OSDMap NumberOfRecentlyOnlineUsers(OSDMap map)
         {
             uint secondsAgo = map.ContainsKey("secondsAgo") ? uint.Parse(map["secondsAgo"]) : 0;
             bool stillOnline = map.ContainsKey("stillOnline") ? uint.Parse(map["stillOnline"]) == 1 : false;
