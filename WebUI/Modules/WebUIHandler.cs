@@ -1351,15 +1351,19 @@ namespace Aurora.Services
             {
                 userinfo = agentService.GetUserInfo(uuid);
                 IGridService gs = m_registry.RequestModuleInterface<IGridService>();
-                GridRegion gr = null;
+                GridRegion homeRegion = null;
+                GridRegion currentRegion = null;
                 if (userinfo != null)
                 {
-                    gr = gs.GetRegionByUUID(UUID.Zero, userinfo.HomeRegionID);
+                    homeRegion = gs.GetRegionByUUID(UUID.Zero, userinfo.HomeRegionID);
+                    currentRegion = userinfo.CurrentRegionID != UUID.Zero ? gs.GetRegionByUUID(UUID.Zero, userinfo.CurrentRegionID) : null;
                 }
 
                 resp["UUID"] = OSD.FromUUID(user.PrincipalID);
                 resp["HomeUUID"] = OSD.FromUUID((userinfo == null) ? UUID.Zero : userinfo.HomeRegionID);
-                resp["HomeName"] = OSD.FromString((userinfo == null || gr == null) ? "" : gr.RegionName);
+                resp["HomeName"] = OSD.FromString((userinfo == null || homeRegion == null) ? "" : homeRegion.RegionName);
+                resp["CurrentRegionUUID"] = OSD.FromUUID((userinfo == null) ? UUID.Zero : userinfo.CurrentRegionID);
+                resp["CurrentRegionName"] = OSD.FromString((userinfo == null || currentRegion == null) ? "" : currentRegion.RegionName);
                 resp["Online"] = OSD.FromBoolean((userinfo == null) ? false : userinfo.IsOnline);
                 resp["Email"] = OSD.FromString(user.Email);
                 resp["Name"] = OSD.FromString(user.Name);
