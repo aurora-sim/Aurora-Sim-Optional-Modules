@@ -1329,6 +1329,65 @@ namespace Aurora.Services
 
         #region Users
 
+        private OSDMap UserAccount2InfoWebOSD(UserAccount user)
+        {
+            OSDMap resp = new OSDMap();
+
+            IAgentInfoService agentService = m_registry.RequestModuleInterface<IAgentInfoService>();
+
+            UserInfo userinfo = agentService.GetUserInfo(user.PrincipalID.ToString());
+            IGridService gs = m_registry.RequestModuleInterface<IGridService>();
+            GridRegion homeRegion = null;
+            GridRegion currentRegion = null;
+            if (userinfo != null)
+            {
+                homeRegion = gs.GetRegionByUUID(UUID.Zero, userinfo.HomeRegionID);
+                currentRegion = userinfo.CurrentRegionID != UUID.Zero ? gs.GetRegionByUUID(UUID.Zero, userinfo.CurrentRegionID) : null;
+            }
+
+            resp["UUID"] = OSD.FromUUID(user.PrincipalID);
+            resp["HomeUUID"] = OSD.FromUUID((userinfo == null) ? UUID.Zero : userinfo.HomeRegionID);
+            resp["HomeName"] = OSD.FromString((userinfo == null || homeRegion == null) ? "" : homeRegion.RegionName);
+            resp["CurrentRegionUUID"] = OSD.FromUUID((userinfo == null) ? UUID.Zero : userinfo.CurrentRegionID);
+            resp["CurrentRegionName"] = OSD.FromString((userinfo == null || currentRegion == null) ? "" : currentRegion.RegionName);
+            resp["Online"] = OSD.FromBoolean((userinfo == null) ? false : userinfo.IsOnline);
+            resp["Email"] = OSD.FromString(user.Email);
+            resp["Name"] = OSD.FromString(user.Name);
+            resp["FirstName"] = OSD.FromString(user.FirstName);
+            resp["LastName"] = OSD.FromString(user.LastName);
+            resp["LastLogin"] = userinfo == null ? OSD.FromBoolean(false) : OSD.FromInteger((int)Utils.DateTimeToUnixTime(userinfo.LastLogin));
+            resp["LastLogout"] = userinfo == null ? OSD.FromBoolean(false) : OSD.FromInteger((int)Utils.DateTimeToUnixTime(userinfo.LastLogout));
+
+            return resp;
+        }
+
+        private OSDMap UserInfo2InfoWebOSD(UserInfo userinfo)
+        {
+            OSDMap resp = new OSDMap();
+
+            IUserAccountService accountService = m_registry.RequestModuleInterface<IUserAccountService>();
+            IGridService gs = m_registry.RequestModuleInterface<IGridService>();
+            UserAccount user = accountService.GetUserAccount(UUID.Zero, new UUID(userinfo.UserID));
+
+            GridRegion homeRegion = gs.GetRegionByUUID(UUID.Zero, userinfo.HomeRegionID);
+            GridRegion currentRegion = userinfo.CurrentRegionID != UUID.Zero ? gs.GetRegionByUUID(UUID.Zero, userinfo.CurrentRegionID) : null;
+
+            resp["UUID"] = OSD.FromUUID(user.PrincipalID);
+            resp["HomeUUID"] = OSD.FromUUID((userinfo == null) ? UUID.Zero : userinfo.HomeRegionID);
+            resp["HomeName"] = OSD.FromString((userinfo == null || homeRegion == null) ? "" : homeRegion.RegionName);
+            resp["CurrentRegionUUID"] = OSD.FromUUID((userinfo == null) ? UUID.Zero : userinfo.CurrentRegionID);
+            resp["CurrentRegionName"] = OSD.FromString((userinfo == null || currentRegion == null) ? "" : currentRegion.RegionName);
+            resp["Online"] = OSD.FromBoolean((userinfo == null) ? false : userinfo.IsOnline);
+            resp["Email"] = OSD.FromString(user.Email);
+            resp["Name"] = OSD.FromString(user.Name);
+            resp["FirstName"] = OSD.FromString(user.FirstName);
+            resp["LastName"] = OSD.FromString(user.LastName);
+            resp["LastLogin"] = userinfo == null ? OSD.FromBoolean(false) : OSD.FromInteger((int)Utils.DateTimeToUnixTime(userinfo.LastLogin));
+            resp["LastLogout"] = userinfo == null ? OSD.FromBoolean(false) : OSD.FromInteger((int)Utils.DateTimeToUnixTime(userinfo.LastLogout));
+
+            return resp;
+        }
+
         /// <summary>
         /// Gets user information for change user info page on site
         /// </summary>
@@ -1343,34 +1402,12 @@ namespace Aurora.Services
             UserAccount user = accountService.GetUserAccount(UUID.Zero, map["UUID"].AsUUID());
             IAgentInfoService agentService = m_registry.RequestModuleInterface<IAgentInfoService>();
 
-            UserInfo userinfo;
             OSDMap resp = new OSDMap();
             bool verified = user != null;
             resp["Verified"] = OSD.FromBoolean(verified);
             if (verified)
             {
-                userinfo = agentService.GetUserInfo(uuid);
-                IGridService gs = m_registry.RequestModuleInterface<IGridService>();
-                GridRegion homeRegion = null;
-                GridRegion currentRegion = null;
-                if (userinfo != null)
-                {
-                    homeRegion = gs.GetRegionByUUID(UUID.Zero, userinfo.HomeRegionID);
-                    currentRegion = userinfo.CurrentRegionID != UUID.Zero ? gs.GetRegionByUUID(UUID.Zero, userinfo.CurrentRegionID) : null;
-                }
-
-                resp["UUID"] = OSD.FromUUID(user.PrincipalID);
-                resp["HomeUUID"] = OSD.FromUUID((userinfo == null) ? UUID.Zero : userinfo.HomeRegionID);
-                resp["HomeName"] = OSD.FromString((userinfo == null || homeRegion == null) ? "" : homeRegion.RegionName);
-                resp["CurrentRegionUUID"] = OSD.FromUUID((userinfo == null) ? UUID.Zero : userinfo.CurrentRegionID);
-                resp["CurrentRegionName"] = OSD.FromString((userinfo == null || currentRegion == null) ? "" : currentRegion.RegionName);
-                resp["Online"] = OSD.FromBoolean((userinfo == null) ? false : userinfo.IsOnline);
-                resp["Email"] = OSD.FromString(user.Email);
-                resp["Name"] = OSD.FromString(user.Name);
-                resp["FirstName"] = OSD.FromString(user.FirstName);
-                resp["LastName"] = OSD.FromString(user.LastName);
-                resp["LastLogin"] = userinfo == null ? OSD.FromBoolean(false) : OSD.FromInteger((int)Utils.DateTimeToUnixTime(userinfo.LastLogin));
-                resp["LastLogout"] = userinfo == null ? OSD.FromBoolean(false) : OSD.FromInteger((int)Utils.DateTimeToUnixTime(userinfo.LastLogout));
+                resp = UserAccount2InfoWebOSD(user);
             }
 
             return resp;
@@ -1688,6 +1725,42 @@ namespace Aurora.Services
             resp["secondsAgo"] = OSD.FromInteger((int)secondsAgo);
             resp["stillOnline"] = OSD.FromBoolean(stillOnline);
             resp["result"] = OSD.FromInteger(users != null ? (int)users.RecentlyOnline(secondsAgo, stillOnline) : 0);
+
+            return resp;
+        }
+
+        private OSDMap RecentlyOnlineUsers(OSDMap map)
+        {
+            OSDMap resp = new OSDMap();
+
+            uint secondsAgo = map.ContainsKey("secondsAgo") ? uint.Parse(map["secondsAgo"]) : 0;
+            bool stillOnline = map.ContainsKey("stillOnline") ? uint.Parse(map["stillOnline"]) == 1 : false;
+            uint start = map.ContainsKey("Start") ? map["Start"].AsUInteger() : 0;
+            uint count = map.ContainsKey("Count") ? map["Count"].AsUInteger() : 10;
+
+            IAgentInfoConnector userInfoService = DataManager.DataManager.RequestPlugin<IAgentInfoConnector>();
+            if (userInfoService == null)
+            {
+                resp["Failed"] = new OSDString("Could not get IAgentInfoConnector");
+            }
+            else
+            {
+                resp["Start"] = OSD.FromInteger((int)start);
+                resp["Count"] = OSD.FromInteger((int)count);
+                resp["Total"] = OSD.FromInteger((int)userInfoService.RecentlyOnline(secondsAgo, stillOnline));
+
+                OSDArray Users = new OSDArray();
+                Dictionary<string, bool> sort = new Dictionary<string,bool>(1);
+                sort["LastSeen"] = true;
+                List<UserInfo> users = userInfoService.RecentlyOnline(secondsAgo, stillOnline, sort, start, count);
+
+                foreach (UserInfo userinfo in users)
+                {
+                    Users.Add(UserInfo2InfoWebOSD(userinfo));
+                }
+
+                resp["Users"] = Users;
+            }
 
             return resp;
         }
