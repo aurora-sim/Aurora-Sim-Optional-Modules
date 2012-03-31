@@ -1651,28 +1651,37 @@ namespace Aurora.Services
         private OSDMap FindUsers(OSDMap map)
         {
             OSDMap resp = new OSDMap();
-            int start = map["Start"].AsInteger();
-            int end = map["End"].AsInteger();
-            string Query = map["Query"].AsString();
-            List<UserAccount> accounts = m_registry.RequestModuleInterface<IUserAccountService>().GetUserAccounts(UUID.Zero, Query);
-
-            OSDArray users = new OSDArray();
-            MainConsole.Instance.TraceFormat("{0} accounts found", accounts.Count);
-            for(int i = start; i < end && i < accounts.Count; i++)
+            IUserAccountService accountService = m_registry.RequestModuleInterface<IUserAccountService>();
+            if (accountService == null)
             {
-                UserAccount acc = accounts[i];
-                OSDMap userInfo = new OSDMap();
-                userInfo["PrincipalID"] = acc.PrincipalID;
-                userInfo["UserName"] = acc.Name;
-                userInfo["Created"] = acc.Created;
-                userInfo["UserFlags"] = acc.UserFlags;
-                users.Add(userInfo);
+                map["Failed"] = new OSDString("Could not find IUserAccountService");
             }
-            resp["Users"] = users;
+            else
+            {
+                UUID scopeID = map.ContainsKey("ScopeID") ? map["ScopeID"].AsUUID() : UUID.Zero;
+                uint start = map.ContainsKey("Start") ? map["Start"].AsUInteger() : 0;
+                uint count = map.ContainsKey("Count") ? map["Count"].AsUInteger() : 10;
+                string Query = map["Query"].AsString();
+                List<UserAccount> accounts = accountService.GetUserAccounts(scopeID, Query, start, count);
 
-            resp["Start"] = OSD.FromInteger(start);
-            resp["End"] = OSD.FromInteger(end);
-            resp["Query"] = OSD.FromString(Query);
+                OSDArray users = new OSDArray();
+                MainConsole.Instance.TraceFormat("{0} accounts found", accounts.Count);
+                foreach (UserAccount acc in accounts)
+                {
+                    OSDMap userInfo = new OSDMap();
+                    userInfo["PrincipalID"] = acc.PrincipalID;
+                    userInfo["UserName"] = acc.Name;
+                    userInfo["Created"] = acc.Created;
+                    userInfo["UserFlags"] = acc.UserFlags;
+                    users.Add(userInfo);
+                }
+                resp["Users"] = users;
+
+                resp["Start"] = OSD.FromInteger(start);
+                resp["Count"] = OSD.FromInteger(count);
+                resp["Query"] = OSD.FromString(Query);
+                resp["Total"] = OSD.FromInteger((int)accountService.NumberOfUserAccounts(scopeID, Query));
+            }
 
             return resp;
         }
