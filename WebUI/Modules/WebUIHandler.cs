@@ -1931,7 +1931,8 @@ namespace Aurora.Services
         private OSDMap GetRegions(OSDMap map)
         {
             OSDMap resp = new OSDMap();
-            RegionFlags type = map.Keys.Contains("RegionFlags") ? (RegionFlags)map["RegionFlags"].AsInteger() : RegionFlags.RegionOnline;
+            RegionFlags includeFlags = map.ContainsKey("RegionFlags") ? (RegionFlags)map["RegionFlags"].AsInteger() : RegionFlags.RegionOnline;
+            RegionFlags excludeFlags = map.ContainsKey("ExcludeRegionFlags") ? (RegionFlags)map["ExcludeRegionFlags"].AsInteger() : 0;
             int start = map.Keys.Contains("Start") ? map["Start"].AsInteger() : 0;
             if(start < 0){
                 start = 0;
@@ -1959,20 +1960,17 @@ namespace Aurora.Services
                 }
             }
 
-            List<GridRegion> regions = regiondata.Get(type, sort);
+            List<GridRegion> regions = regiondata.Get(includeFlags, excludeFlags, (uint)start, (uint)count, sort);
             OSDArray Regions = new OSDArray();
-            if (start < regions.Count)
-            {
-                int i = 0;
-                int j = regions.Count <= (start + count) ? regions.Count : (start + count);
-                for (i = start; i < j; ++i)
-                {
-                    Regions.Add(GridRegion2WebOSD(regions[i]));
-                }
+            foreach(GridRegion region in regions){
+                Regions.Add(GridRegion2WebOSD(region));
             }
+
+            MainConsole.Instance.Trace("Total regions: " + regiondata.Count(includeFlags, excludeFlags));
+
             resp["Start"] = OSD.FromInteger(start);
             resp["Count"] = OSD.FromInteger(count);
-            resp["Total"] = OSD.FromInteger(regions.Count);
+            resp["Total"] = OSD.FromInteger((int)regiondata.Count(includeFlags, excludeFlags));
             resp["Regions"] = Regions;
             return resp;
         }
