@@ -2516,7 +2516,7 @@ namespace Aurora.Services
             }
             else
             {
-                resp["Success"] = groups.EditGroupNotice(AdminAgentID, GND.GroupID, GND.NoticeID, map.ContainsKey("Subject") ? map["Subject"].ToString() : GND.Subject, map.ContainsKey("Message") ? map["Message"].ToString() : notice.Message);
+                resp["Success"] = groups.EditGroupNotice(AdminAgentID, notice.GroupID, GND.NoticeID, map.ContainsKey("Subject") ? map["Subject"].ToString() : GND.Subject, map.ContainsKey("Message") ? map["Message"].ToString() : notice.Message);
             }
 
             return resp;
