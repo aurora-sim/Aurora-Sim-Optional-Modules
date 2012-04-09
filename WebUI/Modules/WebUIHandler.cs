@@ -2489,6 +2489,39 @@ namespace Aurora.Services
             return resp;
         }
 
+        private OSDMap EditGroupNotice(OSDMap map)
+        {
+            OSDMap resp = new OSDMap();
+            UUID noticeID = map.ContainsKey("NoticeID") ? UUID.Parse(map["NoticeID"]) : UUID.Zero;
+            IGroupsServiceConnector groups = Aurora.DataManager.DataManager.RequestPlugin<IGroupsServiceConnector>();
+            GroupNoticeData GND = noticeID != UUID.Zero && groups != null ? groups.GetGroupNoticeData(AdminAgentID, noticeID) : null;
+            GroupNoticeInfo notice = GND != null ? groups.GetGroupNotice(AdminAgentID, GND.NoticeID) : null;
+
+            if (noticeID == UUID.Zero)
+            {
+                resp["Failed"] = new OSDString("No notice ID was specified");
+            }
+            else if (groups == null)
+            {
+                resp["Failed"] = new OSDString("Could not find IGroupsServiceConnector");
+            }
+            else if (GND == null || notice == null)
+            {
+                resp["Failed"] = new OSDString("Could not find group notice with specified ID");
+            }
+            else if (!map.ContainsKey("Subject") && !map.ContainsKey("Message"))
+            {
+                resp["Success"] = new OSDBoolean(false);
+                resp["Note"] = new OSDString("No changes were made to the group notice");
+            }
+            else
+            {
+                resp["Success"] = groups.EditGroupNotice(AdminAgentID, GND.GroupID, GND.NoticeID, map.ContainsKey("Subject") ? map["Subject"].ToString() : GND.Subject, map.ContainsKey("Message") ? map["Message"].ToString() : notice.Message);
+            }
+
+            return resp;
+        }
+
         #endregion
 
         #endregion
