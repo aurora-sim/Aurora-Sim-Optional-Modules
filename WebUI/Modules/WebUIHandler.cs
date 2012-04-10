@@ -2224,6 +2224,23 @@ namespace Aurora.Services
 
         #region GroupRecord
 
+        private static OSDMap GroupRecord2OSDMap(GroupRecord group)
+        {
+            OSDMap resp = new OSDMap();
+            resp["GroupID"] = group.GroupID;
+            resp["GroupName"] = group.GroupName;
+            resp["AllowPublish"] = group.AllowPublish;
+            resp["MaturePublish"] = group.MaturePublish;
+            resp["Charter"] = group.Charter;
+            resp["FounderID"] = group.FounderID;
+            resp["GroupPicture"] = group.GroupPicture;
+            resp["MembershipFee"] = group.MembershipFee;
+            resp["OpenEnrollment"] = group.OpenEnrollment;
+            resp["OwnerRoleID"] = group.OwnerRoleID;
+            resp["ShowInList"] = group.ShowInList;
+            return resp;
+        }
+
         private OSDMap GroupAsNewsSource(OSDMap map)
         {
             OSDMap resp = new OSDMap();
@@ -2244,23 +2261,6 @@ namespace Aurora.Services
                 }
                 resp["Verified"] = OSD.FromBoolean(true);
             }
-            return resp;
-        }
-
-        private static OSDMap GroupRecord2OSDMap(GroupRecord group)
-        {
-            OSDMap resp = new OSDMap();
-            resp["GroupID"] = group.GroupID;
-            resp["GroupName"] = group.GroupName;
-            resp["AllowPublish"] = group.AllowPublish;
-            resp["MaturePublish"] = group.MaturePublish;
-            resp["Charter"] = group.Charter;
-            resp["FounderID"] = group.FounderID;
-            resp["GroupPicture"] = group.GroupPicture;
-            resp["MembershipFee"] = group.MembershipFee;
-            resp["OpenEnrollment"] = group.OpenEnrollment;
-            resp["OwnerRoleID"] = group.OwnerRoleID;
-            resp["ShowInList"] = group.ShowInList;
             return resp;
         }
 
