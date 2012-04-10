@@ -2326,6 +2326,59 @@ namespace Aurora.Services
             return resp;
         }
 
+        private OSDMap GetNewsSources(OSDMap map)
+        {
+            OSDMap resp = new OSDMap();
+            uint start = map.ContainsKey("Start") ? map["Start"].AsUInteger() : 0;
+            uint count = map.ContainsKey("Count") ? map["Count"].AsUInteger() : 10;
+            IGenericsConnector generics = Aurora.DataManager.DataManager.RequestPlugin<IGenericsConnector>();
+            IGroupsServiceConnector groups = Aurora.DataManager.DataManager.RequestPlugin<IGroupsServiceConnector>();
+
+            if (generics == null)
+            {
+                resp["Failed"] = new OSDString("Could not find IGenericsConnector");
+            }
+            else if (groups == null)
+            {
+                resp["Failed"] = new OSDString("Could not find IGroupsServiceConnector");
+            }
+            else
+            {
+                OSDMap useValue = new OSDMap();
+                useValue["Use"] = OSD.FromBoolean(true);
+                List<UUID> GroupIDs = generics.GetOwnersByGeneric("Group", "WebUI_newsSource", useValue);
+                resp["Total"] = GroupIDs.Count;
+                resp["Start"] = (int)start;
+                resp["Count"] = (int)count;
+
+                OSDArray Groups = new OSDArray();
+                if (start < GroupIDs.Count)
+                {
+                    int end = (int)count;
+                    if (start + count > GroupIDs.Count)
+                    {
+                        end = GroupIDs.Count - (int)start;
+                    }
+                    List<UUID> page = GroupIDs.GetRange((int)start, end);
+                    if (page.Count > 0)
+                    {
+                        List<GroupRecord> reply = groups.GetGroupRecords(AdminAgentID, page);
+                        if (reply.Count > 0)
+                        {
+                            foreach (GroupRecord groupReply in reply)
+                            {
+                                Groups.Add(GroupRecord2OSDMap(groupReply));
+                            }
+                        }
+                    }
+                }
+                resp["Groups"] = Groups;
+            }
+
+
+            return resp;
+        }
+
         private OSDMap GetGroup(OSDMap map)
         {
             OSDMap resp = new OSDMap();
@@ -2517,6 +2570,121 @@ namespace Aurora.Services
             else
             {
                 resp["Success"] = groups.EditGroupNotice(AdminAgentID, notice.GroupID, GND.NoticeID, map.ContainsKey("Subject") ? map["Subject"].ToString() : GND.Subject, map.ContainsKey("Message") ? map["Message"].ToString() : notice.Message);
+            }
+
+            return resp;
+        }
+
+        private OSDMap AddGroupNotice(OSDMap map)
+        {
+            OSDMap resp = new OSDMap();
+
+            if (!map.ContainsKey("GroupID") || !map.ContainsKey("AuthorID") || !map.ContainsKey("Subject") || !map.ContainsKey("Message"))
+            {
+                resp["Failed"] = new OSDString("Missing required arguments one or more of GroupID, AuthorID, Subject, Message");
+            }
+            else
+            {
+                UUID GroupID = UUID.Zero;
+                UUID.TryParse(map["GroupID"].ToString(), out GroupID);
+
+                UUID AuthorID = UUID.Zero;
+                UUID.TryParse(map["AuthorID"].ToString(), out AuthorID);
+
+                string subject = map["Subject"].ToString().Trim();
+                string message = map["Message"].ToString().Trim();
+
+                IGroupsServiceConnector groups = Aurora.DataManager.DataManager.RequestPlugin<IGroupsServiceConnector>();
+                IUserAccountService users = m_registry.RequestModuleInterface<IUserAccountService>();
+                UserAccount Author = AuthorID != UUID.Zero && users != null ? users.GetUserAccount(UUID.Zero, AuthorID) : null;
+
+                if (GroupID == UUID.Zero)
+                {
+                    resp["Failed"] = new OSDString("GroupID was UUID.Zero");
+                }
+                else if (AuthorID == UUID.Zero)
+                {
+                    resp["Failed"] = new OSDString("AuthorID was UUID.Zero");
+                }
+                else if (subject == string.Empty)
+                {
+                    resp["Failed"] = new OSDString("Subject was empty");
+                }
+                else if (message == string.Empty)
+                {
+                    resp["Failed"] = new OSDString("Message was empty");
+                }
+                else if (groups == null)
+                {
+                    resp["Failed"] = new OSDString("Could not findIGroupsServiceConnector");
+                }
+                else if (users == null)
+                {
+                    resp["Failed"] = new OSDString("Could not find IUserAccountService");
+                }
+                else if (Author == null)
+                {
+                    resp["Failed"] = new OSDString(string.Format("Could not find author with ID {0}", AuthorID));
+                }
+                else
+                {
+                    UUID noticeID = UUID.Random();
+                    try
+                    {
+                        groups.AddGroupNotice(AuthorID, GroupID, noticeID, Author.Name, subject, message, UUID.Zero, 0, "");
+                        resp["NoticeID"] = noticeID;
+                    }
+                    catch
+                    {
+                        resp["Failed"] = new OSDString("An exception was thrown.");
+                    }
+                }
+            }
+
+            return resp;
+        }
+
+        private OSDMap RemoveGroupNotice(OSDMap map)
+        {
+            OSDMap resp = new OSDMap();
+
+            if (!map.ContainsKey("GroupID") || !map.ContainsKey("NoticeID"))
+            {
+                resp["Failed"] = new OSDString("Missing required arguments one or more of GroupID, NoticeID");
+            }
+            else
+            {
+                UUID GroupID = UUID.Zero;
+                UUID.TryParse(map["GroupID"].ToString(), out GroupID);
+
+                UUID noticeID = UUID.Zero;
+                UUID.TryParse(map["NoticeID"].ToString(), out noticeID);
+
+                IGroupsServiceConnector groups = Aurora.DataManager.DataManager.RequestPlugin<IGroupsServiceConnector>();
+
+                if (GroupID == UUID.Zero)
+                {
+                    resp["Failed"] = new OSDString("GroupID was UUID.Zero");
+                }
+                else if (noticeID == UUID.Zero)
+                {
+                    resp["Failed"] = new OSDString("NoticeID was UUID.Zero");
+                }
+                else if (groups == null)
+                {
+                    resp["Failed"] = new OSDString("Could not findIGroupsServiceConnector");
+                }
+                else
+                {
+                    try
+                    {
+                        resp["Success"] = groups.RemoveGroupNotice(AdminAgentID, GroupID, noticeID);
+                    }
+                    catch
+                    {
+                        resp["Failed"] = new OSDString("An exception was thrown.");
+                    }
+                }
             }
 
             return resp;
