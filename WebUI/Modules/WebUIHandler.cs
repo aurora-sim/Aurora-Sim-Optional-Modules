@@ -1121,7 +1121,6 @@ namespace Aurora.Services
             return resp;
         }
 
-
         private OSDMap ConfirmUserEmailName(OSDMap map)
         {
             string Name = map["Name"].AsString();
@@ -1219,11 +1218,6 @@ namespace Aurora.Services
 
             return resp;
         }
-		
-		private OSDMap ChangePassword2(OSDMap map)
-		{
-		    return ForgotPassword(map);
-		}
 
         #endregion
 
@@ -2230,6 +2224,29 @@ namespace Aurora.Services
 
         #region GroupRecord
 
+        private OSDMap GroupAsNewsSource(OSDMap map)
+        {
+            OSDMap resp = new OSDMap();
+            resp["Verified"] = OSD.FromBoolean(false);
+            IGenericsConnector generics = Aurora.DataManager.DataManager.RequestPlugin<IGenericsConnector>();
+            UUID groupID;
+            if (generics != null && map.ContainsKey("Group") == true && map.ContainsKey("Use") && UUID.TryParse(map["Group"], out groupID) == true)
+            {
+                if (map["Use"].AsBoolean())
+                {
+                    OSDMap useValue = new OSDMap();
+                    useValue["Use"] = OSD.FromBoolean(true);
+                    generics.AddGeneric(groupID, "Group", "WebUI_newsSource", useValue);
+                }
+                else
+                {
+                    generics.RemoveGeneric(groupID, "Group", "WebUI_newsSource");
+                }
+                resp["Verified"] = OSD.FromBoolean(true);
+            }
+            return resp;
+        }
+
         private static OSDMap GroupRecord2OSDMap(GroupRecord group)
         {
             OSDMap resp = new OSDMap();
@@ -2400,29 +2417,6 @@ namespace Aurora.Services
         #endregion
 
         #region GroupNoticeData
-
-        private OSDMap GroupAsNewsSource(OSDMap map)
-        {
-            OSDMap resp = new OSDMap();
-            resp["Verified"] = OSD.FromBoolean(false);
-            IGenericsConnector generics = Aurora.DataManager.DataManager.RequestPlugin<IGenericsConnector>();
-            UUID groupID;
-            if (generics != null && map.ContainsKey("Group") == true && map.ContainsKey("Use") && UUID.TryParse(map["Group"], out groupID) == true)
-            {
-                if (map["Use"].AsBoolean())
-                {
-                    OSDMap useValue = new OSDMap();
-                    useValue["Use"] = OSD.FromBoolean(true);
-                    generics.AddGeneric(groupID, "Group", "WebUI_newsSource", useValue);
-                }
-                else
-                {
-                    generics.RemoveGeneric(groupID, "Group", "WebUI_newsSource");
-                }
-                resp["Verified"] = OSD.FromBoolean(true);
-            }
-            return resp;
-        }
 
         private OSDMap GroupNotices(OSDMap map)
         {
