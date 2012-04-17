@@ -1967,7 +1967,8 @@ namespace Aurora.Services
                 {
                     region = regiondata.Get(regionID, scopeID);
                 }else if(regionName != string.Empty){
-                    region = regiondata.Get(regionName, scopeID)[0];
+                    List<GridRegion> regions = regiondata.Get(regionName, scopeID);
+                    region = regions.Count > 0 ? regions[0] : null;
                 }
                 if (region != null)
                 {
@@ -2043,6 +2044,64 @@ namespace Aurora.Services
                         Parcels.Add(LandData2WebOSD(parcel));
                     });
                     resp["Parcels"] = Parcels;
+                }
+            }
+
+            return resp;
+        }
+
+        private OSDMap GetParcelsWithNameByRegion(OSDMap map)
+        {
+            OSDMap resp = new OSDMap();
+            resp["Parcels"] = new OSDArray();
+            resp["Total"] = OSD.FromInteger(0);
+
+            IDirectoryServiceConnector directory = Aurora.DataManager.DataManager.RequestPlugin<IDirectoryServiceConnector>();
+            if (directory != null && map.ContainsKey("Region") && map.ContainsKey("Parcel"))
+            {
+                UUID RegionID = UUID.Parse(map["Region"]);
+                string name = map["Parcel"].ToString().Trim();
+                UUID ScopeID = map.ContainsKey("ScopeID") ? UUID.Parse(map["ScopeID"].ToString()) : UUID.Zero;
+                uint start = map.ContainsKey("Start") ? uint.Parse(map["Start"].ToString()) : 0;
+                uint count = map.ContainsKey("Count") ? uint.Parse(map["Count"].ToString()) : 10;
+
+                if (name == string.Empty)
+                {
+                    MainConsole.Instance.Trace("Parcel name was an empty string.");
+                }
+                else
+                {
+                    uint total = directory.GetNumberOfParcelsWithNameByRegion(RegionID, ScopeID, name);
+                    if (total > 0)
+                    {
+                        resp["Total"] = OSD.FromInteger((int)total);
+                        if (count == 0)
+                        {
+                            return resp;
+                        }
+                        List<LandData> parcels = directory.GetParcelsWithNameByRegion(start, count, RegionID, ScopeID, name);
+                        OSDArray Parcels = new OSDArray(parcels.Count);
+                        parcels.ForEach(delegate(LandData parcel)
+                        {
+                            Parcels.Add(LandData2WebOSD(parcel));
+                        });
+                        resp["Parcels"] = Parcels;
+                    }
+                }
+            }
+            else
+            {
+                if (directory == null)
+                {
+                    MainConsole.Instance.Trace("Could not find IDirectoryServiceConnector");
+                }
+                else if (!map.ContainsKey("Region"))
+                {
+                    MainConsole.Instance.Trace("Region was not specified.");
+                }
+                else if (!map.ContainsKey("Parcel"))
+                {
+                    MainConsole.Instance.Trace("Parcel was not specified.");
                 }
             }
 
