@@ -105,11 +105,6 @@ namespace Aurora.Services
             }
         }
 
-        private IGenericData GD;
-        private string ConnectionString = "";
-        private Timer m_GC_timer;
-        private uint m_codes_GC = 24;
-
         #region console wrappers
 
         private void Info(object message)
@@ -148,29 +143,11 @@ namespace Aurora.Services
             m_HandlerPassword = config.GetString("WebUIHandlerPassword", string.Empty);
             m_HandlerPort = config.GetUInt("WebUIHandlerPort", 0);
             m_TexturePort = config.GetUInt("WebUIHandlerTextureServerPort", 0);
-            m_codes_GC = config.GetUInt("WebUIHandlerGC_codes", 24);
-            if (m_codes_GC < 1)
-            {
-                m_codes_GC = 1;
-            }
 
             if (Handler == string.Empty || HandlerPassword == string.Empty || HandlerPort == 0 || TexturePort == 0)
             {
                 m_enabled = false;
                 Warn("Not loaded, configuration missing.");
-                return;
-            }
-
-            IConfig dbConfig = m_config.Configs["DatabaseService"];
-            if (dbConfig != null)
-            {
-                ConnectionString = dbConfig.GetString("ConnectionString", String.Empty);
-            }
-
-            if (ConnectionString == string.Empty)
-            {
-                m_enabled = false;
-                Warn("not loaded, no storage parameters found");
                 return;
             }
 
@@ -186,109 +163,9 @@ namespace Aurora.Services
                 return;
             }
             DataManager.DataManager.RegisterPlugin(this);
-
-            GD = GenericData;
-            GD.ConnectToDatabase(ConnectionString, "Wiredux", true);
-
-            m_GC_timer = new Timer(m_codes_GC * 3600000);
-            m_GC_timer.Elapsed += new ElapsedEventHandler((object sender, ElapsedEventArgs e) => {
-                garbageCollection();
-            });
-            m_GC_timer.Enabled = true;
-            garbageCollection();
         }
 
         #endregion
-
-        public OSDMap WebUIClientImplementationData()
-        {
-            OSDMap resp = new OSDMap(3);
-            List<string> result;
-            string[] keys;
-
-            keys = new string[7]{
-                "id",
-                "lastnames",
-                "adress",
-                "region",
-                "allowRegistrations",
-                "verifyUsers",
-                "ForceAge"
-            };
-            result = GD.Query(keys, "wi_adminsetting", null, null, 0, 1);
-            if (result.Count == keys.Length)
-            {
-                OSDMap adminsetting = new OSDMap();
-                for (int i = 0; i < result.Count; ++i)
-                {
-                    uint val;
-                    if (!uint.TryParse(result[i], out val))
-                    {
-                        val = (uint)((result[i] == "True") ? 1 : 0);
-                    }
-                    adminsetting[keys.GetValue(i).ToString()] = OSD.FromInteger(val);
-                }
-                resp["adminsetting"] = adminsetting;
-            }
-
-            keys = new string[20]{
-                "id",
-                "displayTopPanelSlider", 
-                "displayTemplateSelector",
-                "displayStyleSwitcher",
-                "displayStyleSizer",
-                "displayFontSizer",
-                "displayLanguageSelector",
-                "displayScrollingText",
-                "displayWelcomeMessage",
-                "displayLogo",
-                "displayLogoEffect",
-                "displaySlideShow",
-                "displayMegaMenu",
-                "displayDate",
-                "displayTime",
-                "displayRoundedCorner",
-                "displayBackgroundColorAnimation",
-                "displayPageLoadTime",
-                "displayW3c",
-                "displayRss"
-            };
-            result = GD.Query(keys, "wi_adminmodules", null, null, 0, 1);
-            if (result.Count == keys.Length)
-            {
-                OSDMap adminmodules = new OSDMap();
-                for (int i = 0; i < result.Count; ++i)
-                {
-                    adminmodules[keys.GetValue(i).ToString()] = OSD.FromBoolean(uint.Parse(result[i]) == 1);
-                }
-                resp["adminmodules"] = adminmodules;
-            }
-
-
-            UUID uuid;
-            result = GD.Query(new string[1] { "startregion" }, "wi_adminsetting", null, null, 0, 1);
-            resp["startregion"] = OSD.FromUUID(result[0].Trim() != string.Empty && UUID.TryParse(result[0], out uuid) ? uuid : UUID.Zero);
-
-            return resp;
-        }
-
-        private void garbageCollection()
-        {
-            int now = (int)Utils.DateTimeToUnixTime(DateTime.Now);
-
-            QueryFilter filter = new QueryFilter();
-
-            filter.andLessThanFilters["time"] = now - (int)(m_codes_GC * 3600);
-            filter.andFilters["info"] = "pwreset";
-            filter.orMultiFilters["info"] = new List<object>
-            {
-                "pwreset",
-                "confirm",
-                "emailconfirm"
-            };
-
-            GD.Delete("wi_codetable", filter);
-        }
     }
 
     public class WebUIHandler : IService
@@ -687,11 +564,6 @@ namespace Aurora.Services
         #endregion
 
         #endregion
-
-        public OSDMap WebUIClientImplementationData()
-        {
-            return m_connector.WebUIClientImplementationData();
-        }
     }
 
     public class WebUIHTTPHandler : BaseStreamHandler
@@ -791,15 +663,6 @@ namespace Aurora.Services
         #endregion
 
         #region WebUI API methods
-
-        #region module-specific
-
-        private OSDMap WebUIClientImplementationData(OSDMap map)
-        {
-            return WebUI.WebUIClientImplementationData();
-        }
-
-        #endregion
 
         #region Grid
 
