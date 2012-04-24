@@ -204,6 +204,7 @@ namespace Aurora.Services
             bool runLocally = handlerConfig.GetBoolean("RunLocally", false);
             uint httpPort = handlerConfig.GetUInt("WebUIHTTPPort", 80);
             string phpBinPath = handlerConfig.GetString("phpBinPath", string.Empty);
+            UUID.TryParse(handlerConfig.GetString("WebUIAdminID", UUID.Zero.ToString()), out AdminAgentID);
 
             if (name != Name || (!runLocally && Password == string.Empty) || (runLocally && phpBinPath == string.Empty))
             {
