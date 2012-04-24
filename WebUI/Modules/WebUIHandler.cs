@@ -1203,10 +1203,10 @@ namespace Aurora.Services
             }
 
             resp["UUID"] = OSD.FromUUID(user.PrincipalID);
-            resp["HomeUUID"] = OSD.FromUUID((userinfo == null) ? UUID.Zero : userinfo.HomeRegionID);
-            resp["HomeName"] = OSD.FromString((userinfo == null || homeRegion == null) ? "" : homeRegion.RegionName);
-            resp["CurrentRegionUUID"] = OSD.FromUUID((userinfo == null) ? UUID.Zero : userinfo.CurrentRegionID);
-            resp["CurrentRegionName"] = OSD.FromString((userinfo == null || currentRegion == null) ? "" : currentRegion.RegionName);
+            resp["HomeUUID"] = OSD.FromUUID((homeRegion == null) ? UUID.Zero : homeRegion.RegionID);
+            resp["HomeName"] = OSD.FromString((homeRegion == null) ? "" : homeRegion.RegionName);
+            resp["CurrentRegionUUID"] = OSD.FromUUID((currentRegion == null) ? UUID.Zero : currentRegion.RegionID);
+            resp["CurrentRegionName"] = OSD.FromString((currentRegion == null) ? "" : currentRegion.RegionName);
             resp["Online"] = OSD.FromBoolean((userinfo == null) ? false : userinfo.IsOnline);
             resp["Email"] = OSD.FromString(user.Email);
             resp["Name"] = OSD.FromString(user.Name);
@@ -1230,10 +1230,10 @@ namespace Aurora.Services
             GridRegion currentRegion = userinfo.CurrentRegionID != UUID.Zero ? gs.GetRegionByUUID(UUID.Zero, userinfo.CurrentRegionID) : null;
 
             resp["UUID"] = OSD.FromUUID(user.PrincipalID);
-            resp["HomeUUID"] = OSD.FromUUID((userinfo == null) ? UUID.Zero : userinfo.HomeRegionID);
-            resp["HomeName"] = OSD.FromString((userinfo == null || homeRegion == null) ? "" : homeRegion.RegionName);
+            resp["HomeUUID"] = OSD.FromUUID((homeRegion == null) ? UUID.Zero : homeRegion.RegionID);
+            resp["HomeName"] = OSD.FromString((homeRegion == null) ? "" : homeRegion.RegionName);
             resp["CurrentRegionUUID"] = OSD.FromUUID((userinfo == null) ? UUID.Zero : userinfo.CurrentRegionID);
-            resp["CurrentRegionName"] = OSD.FromString((userinfo == null || currentRegion == null) ? "" : currentRegion.RegionName);
+            resp["CurrentRegionName"] = OSD.FromString((currentRegion == null) ? "" : currentRegion.RegionName);
             resp["Online"] = OSD.FromBoolean((userinfo == null) ? false : userinfo.IsOnline);
             resp["Email"] = OSD.FromString(user.Email);
             resp["Name"] = OSD.FromString(user.Name);
