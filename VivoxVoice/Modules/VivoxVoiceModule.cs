@@ -409,28 +409,25 @@ namespace Aurora.OptionalModules
             OSDMap retVal = new OSDMap();
             retVal["ProvisionVoiceAccountRequest"] = CapsUtil.CreateCAPS("ProvisionVoiceAccountRequest", "");
 
-            server.AddStreamHandler(new RestStreamHandler("POST", retVal["ProvisionVoiceAccountRequest"],
-                                                       delegate(string request, string path, string param,
-                                                                OSHttpRequest httpRequest, OSHttpResponse httpResponse)
+            server.AddStreamHandler(new GenericStreamHandler("POST", retVal["ProvisionVoiceAccountRequest"],
+                                                       delegate(string path, Stream request,
+                                                        OSHttpRequest httpRequest, OSHttpResponse httpResponse)
                                                        {
-                                                           return ProvisionVoiceAccountRequest(scene, request, path, param,
-                                                                                               agentID);
+                                                           return ProvisionVoiceAccountRequest(scene, agentID);
                                                        }));
             retVal["ParcelVoiceInfoRequest"] = CapsUtil.CreateCAPS("ParcelVoiceInfoRequest", "");
-            server.AddStreamHandler(new RestStreamHandler("POST", retVal["ParcelVoiceInfoRequest"],
-                                                       delegate(string request, string path, string param,
-                                                                OSHttpRequest httpRequest, OSHttpResponse httpResponse)
+            server.AddStreamHandler(new GenericStreamHandler("POST", retVal["ParcelVoiceInfoRequest"],
+                                                       delegate(string path, Stream request,
+                                                        OSHttpRequest httpRequest, OSHttpResponse httpResponse)
                                                        {
-                                                           return ParcelVoiceInfoRequest(scene, request, path, param,
-                                                                                         agentID);
+                                                           return ParcelVoiceInfoRequest(scene, agentID);
                                                        }));
             retVal["ChatSessionRequest"] = CapsUtil.CreateCAPS("ChatSessionRequest", "");
-            server.AddStreamHandler(new RestStreamHandler("POST", retVal["ChatSessionRequest"],
-                                                       delegate(string request, string path, string param,
-                                                                OSHttpRequest httpRequest, OSHttpResponse httpResponse)
+            server.AddStreamHandler(new GenericStreamHandler("POST", retVal["ChatSessionRequest"],
+                                                       delegate(string path, Stream request,
+                                                        OSHttpRequest httpRequest, OSHttpResponse httpResponse)
                                                        {
-                                                           return ChatSessionRequest(scene, request, path, param,
-                                                                                         agentID);
+                                                           return ChatSessionRequest(scene, agentID);
                                                        }));
             return retVal;
         }
@@ -439,14 +436,10 @@ namespace Aurora.OptionalModules
         /// Callback for a client request for Voice Account Details
         /// </summary>
         /// <param name="scene">current scene object of the client</param>
-        /// <param name="request"></param>
-        /// <param name="path"></param>
-        /// <param name="param"></param>
         /// <param name="agentID"></param>
         /// <param name="caps"></param>
         /// <returns></returns>
-        public string ProvisionVoiceAccountRequest(IScene scene, string request, string path, string param,
-                                                   UUID agentID)
+        public byte[] ProvisionVoiceAccountRequest(IScene scene, UUID agentID)
         {
             try
             {
@@ -466,8 +459,6 @@ namespace Aurora.OptionalModules
                 avatarName = avatar.Name;
 
                 m_log.TraceFormat("[VivoxVoice][PROVISIONVOICE]: scene = {0}, agentID = {1}", scene, agentID);
-                m_log.TraceFormat("[VivoxVoice][PROVISIONVOICE]: request: {0}, path: {1}, param: {2}",
-                                  request, path, param);
 
                 XmlElement    resp;
                 bool          retry = false;
@@ -573,16 +564,15 @@ namespace Aurora.OptionalModules
                 map["password"] = password;
                 map["voice_sip_uri_hostname"] = m_vivoxSipUri;
                 map["voice_account_server_name"] = m_vivoxVoiceAccountApi;
-                string r = OSDParser.SerializeLLSDXmlString(map);
 
-                m_log.TraceFormat("[VivoxVoice][PROVISIONVOICE]: avatar \"{0}\" added: {1}", avatarName, r);
+                m_log.TraceFormat("[VivoxVoice][PROVISIONVOICE]: avatar \"{0}\" added", avatarName);
 
-                return r;
+                return OSDParser.SerializeLLSDXmlBytes(map);
             }
             catch (Exception e)
             {
                 m_log.ErrorFormat("[VivoxVoice][PROVISIONVOICE]: : {0}, retry later", e.ToString());
-                return "<llsd><undef /></llsd>";
+                return Encoding.UTF8.GetBytes("<llsd><undef /></llsd>");
             }
         }
 
@@ -596,8 +586,7 @@ namespace Aurora.OptionalModules
         /// <param name="agentID"></param>
         /// <param name="caps"></param>
         /// <returns></returns>
-        public string ParcelVoiceInfoRequest(IScene scene, string request, string path, string param,
-                                             UUID agentID)
+        public byte[] ParcelVoiceInfoRequest(IScene scene, UUID agentID)
         {
             IScenePresence avatar = scene.GetScenePresence(agentID);
             string        avatarName = avatar.Name;
@@ -616,11 +605,6 @@ namespace Aurora.OptionalModules
                 // voice, if all do retrieve or obtain the parcel
                 // voice channel
                 LandData land = avatar.CurrentParcel.LandData;
-
-                //m_log.DebugFormat("[VivoxVoice][PARCELVOICE]: region \"{0}\": Parcel \"{1}\" ({2}): avatar \"{3}\": request: {4}, path: {5}, param: {6}",
-                //                  scene.RegionInfo.RegionName, land.Name, land.LocalID, avatarName, request, path, param);
-                // m_log.DebugFormat("[VivoxVoice][PARCELVOICE]: avatar \"{0}\": location: {1} {2} {3}",
-                //                   avatarName, avatar.AbsolutePosition.X, avatar.AbsolutePosition.Y, avatar.AbsolutePosition.Z);
 
                 if (!scene.RegionInfo.EstateSettings.AllowVoice)
                 {
@@ -648,11 +632,10 @@ namespace Aurora.OptionalModules
                 map["parcel_local_id"] = land.LocalID;
                 map["voice_credentials"] = new OSDMap();
                 ((OSDMap)map["voice_credentials"])["channel_uri"] = channel_uri;
-                string r = OSDParser.SerializeLLSDXmlString(map);
 
-                m_log.DebugFormat("[VivoxVoice][PARCELVOICE]: region \"{0}\": Parcel \"{1}\" ({2}): avatar \"{3}\": {4}",
-                                  scene.RegionInfo.RegionName, land.Name, land.LocalID, avatarName, r);
-                return r;
+                m_log.DebugFormat("[VivoxVoice][PARCELVOICE]: region \"{0}\": Parcel \"{1}\" ({2}): avatar \"{3}\"",
+                                  scene.RegionInfo.RegionName, land.Name, land.LocalID, avatarName);
+                return OSDParser.SerializeLLSDXmlBytes(map);
             }
             catch (Exception e)
             {
@@ -661,7 +644,7 @@ namespace Aurora.OptionalModules
                 m_log.DebugFormat("[VivoxVoice][PARCELVOICE]: region \"{0}\": avatar \"{1}\": {2} failed",
                                   scene.RegionInfo.RegionName, avatarName, e.ToString());
 
-                return "<llsd><undef /></llsd>";
+                return Encoding.UTF8.GetBytes("<llsd><undef /></llsd>");
             }
         }
 
@@ -670,23 +653,19 @@ namespace Aurora.OptionalModules
         /// Callback for a client request for a private chat channel
         /// </summary>
         /// <param name="scene">current scene object of the client</param>
-        /// <param name="request"></param>
-        /// <param name="path"></param>
-        /// <param name="param"></param>
         /// <param name="agentID"></param>
         /// <param name="caps"></param>
         /// <returns></returns>
-        public string ChatSessionRequest(IScene scene, string request, string path, string param,
-                                         UUID agentID)
+        public byte[] ChatSessionRequest(IScene scene, UUID agentID)
         {
             IScenePresence avatar = scene.GetScenePresence(agentID);
             string        avatarName = avatar.Name;
 
-            m_log.DebugFormat("[VivoxVoice][CHATSESSION]: avatar \"{0}\": request: {1}, path: {2}, param: {3}",
-                              avatarName, request, path, param);
+            m_log.DebugFormat("[VivoxVoice][CHATSESSION]: avatar \"{0}\"",
+                              avatarName);
             if (avatar.Scene.RegionInfo.EstateSettings.AllowVoice)
-                return "<llsd>true</llsd>";
-            return "<llsd>false</llsd>";
+                return OSDParser.SerializeLLSDXmlBytes(true);
+            return OSDParser.SerializeLLSDXmlBytes(false);
         }
 
 
