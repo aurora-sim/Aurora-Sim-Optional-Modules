@@ -42,7 +42,7 @@ using log4net;
 
 namespace OpenSim.Region.OptionalModules.World.WorldView
 {
-    public class WorldViewRequestHandler : BaseStreamHandler
+    public class WorldViewRequestHandler : BaseRequestHandler
     {
         private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 

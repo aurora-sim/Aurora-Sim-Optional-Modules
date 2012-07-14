@@ -552,9 +552,9 @@ namespace OpenSim.Region.OptionalModules.World.TreePopulator
                 }
             }
 
+            sceneObject.SetGroup(groupID, UUID.Zero, false);
             m_scene.SceneGraph.AddPrimToScene(sceneObject);
-            sceneObject.ScheduleGroupUpdate (PrimUpdateFlags.ForcedFullUpdate);
-            sceneObject.SetGroup(groupID, UUID.Zero);
+            sceneObject.ScheduleGroupUpdate(PrimUpdateFlags.ForcedFullUpdate);
 
             return sceneObject;
         }

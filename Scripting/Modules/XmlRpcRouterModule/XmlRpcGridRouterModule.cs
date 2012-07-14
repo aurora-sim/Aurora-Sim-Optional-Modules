@@ -37,6 +37,7 @@ using Aurora.Framework;
 using Aurora.Framework.Servers.HttpServer;
 using OpenSim.Region.Framework.Interfaces;
 using OpenSim.Region.Framework.Scenes;
+using OpenSim.Services.Robust;
 
 namespace OpenSim.Region.OptionalModules.Scripting.XmlRpcGridRouterModule
 {
@@ -122,7 +123,6 @@ namespace OpenSim.Region.OptionalModules.Scripting.XmlRpcGridRouterModule
                 XmlRpcInfo info = new XmlRpcInfo();
                 info.channel = channel;
                 info.uri = uri;
-
                 bool success = SynchronousRestObjectRequester.MakeRequest<XmlRpcInfo, bool>(
                         "POST", m_ServerURI+"/RegisterChannel/", info);
 

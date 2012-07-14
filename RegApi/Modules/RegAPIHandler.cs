@@ -79,7 +79,7 @@ namespace OpenSim.Services
         }
     }
 
-    public class RegApiHTTPHandler : BaseStreamHandler
+    public class RegApiHTTPHandler : BaseRequestHandler
     {
         private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 

@@ -37,6 +37,7 @@ using Aurora.Framework.Servers.HttpServer;
 using OpenSim.Services.Interfaces;
 using Aurora.Simulation.Base;
 using OpenMetaverse;
+using OpenSim.Services.Robust;
 
 namespace FreeswitchVoice
 {

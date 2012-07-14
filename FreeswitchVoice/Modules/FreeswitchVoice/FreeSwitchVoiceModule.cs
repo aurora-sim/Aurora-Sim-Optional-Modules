@@ -291,19 +291,19 @@ namespace FreeswitchVoice
             OSDMap retVal = new OSDMap();
             retVal["ProvisionVoiceAccountRequest"] = CapsUtil.CreateCAPS("ProvisionVoiceAccountRequest", "");
 
-            server.AddStreamHandler(new RestStreamHandler("POST", retVal["ProvisionVoiceAccountRequest"],
-                                                       delegate(string request, string path, string param,
+            server.AddStreamHandler(new GenericStreamHandler("POST", retVal["ProvisionVoiceAccountRequest"],
+                                                       delegate(string path, Stream req,
                                                                 OSHttpRequest httpRequest, OSHttpResponse httpResponse)
                                                        {
-                                                           return ProvisionVoiceAccountRequest(scene, request, path, param,
+                                                           return ProvisionVoiceAccountRequest(scene, req.ReadUntilEnd(),
                                                                                                agentID);
                                                        }));
             retVal["ParcelVoiceInfoRequest"] = CapsUtil.CreateCAPS("ParcelVoiceInfoRequest", "");
-            server.AddStreamHandler(new RestStreamHandler("POST", retVal["ParcelVoiceInfoRequest"],
-                                                       delegate(string request, string path, string param,
+            server.AddStreamHandler(new GenericStreamHandler("POST", retVal["ParcelVoiceInfoRequest"],
+                                                       delegate(string path, Stream req,
                                                                 OSHttpRequest httpRequest, OSHttpResponse httpResponse)
                                                        {
-                                                           return ParcelVoiceInfoRequest(scene, request, path, param,
+                                                           return ParcelVoiceInfoRequest(scene, req.ReadUntilEnd(),
                                                                                          agentID);
                                                        }));
             return retVal;
@@ -319,7 +319,7 @@ namespace FreeswitchVoice
         /// <param name="agentID"></param>
         /// <param name="caps"></param>
         /// <returns></returns>
-        public string ProvisionVoiceAccountRequest(IScene scene, string request, string path, string param,
+        public byte[] ProvisionVoiceAccountRequest(IScene scene, string request,
                                                    UUID agentID)
         {
             IScenePresence avatar = scene.GetScenePresence (agentID);
@@ -329,15 +329,12 @@ namespace FreeswitchVoice
                 avatar = scene.GetScenePresence(agentID);
 
                 if (avatar == null)
-                    return "<llsd>undef</llsd>";
+                    return MainServer.BadRequest;
             }
             string avatarName = avatar.Name;
 
             try
             {
-                m_log.DebugFormat("[FreeSwitchVoice][PROVISIONVOICE]: request: {0}, path: {1}, param: {2}",
-                                  request, path, param);
-
                 //XmlElement    resp;
                 string agentname = "x" + Convert.ToBase64String(agentID.GetBytes());
                 string password = "1234";//temp hack//new UUID(Guid.NewGuid()).ToString().Replace('-','Z').Substring(0,16);
@@ -365,18 +362,15 @@ namespace FreeswitchVoice
                 map["voice_sip_uri_hostname"] = m_freeSwitchRealm;
                 map["voice_account_server_name"] = String.Format("http://{0}:{1}{2}/", m_openSimWellKnownHTTPAddress,
                                                                m_freeSwitchServicePort, m_freeSwitchAPIPrefix);
-                string r = OSDParser.SerializeLLSDXmlString(map);
-                
-                m_log.DebugFormat("[FreeSwitchVoice][PROVISIONVOICE]: avatar \"{0}\": {1}", avatarName, r);
 
-                return r;
+                return OSDParser.SerializeLLSDXmlBytes(map);
             }
             catch (Exception e)
             {
                 m_log.ErrorFormat("[FreeSwitchVoice][PROVISIONVOICE]: avatar \"{0}\": {1}, retry later", avatarName, e.Message);
                 m_log.DebugFormat("[FreeSwitchVoice][PROVISIONVOICE]: avatar \"{0}\": {1} failed", avatarName, e.ToString());
 
-                return "<llsd>undef</llsd>";
+                return MainServer.BadRequest;
             }
         }
 
@@ -390,7 +384,7 @@ namespace FreeswitchVoice
         /// <param name="agentID"></param>
         /// <param name="caps"></param>
         /// <returns></returns>
-        public string ParcelVoiceInfoRequest(IScene scene, string request, string path, string param,
+        public byte[] ParcelVoiceInfoRequest(IScene scene, string request,
                                              UUID agentID)
         {
             IScenePresence avatar = scene.GetScenePresence (agentID);
@@ -416,8 +410,8 @@ namespace FreeswitchVoice
                 // voice channel
                 LandData land = parcelManagement.GetLandObject(avatar.AbsolutePosition.X, avatar.AbsolutePosition.Y).LandData;
 
-                m_log.DebugFormat("[FreeSwitchVoice][PARCELVOICE]: region \"{0}\": Parcel \"{1}\" ({2}): avatar \"{3}\": request: {4}, path: {5}, param: {6}",
-                                  scene.RegionInfo.RegionName, land.Name, land.LocalID, avatarName, request, path, param);
+                m_log.DebugFormat("[FreeSwitchVoice][PARCELVOICE]: region \"{0}\": Parcel \"{1}\" ({2}): avatar \"{3}\": request: {4}",
+                                  scene.RegionInfo.RegionName, land.Name, land.LocalID, avatarName, request);
 
                 if (!scene.RegionInfo.EstateSettings.AllowVoice)
                 {
@@ -444,11 +438,7 @@ namespace FreeswitchVoice
                 map["parcel_local_id"] = land.LocalID;
                 map["voice_credentials"] = new OSDMap();
                 ((OSDMap)map["voice_credentials"])["channel_uri"] = channelUri;
-                string r = OSDParser.SerializeLLSDXmlString(map);
-
-                m_log.DebugFormat("[FreeSwitchVoice][PARCELVOICE]: region \"{0}\": Parcel \"{1}\" ({2}): avatar \"{3}\": {4}",
-                                  scene.RegionInfo.RegionName, land.Name, land.LocalID, avatarName, r);
-                return r;
+                return OSDParser.SerializeLLSDXmlBytes(map);
             }
             catch (Exception e)
             {
@@ -457,7 +447,7 @@ namespace FreeswitchVoice
                 m_log.DebugFormat("[FreeSwitchVoice][PARCELVOICE]: region \"{0}\": avatar \"{1}\": {2} failed",
                                   scene.RegionInfo.RegionName, avatarName, e.ToString());
 
-                return "<llsd>undef</llsd>";
+                return MainServer.BadRequest;
             }
         }
 

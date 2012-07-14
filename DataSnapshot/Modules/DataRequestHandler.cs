@@ -67,14 +67,14 @@ namespace OpenSim.Region.DataSnapshot
             OSDMap retVal = new OSDMap();
             retVal["PublicSnapshotDataInfo"] = CapsUtil.CreateCAPS("PublicSnapshotDataInfo", "");
 
-            httpServer.AddStreamHandler(new RestStreamHandler("POST", retVal["ViewerStartAuction"],
+            httpServer.AddStreamHandler(new GenericStreamHandler("POST", retVal["ViewerStartAuction"],
                                                       OnDiscoveryAttempt));
             //m_log.Info("[DATASNAPSHOT]: Registering service discovery capability for " + agentID);
             return retVal;
         }
 
-        public string OnDiscoveryAttempt(string request, string path, string param,
-                                         OSHttpRequest httpRequest, OSHttpResponse httpResponse)
+        public byte[] OnDiscoveryAttempt(string path, System.IO.Stream request, OSHttpRequest httpRequest,
+                                      OSHttpResponse httpResponse)
         {
             //Very static for now, flexible enough to add new formats
             OSDMap resp = new OSDMap();
@@ -86,9 +86,7 @@ namespace OpenSim.Region.DataSnapshot
 
             ((OSDArray)resp["snapshot_resources"]).Add(dataurl);
 
-            string response = OSDParser.SerializeLLSDXmlString(resp);
-
-            return response;
+            return OSDParser.SerializeLLSDXmlBytes(resp);
         }
 
         public Hashtable OnGetSnapshot(Hashtable keysvals)

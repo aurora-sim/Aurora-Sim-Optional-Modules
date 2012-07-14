@@ -285,9 +285,9 @@ namespace OpenSimSearch.Modules.OpenSearch
                 Hashtable d = (Hashtable)o;
 
                 data[i] = new DirPopularReplyData();
-                data[i].parcelID = new UUID(d["parcel_id"].ToString());
-                data[i].name = d["name"].ToString();
-                data[i].dwell = Convert.ToSingle(d["dwell"]);
+                data[i].ParcelID = new UUID(d["parcel_id"].ToString());
+                data[i].Name = d["name"].ToString();
+                data[i].Dwell = Convert.ToSingle(d["dwell"]);
                 i++;
                 if (i >= count)
                     break;
@@ -296,9 +296,7 @@ namespace OpenSimSearch.Modules.OpenSearch
             remoteClient.SendDirPopularReply(queryID, data);
         }
 
-        public void DirLandQuery(IClientAPI remoteClient, UUID queryID,
-                uint queryFlags, uint searchType, int price, int area,
-                int queryStart)
+        public void DirLandQuery(IClientAPI remoteClient, UUID queryID, uint queryFlags, uint searchType, uint price, uint area, int queryStart)
         {
             Hashtable ReqHash = new Hashtable();
             ReqHash["flags"] = queryFlags.ToString();

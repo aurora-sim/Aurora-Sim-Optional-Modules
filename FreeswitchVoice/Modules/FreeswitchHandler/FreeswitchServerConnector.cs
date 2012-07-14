@@ -132,6 +132,11 @@ namespace FreeswitchVoice
             get { return "FreeswitchServiceURL"; }
         }
 
+        public bool DoMultiplePorts
+        {
+            get { return false; }
+        }
+
         public void AddExistingUrlForClient (string SessionID, string url, uint port)
         {
             IHttpServer server = m_registry.RequestModuleInterface<ISimulationBase> ().GetHttpServer (port);

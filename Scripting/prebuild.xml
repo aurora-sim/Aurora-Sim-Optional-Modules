@@ -41,6 +41,7 @@
 	<Reference name="Aurora.Framework"/>
 	<Reference name="Aurora.Simulation.Base"/>
 	<Reference name="OpenSim.Region.Framework"/>
+	<Reference name="OpenSim.Services"/>
 
 	<Reference name="log4net" path="../../../bin/"/>
 	<Reference name="Nini" path="../../../bin/"/>
