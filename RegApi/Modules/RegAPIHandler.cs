@@ -40,7 +40,6 @@ using Aurora.Framework;
 using Aurora.Framework.Servers.HttpServer;
 
 using Aurora.DataManager;
-using Aurora.Framework;
 using OpenMetaverse;
 using OpenMetaverse.StructuredData;
 using System.Collections.Specialized;
@@ -137,12 +136,12 @@ namespace OpenSim.Services
 
             ILoginService loginService = m_registry.RequestModuleInterface<ILoginService>();
 
-            Verified = loginService.VerifyClient(UUID.Zero, FirstName + " " + LastName, "UserAccount", Password, UUID.Zero);
+            Verified = loginService.VerifyClient(UUID.Zero, FirstName + " " + LastName, "UserAccount", Password);
             
             OSDMap resp = new OSDMap();
             if (Verified)
             {
-                UserAccount account = m_registry.RequestModuleInterface<IUserAccountService>().GetUserAccount(UUID.Zero, FirstName, LastName);
+                UserAccount account = m_registry.RequestModuleInterface<IUserAccountService>().GetUserAccount(null, FirstName, LastName);
                 if (Verified)
                 {
                     AddCapsUrls(resp, account);
@@ -239,7 +238,7 @@ namespace OpenSim.Services
                 GroupRecord record = groupsService.GetGroupRecord(UUID.Zero, UUID.Zero, group_name);
                 if (record != null)
                 {
-                    UserAccount user = m_registry.RequestModuleInterface<IUserAccountService>().GetUserAccount(UUID.Zero, first, last);
+                    UserAccount user = m_registry.RequestModuleInterface<IUserAccountService>().GetUserAccount(null, first, last);
                     if (user != null)
                     {
                         groupsService.AddAgentToGroup(UUID.Zero, user.PrincipalID, record.GroupID, UUID.Zero);
@@ -260,7 +259,7 @@ namespace OpenSim.Services
             {
                 string lastName = m_lastNameRegistry[last_name_id];
                 IUserAccountService accountService = m_registry.RequestModuleInterface<IUserAccountService>();
-                UserAccount user = accountService.GetUserAccount(UUID.Zero, userName, lastName);
+                UserAccount user = accountService.GetUserAccount(null, userName, lastName);
                 if (user != null)
                     found = true;
             }
@@ -301,13 +300,13 @@ namespace OpenSim.Services
                 if (m_lastNameRegistry.ContainsKey(last_name_id))
                 {
                     string lastName = m_lastNameRegistry[last_name_id];
-                    UserAccount user = accountService.GetUserAccount(UUID.Zero, username, lastName);
+                    UserAccount user = accountService.GetUserAccount(null, username, lastName);
                     if (user == null)
                     {
                         //The pass is in plain text... so put it in and create the account
                         accountService.CreateUser(username + " " + lastName, password, email);
                         DateTime time = DateTime.ParseExact(dob, "YYYY-MM-DD", System.Globalization.CultureInfo.InvariantCulture);
-                        user = accountService.GetUserAccount(UUID.Zero, username, lastName);
+                        user = accountService.GetUserAccount(null, username, lastName);
                         //Update the dob
                         user.Created = Util.ToUnixTime(time);
                         accountService.StoreUserAccount(user);
@@ -334,7 +333,7 @@ namespace OpenSim.Services
                                 {
                                     agentInfoService.SetHomePosition(user.PrincipalID.ToString(),
                                             m_registry.RequestModuleInterface<IGridService>().GetRegionByName
-                                            (UUID.Zero, start_region_name).RegionID,
+                                            (null, start_region_name).RegionID,
                                             new Vector3(start_local_x,
                                             start_local_y,
                                             start_local_z),
@@ -374,7 +373,7 @@ namespace OpenSim.Services
             {
                 string lastName = m_lastNameRegistry[last_name_id];
                 IUserAccountService accountService = m_registry.RequestModuleInterface<IUserAccountService>();
-                UserAccount user = accountService.GetUserAccount(UUID.Zero, userName, lastName);
+                UserAccount user = accountService.GetUserAccount(null, userName, lastName);
                 if (user != null)
                     found = true;
             }

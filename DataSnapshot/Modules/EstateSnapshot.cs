@@ -58,7 +58,7 @@ namespace OpenSim.Region.DataSnapshot.Providers
 
             UUID ownerid = m_scene.RegionInfo.EstateSettings.EstateOwner;
 
-            UserAccount userInfo = m_scene.UserAccountService.GetUserAccount(m_scene.RegionInfo.ScopeID, ownerid);
+            UserAccount userInfo = m_scene.UserAccountService.GetUserAccount(null, ownerid);
             //TODO: Change to query userserver about the master avatar UUID ?
             String firstname;
             String lastname;

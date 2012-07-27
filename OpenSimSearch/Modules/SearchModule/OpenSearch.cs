@@ -367,7 +367,7 @@ namespace OpenSimSearch.Modules.OpenSearch
         public void DirPeopleQuery(IClientAPI remoteClient, UUID queryID,
                 string queryText, uint queryFlags, int queryStart)
         {
-            List<UserAccount> accounts = m_Scenes[0].UserAccountService.GetUserAccounts(m_Scenes[0].RegionInfo.ScopeID, queryText);
+            List<UserAccount> accounts = m_Scenes[0].UserAccountService.GetUserAccounts(null, queryText);
 
             DirPeopleReplyData[] data =
                     new DirPeopleReplyData[accounts.Count];

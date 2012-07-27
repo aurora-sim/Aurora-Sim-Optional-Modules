@@ -250,7 +250,7 @@ namespace OpenSim.Region.DataSnapshot.Providers
                             try
                             {
                                 XmlNode username = nodeFactory.CreateNode(XmlNodeType.Element, "name", "");
-                                UserAccount account = m_scene.UserAccountService.GetUserAccount(m_scene.RegionInfo.ScopeID, userOwnerUUID);
+                                UserAccount account = m_scene.UserAccountService.GetUserAccount(null, userOwnerUUID);
                                 username.InnerText = account.FirstName + " " + account.LastName;
                                 userblock.AppendChild(username);
                             }

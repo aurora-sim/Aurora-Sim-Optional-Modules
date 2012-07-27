@@ -35,7 +35,7 @@ using Aurora.Framework;
 
 namespace Aurora.DataManager.MSSQL
 {
-    public class MSSQLDataLoader : DataManagerBase
+    /*public class MSSQLDataLoader : DataManagerBase
     {
         private string connectionString = "";
         private SqlConnection m_connection;
@@ -1071,5 +1071,5 @@ namespace Aurora.DataManager.MSSQL
         {
             return new MSSQLDataLoader();
         }
-    }
+    }*/
 }

@@ -640,7 +640,7 @@ namespace OpenSimProfile.Modules.OpenProfile
         {
             IScene scene = remoteClient.Scene;
             
-            UserAccount account = scene.UserAccountService.GetUserAccount(scene.RegionInfo.ScopeID, avatarID);
+            UserAccount account = scene.UserAccountService.GetUserAccount(null, avatarID);
             if (null != account)
             {
                 Byte[] charterMember;
