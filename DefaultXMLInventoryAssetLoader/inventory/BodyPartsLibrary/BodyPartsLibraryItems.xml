@@ -9,13 +9,9 @@
     <Key Name="name" Value="Example Library Item" />
     <Key Name="assetType" Value="7" />
     <Key Name="inventoryType" Value="7" />
-    <Key Name="currentPermissions" Value="2147483647" />
-    <Key Name="nextPermissions" Value="2147483647" />
-    <Key Name="everyonePermissions" Value="2147483647" />
-    <Key Name="basePermissions" Value="2147483647" />
   </Section>
 --> 
-<!--
+
   <Section Name="Hair">
     <Key Name="inventoryID" Value="d342e6c1-b9d2-11dc-95ff-0800200c9a66" />
     <Key Name="assetID" Value="d342e6c0-b9d2-11dc-95ff-0800200c9a66" />
@@ -24,10 +20,6 @@
     <Key Name="name" Value="Hair" />
     <Key Name="assetType" Value="13" />
     <Key Name="inventoryType" Value="18" />
-    <Key Name="currentPermissions" Value="2147483647" />
-    <Key Name="nextPermissions" Value="2147483647" />
-    <Key Name="everyonePermissions" Value="2147483647" />
-    <Key Name="basePermissions" Value="2147483647" />
   </Section>
   
   <Section Name="Skin">
@@ -38,12 +30,8 @@
     <Key Name="name" Value="Skin" />
     <Key Name="assetType" Value="13" />
     <Key Name="inventoryType" Value="18" />
-    <Key Name="currentPermissions" Value="2147483647" />
-    <Key Name="nextPermissions" Value="2147483647" />
-    <Key Name="everyonePermissions" Value="2147483647" />
-    <Key Name="basePermissions" Value="2147483647" />
   </Section>
--->
+
 <!--
   <Section Name="Jim Skin">
     <Key Name="inventoryID" Value="5c86b031-b9cc-11dc-95ff-0800200c9a66" />
@@ -53,10 +41,6 @@
     <Key Name="name" Value="Jim Skin" />
     <Key Name="assetType" Value="13" />
     <Key Name="inventoryType" Value="13" />
-    <Key Name="currentPermissions" Value="2147483647" />
-    <Key Name="nextPermissions" Value="2147483647" />
-    <Key Name="everyonePermissions" Value="2147483647" />
-    <Key Name="basePermissions" Value="2147483647" />
   </Section>
 
   <Section Name="Little Goblin Skin">
@@ -67,13 +51,9 @@
     <Key Name="name" Value="Little Goblin Skin" />
     <Key Name="assetType" Value="13" />
     <Key Name="inventoryType" Value="13" />
-    <Key Name="currentPermissions" Value="2147483647" />
-    <Key Name="nextPermissions" Value="2147483647" />
-    <Key Name="everyonePermissions" Value="2147483647" />
-    <Key Name="basePermissions" Value="2147483647" />
   </Section>
 -->
-<!--
+
   <Section Name="Shape">
     <Key Name="inventoryID" Value="5c86b033-b9cc-11dc-95ff-0800200c9a66" />
     <Key Name="assetID" Value="66c41e39-38f9-f75a-024e-585989bfab73" />
@@ -82,12 +62,18 @@
     <Key Name="name" Value="Shape" />
     <Key Name="assetType" Value="13" />
     <Key Name="inventoryType" Value="18" />
-    <Key Name="currentPermissions" Value="2147483647" />
-    <Key Name="nextPermissions" Value="2147483647" />
-    <Key Name="everyonePermissions" Value="2147483647" />
-    <Key Name="basePermissions" Value="2147483647" />
   </Section>
--->
+
+  <Section Name="Eyes">
+    <Key Name="inventoryID" Value="a3ca4ea0-3065-4ff9-ae00-c31abde64330" />
+    <Key Name="assetID" Value="4bb6fa4d-1cd2-498a-a84c-95c1a0e745a7" />
+    <Key Name="folderID" Value="d499e5e0-b9bf-11dc-95ff-0800200c9a66"/>
+    <Key Name="description" Value="Shape" />
+    <Key Name="name" Value="Shape" />
+    <Key Name="assetType" Value="13" />
+    <Key Name="inventoryType" Value="18" />
+  </Section>
+
 <!--
   <Section Name="Jim Shape">
     <Key Name="inventoryID" Value="5c86b034-b9cc-11dc-95ff-0800200c9a66" />
@@ -97,10 +83,6 @@
     <Key Name="name" Value="Jim Shape" />
     <Key Name="assetType" Value="13" />
     <Key Name="inventoryType" Value="13" />
-    <Key Name="currentPermissions" Value="2147483647" />
-    <Key Name="nextPermissions" Value="2147483647" />
-    <Key Name="everyonePermissions" Value="2147483647" />
-    <Key Name="basePermissions" Value="2147483647" />
   </Section>
 
   <Section Name="Little Goblin Shape">
@@ -111,10 +93,7 @@
     <Key Name="name" Value="Little Goblin Shape" />
     <Key Name="assetType" Value="13" />
     <Key Name="inventoryType" Value="13" />
-    <Key Name="currentPermissions" Value="2147483647" />
-    <Key Name="nextPermissions" Value="2147483647" />
-    <Key Name="everyonePermissions" Value="2147483647" />
-    <Key Name="basePermissions" Value="2147483647" />
   </Section>
   -->
+
 </Nini>
