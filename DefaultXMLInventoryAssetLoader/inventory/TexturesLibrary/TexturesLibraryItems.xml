@@ -9,10 +9,6 @@
     <Key Name="name" Value="Example Library Item" />
     <Key Name="assetType" Value="7" />
     <Key Name="inventoryType" Value="7" />
-    <Key Name="currentPermissions" Value="2147483647" />
-    <Key Name="nextPermissions" Value="2147483647" />
-    <Key Name="everyonePermissions" Value="2147483647" />
-    <Key Name="basePermissions" Value="2147483647" />
   </Section>
 --> 
 
@@ -24,11 +20,8 @@
     <Key Name="name" Value="4-tile2" />
     <Key Name="assetType" Value="0" />
     <Key Name="inventoryType" Value="0" />
-    <Key Name="currentPermissions" Value="2147483647" />
-    <Key Name="nextPermissions" Value="2147483647" />
-    <Key Name="everyonePermissions" Value="2147483647" />
-    <Key Name="basePermissions" Value="2147483647" />
   </Section>
+
   <Section Name="4-tile3 Texture">
     <Key Name="inventoryID" Value="00000000-0000-2222-4444-100000001001" />
     <Key Name="assetID" Value="00000000-0000-2222-3333-100000001001" />
@@ -37,11 +30,8 @@
     <Key Name="name" Value="4-tile3" />
     <Key Name="assetType" Value="0" />
     <Key Name="inventoryType" Value="0" />
-    <Key Name="currentPermissions" Value="2147483647" />
-    <Key Name="nextPermissions" Value="2147483647" />
-    <Key Name="everyonePermissions" Value="2147483647" />
-    <Key Name="basePermissions" Value="2147483647" />
   </Section>
+
   <Section Name="brick1_256 Texture">
     <Key Name="inventoryID" Value="00000000-0000-2222-4444-100000001002" />
     <Key Name="assetID" Value="00000000-0000-2222-3333-100000001002" />
@@ -50,11 +40,8 @@
     <Key Name="name" Value="brick1_256" />
     <Key Name="assetType" Value="0" />
     <Key Name="inventoryType" Value="0" />
-    <Key Name="currentPermissions" Value="2147483647" />
-    <Key Name="nextPermissions" Value="2147483647" />
-    <Key Name="everyonePermissions" Value="2147483647" />
-    <Key Name="basePermissions" Value="2147483647" />
   </Section>
+
   <Section Name="brick2_256 Texture">
     <Key Name="inventoryID" Value="00000000-0000-2222-4444-100000001003" />
     <Key Name="assetID" Value="00000000-0000-2222-3333-100000001003" />
@@ -63,11 +50,8 @@
     <Key Name="name" Value="brick2_256" />
     <Key Name="assetType" Value="0" />
     <Key Name="inventoryType" Value="0" />
-    <Key Name="currentPermissions" Value="2147483647" />
-    <Key Name="nextPermissions" Value="2147483647" />
-    <Key Name="everyonePermissions" Value="2147483647" />
-    <Key Name="basePermissions" Value="2147483647" />
   </Section>
+
   <Section Name="brick_mono Texture">
     <Key Name="inventoryID" Value="00000000-0000-2222-4444-100000001004" />
     <Key Name="assetID" Value="00000000-0000-2222-3333-100000001004" />
@@ -76,11 +60,8 @@
     <Key Name="name" Value="brick_mono" />
     <Key Name="assetType" Value="0" />
     <Key Name="inventoryType" Value="0" />
-    <Key Name="currentPermissions" Value="2147483647" />
-    <Key Name="nextPermissions" Value="2147483647" />
-    <Key Name="everyonePermissions" Value="2147483647" />
-    <Key Name="basePermissions" Value="2147483647" />
   </Section>
+
   <Section Name="cedar Texture">
     <Key Name="inventoryID" Value="00000000-0000-2222-4444-100000001005" />
     <Key Name="assetID" Value="00000000-0000-2222-3333-100000001005" />
@@ -89,11 +70,8 @@
     <Key Name="name" Value="cedar" />
     <Key Name="assetType" Value="0" />
     <Key Name="inventoryType" Value="0" />
-    <Key Name="currentPermissions" Value="2147483647" />
-    <Key Name="nextPermissions" Value="2147483647" />
-    <Key Name="everyonePermissions" Value="2147483647" />
-    <Key Name="basePermissions" Value="2147483647" />
   </Section>
+
   <Section Name="cement_block Texture">
     <Key Name="inventoryID" Value="00000000-0000-2222-4444-100000001006" />
     <Key Name="assetID" Value="00000000-0000-2222-3333-100000001006" />
@@ -102,11 +80,8 @@
     <Key Name="name" Value="cement_block" />
     <Key Name="assetType" Value="0" />
     <Key Name="inventoryType" Value="0" />
-    <Key Name="currentPermissions" Value="2147483647" />
-    <Key Name="nextPermissions" Value="2147483647" />
-    <Key Name="everyonePermissions" Value="2147483647" />
-    <Key Name="basePermissions" Value="2147483647" />
   </Section>
+
   <Section Name="clear Texture">
     <Key Name="inventoryID" Value="00000000-0000-2222-4444-100000001007" />
     <Key Name="assetID" Value="00000000-0000-2222-3333-100000001007" />
@@ -115,11 +90,8 @@
     <Key Name="name" Value="clear" />
     <Key Name="assetType" Value="0" />
     <Key Name="inventoryType" Value="0" />
-    <Key Name="currentPermissions" Value="2147483647" />
-    <Key Name="nextPermissions" Value="2147483647" />
-    <Key Name="everyonePermissions" Value="2147483647" />
-    <Key Name="basePermissions" Value="2147483647" />
   </Section>
+
   <Section Name="cobbles Texture">
     <Key Name="inventoryID" Value="00000000-0000-2222-4444-100000001008" />
     <Key Name="assetID" Value="00000000-0000-2222-3333-100000001008" />
@@ -128,11 +100,8 @@
     <Key Name="name" Value="cobbles" />
     <Key Name="assetType" Value="0" />
     <Key Name="inventoryType" Value="0" />
-    <Key Name="currentPermissions" Value="2147483647" />
-    <Key Name="nextPermissions" Value="2147483647" />
-    <Key Name="everyonePermissions" Value="2147483647" />
-    <Key Name="basePermissions" Value="2147483647" />
   </Section>
+
   <Section Name="creambrick Texture">
     <Key Name="inventoryID" Value="00000000-0000-2222-4444-100000001009" />
     <Key Name="assetID" Value="00000000-0000-2222-3333-100000001009" />
@@ -141,11 +110,8 @@
     <Key Name="name" Value="creambrick" />
     <Key Name="assetType" Value="0" />
     <Key Name="inventoryType" Value="0" />
-    <Key Name="currentPermissions" Value="2147483647" />
-    <Key Name="nextPermissions" Value="2147483647" />
-    <Key Name="everyonePermissions" Value="2147483647" />
-    <Key Name="basePermissions" Value="2147483647" />
   </Section>
+
   <Section Name="fgrass Texture">
     <Key Name="inventoryID" Value="00000000-0000-2222-4444-100000001010" />
     <Key Name="assetID" Value="00000000-0000-2222-3333-100000001010" />
@@ -154,11 +120,8 @@
     <Key Name="name" Value="fgrass" />
     <Key Name="assetType" Value="0" />
     <Key Name="inventoryType" Value="0" />
-    <Key Name="currentPermissions" Value="2147483647" />
-    <Key Name="nextPermissions" Value="2147483647" />
-    <Key Name="everyonePermissions" Value="2147483647" />
-    <Key Name="basePermissions" Value="2147483647" />
   </Section>
+
   <Section Name="glasstile2 Texture">
     <Key Name="inventoryID" Value="00000000-0000-2222-4444-100000001011" />
     <Key Name="assetID" Value="00000000-0000-2222-3333-100000001011" />
@@ -167,11 +130,8 @@
     <Key Name="name" Value="glasstile2" />
     <Key Name="assetType" Value="0" />
     <Key Name="inventoryType" Value="0" />
-    <Key Name="currentPermissions" Value="2147483647" />
-    <Key Name="nextPermissions" Value="2147483647" />
-    <Key Name="everyonePermissions" Value="2147483647" />
-    <Key Name="basePermissions" Value="2147483647" />
   </Section>
+
   <Section Name="graniteblock Texture">
     <Key Name="inventoryID" Value="00000000-0000-2222-4444-100000001012" />
     <Key Name="assetID" Value="00000000-0000-2222-3333-100000001012" />
@@ -180,11 +140,8 @@
     <Key Name="name" Value="graniteblock" />
     <Key Name="assetType" Value="0" />
     <Key Name="inventoryType" Value="0" />
-    <Key Name="currentPermissions" Value="2147483647" />
-    <Key Name="nextPermissions" Value="2147483647" />
-    <Key Name="everyonePermissions" Value="2147483647" />
-    <Key Name="basePermissions" Value="2147483647" />
   </Section>
+
   <Section Name="grass Texture">
     <Key Name="inventoryID" Value="00000000-0000-2222-4444-100000001013" />
     <Key Name="assetID" Value="00000000-0000-2222-3333-100000001013" />
@@ -193,11 +150,8 @@
     <Key Name="name" Value="grass" />
     <Key Name="assetType" Value="0" />
     <Key Name="inventoryType" Value="0" />
-    <Key Name="currentPermissions" Value="2147483647" />
-    <Key Name="nextPermissions" Value="2147483647" />
-    <Key Name="everyonePermissions" Value="2147483647" />
-    <Key Name="basePermissions" Value="2147483647" />
   </Section>
+
   <Section Name="gravel Texture">
     <Key Name="inventoryID" Value="00000000-0000-2222-4444-100000001014" />
     <Key Name="assetID" Value="00000000-0000-2222-3333-100000001014" />
@@ -206,11 +160,8 @@
     <Key Name="name" Value="gravel" />
     <Key Name="assetType" Value="0" />
     <Key Name="inventoryType" Value="0" />
-    <Key Name="currentPermissions" Value="2147483647" />
-    <Key Name="nextPermissions" Value="2147483647" />
-    <Key Name="everyonePermissions" Value="2147483647" />
-    <Key Name="basePermissions" Value="2147483647" />
   </Section>
+
   <Section Name="greybrick Texture">
     <Key Name="inventoryID" Value="00000000-0000-2222-4444-100000001015" />
     <Key Name="assetID" Value="00000000-0000-2222-3333-100000001015" />
@@ -219,11 +170,8 @@
     <Key Name="name" Value="greybrick" />
     <Key Name="assetType" Value="0" />
     <Key Name="inventoryType" Value="0" />
-    <Key Name="currentPermissions" Value="2147483647" />
-    <Key Name="nextPermissions" Value="2147483647" />
-    <Key Name="everyonePermissions" Value="2147483647" />
-    <Key Name="basePermissions" Value="2147483647" />
   </Section>
+
   <Section Name="ivy Texture">
     <Key Name="inventoryID" Value="00000000-0000-2222-4444-100000001016" />
     <Key Name="assetID" Value="00000000-0000-2222-3333-100000001016" />
@@ -232,11 +180,8 @@
     <Key Name="name" Value="ivy" />
     <Key Name="assetType" Value="0" />
     <Key Name="inventoryType" Value="0" />
-    <Key Name="currentPermissions" Value="2147483647" />
-    <Key Name="nextPermissions" Value="2147483647" />
-    <Key Name="everyonePermissions" Value="2147483647" />
-    <Key Name="basePermissions" Value="2147483647" />
   </Section>
+
   <Section Name="mahogany Texture">
     <Key Name="inventoryID" Value="00000000-0000-2222-4444-100000001017" />
     <Key Name="assetID" Value="00000000-0000-2222-3333-100000001017" />
@@ -245,11 +190,8 @@
     <Key Name="name" Value="mahogany" />
     <Key Name="assetType" Value="0" />
     <Key Name="inventoryType" Value="0" />
-    <Key Name="currentPermissions" Value="2147483647" />
-    <Key Name="nextPermissions" Value="2147483647" />
-    <Key Name="everyonePermissions" Value="2147483647" />
-    <Key Name="basePermissions" Value="2147483647" />
   </Section>
+
   <Section Name="maple Texture">
     <Key Name="inventoryID" Value="00000000-0000-2222-4444-100000001018" />
     <Key Name="assetID" Value="00000000-0000-2222-3333-100000001018" />
@@ -258,11 +200,8 @@
     <Key Name="name" Value="maple" />
     <Key Name="assetType" Value="0" />
     <Key Name="inventoryType" Value="0" />
-    <Key Name="currentPermissions" Value="2147483647" />
-    <Key Name="nextPermissions" Value="2147483647" />
-    <Key Name="everyonePermissions" Value="2147483647" />
-    <Key Name="basePermissions" Value="2147483647" />
   </Section>
+
   <Section Name="mosaic02 Texture">
     <Key Name="inventoryID" Value="00000000-0000-2222-4444-100000001019" />
     <Key Name="assetID" Value="00000000-0000-2222-3333-100000001019" />
@@ -271,11 +210,8 @@
     <Key Name="name" Value="mosaic02" />
     <Key Name="assetType" Value="0" />
     <Key Name="inventoryType" Value="0" />
-    <Key Name="currentPermissions" Value="2147483647" />
-    <Key Name="nextPermissions" Value="2147483647" />
-    <Key Name="everyonePermissions" Value="2147483647" />
-    <Key Name="basePermissions" Value="2147483647" />
   </Section>
+
   <Section Name="palm1 Texture">
     <Key Name="inventoryID" Value="00000000-0000-2222-4444-100000001020" />
     <Key Name="assetID" Value="00000000-0000-2222-3333-100000001020" />
@@ -284,11 +220,8 @@
     <Key Name="name" Value="palm1" />
     <Key Name="assetType" Value="0" />
     <Key Name="inventoryType" Value="0" />
-    <Key Name="currentPermissions" Value="2147483647" />
-    <Key Name="nextPermissions" Value="2147483647" />
-    <Key Name="everyonePermissions" Value="2147483647" />
-    <Key Name="basePermissions" Value="2147483647" />
   </Section>
+
   <Section Name="papaya Texture">
     <Key Name="inventoryID" Value="00000000-0000-2222-4444-100000001021" />
     <Key Name="assetID" Value="00000000-0000-2222-3333-100000001021" />
@@ -297,11 +230,8 @@
     <Key Name="name" Value="papaya" />
     <Key Name="assetType" Value="0" />
     <Key Name="inventoryType" Value="0" />
-    <Key Name="currentPermissions" Value="2147483647" />
-    <Key Name="nextPermissions" Value="2147483647" />
-    <Key Name="everyonePermissions" Value="2147483647" />
-    <Key Name="basePermissions" Value="2147483647" />
   </Section>
+
   <Section Name="papaya_bark Texture">
     <Key Name="inventoryID" Value="00000000-0000-2222-4444-100000001022" />
     <Key Name="assetID" Value="00000000-0000-2222-3333-100000001022" />
@@ -310,11 +240,8 @@
     <Key Name="name" Value="papaya_bark" />
     <Key Name="assetType" Value="0" />
     <Key Name="inventoryType" Value="0" />
-    <Key Name="currentPermissions" Value="2147483647" />
-    <Key Name="nextPermissions" Value="2147483647" />
-    <Key Name="everyonePermissions" Value="2147483647" />
-    <Key Name="basePermissions" Value="2147483647" />
   </Section>
+
   <Section Name="pastelbrick Texture">
     <Key Name="inventoryID" Value="00000000-0000-2222-4444-100000001023" />
     <Key Name="assetID" Value="00000000-0000-2222-3333-100000001023" />
@@ -323,11 +250,8 @@
     <Key Name="name" Value="pastelbrick" />
     <Key Name="assetType" Value="0" />
     <Key Name="inventoryType" Value="0" />
-    <Key Name="currentPermissions" Value="2147483647" />
-    <Key Name="nextPermissions" Value="2147483647" />
-    <Key Name="everyonePermissions" Value="2147483647" />
-    <Key Name="basePermissions" Value="2147483647" />
   </Section>
+
   <Section Name="pine1_10m Texture">
     <Key Name="inventoryID" Value="00000000-0000-2222-4444-100000001024" />
     <Key Name="assetID" Value="00000000-0000-2222-3333-100000001024" />
@@ -336,11 +260,8 @@
     <Key Name="name" Value="pine1_10m" />
     <Key Name="assetType" Value="0" />
     <Key Name="inventoryType" Value="0" />
-    <Key Name="currentPermissions" Value="2147483647" />
-    <Key Name="nextPermissions" Value="2147483647" />
-    <Key Name="everyonePermissions" Value="2147483647" />
-    <Key Name="basePermissions" Value="2147483647" />
   </Section>
+
   <Section Name="poplar Texture">
     <Key Name="inventoryID" Value="00000000-0000-2222-4444-100000001025" />
     <Key Name="assetID" Value="00000000-0000-2222-3333-100000001025" />
@@ -349,11 +270,8 @@
     <Key Name="name" Value="poplar" />
     <Key Name="assetType" Value="0" />
     <Key Name="inventoryType" Value="0" />
-    <Key Name="currentPermissions" Value="2147483647" />
-    <Key Name="nextPermissions" Value="2147483647" />
-    <Key Name="everyonePermissions" Value="2147483647" />
-    <Key Name="basePermissions" Value="2147483647" />
   </Section>
+
   <Section Name="redtri_tile Texture">
     <Key Name="inventoryID" Value="00000000-0000-2222-4444-100000001026" />
     <Key Name="assetID" Value="00000000-0000-2222-3333-100000001026" />
@@ -362,11 +280,8 @@
     <Key Name="name" Value="redtri_tile" />
     <Key Name="assetType" Value="0" />
     <Key Name="inventoryType" Value="0" />
-    <Key Name="currentPermissions" Value="2147483647" />
-    <Key Name="nextPermissions" Value="2147483647" />
-    <Key Name="everyonePermissions" Value="2147483647" />
-    <Key Name="basePermissions" Value="2147483647" />
   </Section>
+
   <Section Name="rockbuilding Texture">
     <Key Name="inventoryID" Value="00000000-0000-2222-4444-100000001027" />
     <Key Name="assetID" Value="00000000-0000-2222-3333-100000001027" />
@@ -375,11 +290,8 @@
     <Key Name="name" Value="rockbuilding" />
     <Key Name="assetType" Value="0" />
     <Key Name="inventoryType" Value="0" />
-    <Key Name="currentPermissions" Value="2147483647" />
-    <Key Name="nextPermissions" Value="2147483647" />
-    <Key Name="everyonePermissions" Value="2147483647" />
-    <Key Name="basePermissions" Value="2147483647" />
   </Section>
+
   <Section Name="rockwallbig Texture">
     <Key Name="inventoryID" Value="00000000-0000-2222-4444-100000001028" />
     <Key Name="assetID" Value="00000000-0000-2222-3333-100000001028" />
@@ -388,11 +300,8 @@
     <Key Name="name" Value="rockwallbig" />
     <Key Name="assetType" Value="0" />
     <Key Name="inventoryType" Value="0" />
-    <Key Name="currentPermissions" Value="2147483647" />
-    <Key Name="nextPermissions" Value="2147483647" />
-    <Key Name="everyonePermissions" Value="2147483647" />
-    <Key Name="basePermissions" Value="2147483647" />
   </Section>
+
   <Section Name="roof01 Texture">
     <Key Name="inventoryID" Value="00000000-0000-2222-4444-100000001029" />
     <Key Name="assetID" Value="00000000-0000-2222-3333-100000001029" />
@@ -401,11 +310,8 @@
     <Key Name="name" Value="roof01" />
     <Key Name="assetType" Value="0" />
     <Key Name="inventoryType" Value="0" />
-    <Key Name="currentPermissions" Value="2147483647" />
-    <Key Name="nextPermissions" Value="2147483647" />
-    <Key Name="everyonePermissions" Value="2147483647" />
-    <Key Name="basePermissions" Value="2147483647" />
   </Section>
+
   <Section Name="rooftiles1 Texture">
     <Key Name="inventoryID" Value="00000000-0000-2222-4444-100000001030" />
     <Key Name="assetID" Value="00000000-0000-2222-3333-100000001030" />
@@ -414,11 +320,8 @@
     <Key Name="name" Value="rooftiles1" />
     <Key Name="assetType" Value="0" />
     <Key Name="inventoryType" Value="0" />
-    <Key Name="currentPermissions" Value="2147483647" />
-    <Key Name="nextPermissions" Value="2147483647" />
-    <Key Name="everyonePermissions" Value="2147483647" />
-    <Key Name="basePermissions" Value="2147483647" />
   </Section>
+
   <Section Name="rooftiles2_peach Texture">
     <Key Name="inventoryID" Value="00000000-0000-2222-4444-100000001031" />
     <Key Name="assetID" Value="00000000-0000-2222-3333-100000001031" />
@@ -427,11 +330,8 @@
     <Key Name="name" Value="rooftiles2_peach" />
     <Key Name="assetType" Value="0" />
     <Key Name="inventoryType" Value="0" />
-    <Key Name="currentPermissions" Value="2147483647" />
-    <Key Name="nextPermissions" Value="2147483647" />
-    <Key Name="everyonePermissions" Value="2147483647" />
-    <Key Name="basePermissions" Value="2147483647" />
   </Section>
+
   <Section Name="rooftiles2_roy Texture">
     <Key Name="inventoryID" Value="00000000-0000-2222-4444-100000001032" />
     <Key Name="assetID" Value="00000000-0000-2222-3333-100000001032" />
@@ -440,11 +340,8 @@
     <Key Name="name" Value="rooftiles2_roy" />
     <Key Name="assetType" Value="0" />
     <Key Name="inventoryType" Value="0" />
-    <Key Name="currentPermissions" Value="2147483647" />
-    <Key Name="nextPermissions" Value="2147483647" />
-    <Key Name="everyonePermissions" Value="2147483647" />
-    <Key Name="basePermissions" Value="2147483647" />
   </Section>
+
   <Section Name="saguaro_8m Texture">
     <Key Name="inventoryID" Value="00000000-0000-2222-4444-100000001033" />
     <Key Name="assetID" Value="00000000-0000-2222-3333-100000001033" />
@@ -453,11 +350,8 @@
     <Key Name="name" Value="saguaro_8m" />
     <Key Name="assetType" Value="0" />
     <Key Name="inventoryType" Value="0" />
-    <Key Name="currentPermissions" Value="2147483647" />
-    <Key Name="nextPermissions" Value="2147483647" />
-    <Key Name="everyonePermissions" Value="2147483647" />
-    <Key Name="basePermissions" Value="2147483647" />
   </Section>
+
   <Section Name="seawater Texture">
     <Key Name="inventoryID" Value="00000000-0000-2222-4444-100000001034" />
     <Key Name="assetID" Value="00000000-0000-2222-3333-100000001034" />
@@ -466,11 +360,8 @@
     <Key Name="name" Value="seawater" />
     <Key Name="assetType" Value="0" />
     <Key Name="inventoryType" Value="0" />
-    <Key Name="currentPermissions" Value="2147483647" />
-    <Key Name="nextPermissions" Value="2147483647" />
-    <Key Name="everyonePermissions" Value="2147483647" />
-    <Key Name="basePermissions" Value="2147483647" />
   </Section>
+
   <Section Name="snow1 Texture">
     <Key Name="inventoryID" Value="00000000-0000-2222-4444-100000001035" />
     <Key Name="assetID" Value="00000000-0000-2222-3333-100000001035" />
@@ -479,11 +370,8 @@
     <Key Name="name" Value="snow1" />
     <Key Name="assetType" Value="0" />
     <Key Name="inventoryType" Value="0" />
-    <Key Name="currentPermissions" Value="2147483647" />
-    <Key Name="nextPermissions" Value="2147483647" />
-    <Key Name="everyonePermissions" Value="2147483647" />
-    <Key Name="basePermissions" Value="2147483647" />
   </Section>
+
   <Section Name="steel Texture">
     <Key Name="inventoryID" Value="00000000-0000-2222-4444-100000001036" />
     <Key Name="assetID" Value="00000000-0000-2222-3333-100000001036" />
@@ -492,11 +380,8 @@
     <Key Name="name" Value="steel" />
     <Key Name="assetType" Value="0" />
     <Key Name="inventoryType" Value="0" />
-    <Key Name="currentPermissions" Value="2147483647" />
-    <Key Name="nextPermissions" Value="2147483647" />
-    <Key Name="everyonePermissions" Value="2147483647" />
-    <Key Name="basePermissions" Value="2147483647" />
   </Section>
+
   <Section Name="stone1wall Texture">
     <Key Name="inventoryID" Value="00000000-0000-2222-4444-100000001037" />
     <Key Name="assetID" Value="00000000-0000-2222-3333-100000001037" />
@@ -505,11 +390,8 @@
     <Key Name="name" Value="stone1wall" />
     <Key Name="assetType" Value="0" />
     <Key Name="inventoryType" Value="0" />
-    <Key Name="currentPermissions" Value="2147483647" />
-    <Key Name="nextPermissions" Value="2147483647" />
-    <Key Name="everyonePermissions" Value="2147483647" />
-    <Key Name="basePermissions" Value="2147483647" />
   </Section>
+
   <Section Name="stonetile Texture">
     <Key Name="inventoryID" Value="00000000-0000-2222-4444-100000001038" />
     <Key Name="assetID" Value="00000000-0000-2222-3333-100000001038" />
@@ -518,11 +400,8 @@
     <Key Name="name" Value="stonetile" />
     <Key Name="assetType" Value="0" />
     <Key Name="inventoryType" Value="0" />
-    <Key Name="currentPermissions" Value="2147483647" />
-    <Key Name="nextPermissions" Value="2147483647" />
-    <Key Name="everyonePermissions" Value="2147483647" />
-    <Key Name="basePermissions" Value="2147483647" />
   </Section>
+
   <Section Name="street2 Texture">
     <Key Name="inventoryID" Value="00000000-0000-2222-4444-100000001039" />
     <Key Name="assetID" Value="00000000-0000-2222-3333-100000001039" />
@@ -531,11 +410,8 @@
     <Key Name="name" Value="street2" />
     <Key Name="assetType" Value="0" />
     <Key Name="inventoryType" Value="0" />
-    <Key Name="currentPermissions" Value="2147483647" />
-    <Key Name="nextPermissions" Value="2147483647" />
-    <Key Name="everyonePermissions" Value="2147483647" />
-    <Key Name="basePermissions" Value="2147483647" />
   </Section>
+
   <Section Name="thatch Texture">
     <Key Name="inventoryID" Value="00000000-0000-2222-4444-100000001040" />
     <Key Name="assetID" Value="00000000-0000-2222-3333-100000001040" />
@@ -544,11 +420,8 @@
     <Key Name="name" Value="thatch" />
     <Key Name="assetType" Value="0" />
     <Key Name="inventoryType" Value="0" />
-    <Key Name="currentPermissions" Value="2147483647" />
-    <Key Name="nextPermissions" Value="2147483647" />
-    <Key Name="everyonePermissions" Value="2147483647" />
-    <Key Name="basePermissions" Value="2147483647" />
   </Section>
+
   <Section Name="water1 Texture">
     <Key Name="inventoryID" Value="00000000-0000-2222-4444-100000001041" />
     <Key Name="assetID" Value="00000000-0000-2222-3333-100000001041" />
@@ -557,11 +430,8 @@
     <Key Name="name" Value="water1" />
     <Key Name="assetType" Value="0" />
     <Key Name="inventoryType" Value="0" />
-    <Key Name="currentPermissions" Value="2147483647" />
-    <Key Name="nextPermissions" Value="2147483647" />
-    <Key Name="everyonePermissions" Value="2147483647" />
-    <Key Name="basePermissions" Value="2147483647" />
   </Section>
+
   <Section Name="water3 Texture">
     <Key Name="inventoryID" Value="00000000-0000-2222-4444-100000001042" />
     <Key Name="assetID" Value="00000000-0000-2222-3333-100000001042" />
@@ -570,11 +440,8 @@
     <Key Name="name" Value="water3" />
     <Key Name="assetType" Value="0" />
     <Key Name="inventoryType" Value="0" />
-    <Key Name="currentPermissions" Value="2147483647" />
-    <Key Name="nextPermissions" Value="2147483647" />
-    <Key Name="everyonePermissions" Value="2147483647" />
-    <Key Name="basePermissions" Value="2147483647" />
   </Section>
+
   <Section Name="wood1 Texture">
     <Key Name="inventoryID" Value="00000000-0000-2222-4444-100000001043" />
     <Key Name="assetID" Value="00000000-0000-2222-3333-100000001043" />
@@ -583,11 +450,8 @@
     <Key Name="name" Value="wood1" />
     <Key Name="assetType" Value="0" />
     <Key Name="inventoryType" Value="0" />
-    <Key Name="currentPermissions" Value="2147483647" />
-    <Key Name="nextPermissions" Value="2147483647" />
-    <Key Name="everyonePermissions" Value="2147483647" />
-    <Key Name="basePermissions" Value="2147483647" />
   </Section>
+
   <Section Name="bricks Texture">
     <Key Name="inventoryID" Value="00000000-0000-2222-9999-000000000001"/>
     <Key Name="assetID" Value="00000000-0000-1111-9999-000000000001"/>
@@ -596,11 +460,8 @@
     <Key Name="name" Value="bricks" />
     <Key Name="assetType" Value="0" />
     <Key Name="inventoryType" Value="0" />
-    <Key Name="currentPermissions" Value="2147483647" />
-    <Key Name="nextPermissions" Value="2147483647" />
-    <Key Name="everyonePermissions" Value="2147483647" />
-    <Key Name="basePermissions" Value="2147483647" />
   </Section>
+
   <Section Name="granite Texture">
     <Key Name="inventoryID" Value="00000000-0000-2222-9999-000000000004"/>
     <Key Name="assetID" Value="00000000-0000-1111-9999-000000000004"/>
@@ -609,11 +470,8 @@
     <Key Name="name" Value="granite" />
     <Key Name="assetType" Value="0" />
     <Key Name="inventoryType" Value="0" />
-    <Key Name="currentPermissions" Value="2147483647" />
-    <Key Name="nextPermissions" Value="2147483647" />
-    <Key Name="everyonePermissions" Value="2147483647" />
-    <Key Name="basePermissions" Value="2147483647" />
   </Section>
+
   <Section Name="hardwood Texture">
     <Key Name="inventoryID" Value="00000000-0000-2222-9999-000000000005"/>
     <Key Name="assetID" Value="00000000-0000-1111-9999-000000000005"/>
@@ -622,11 +480,8 @@
     <Key Name="name" Value="hardwood" />
     <Key Name="assetType" Value="0" />
     <Key Name="inventoryType" Value="0" />
-    <Key Name="currentPermissions" Value="2147483647" />
-    <Key Name="nextPermissions" Value="2147483647" />
-    <Key Name="everyonePermissions" Value="2147483647" />
-    <Key Name="basePermissions" Value="2147483647" />
   </Section>
+
   <Section Name="rocks Texture">
     <Key Name="inventoryID" Value="00000000-0000-2222-9999-000000000003"/>
     <Key Name="assetID" Value="00000000-0000-1111-9999-000000000003"/>
@@ -635,10 +490,6 @@
     <Key Name="name" Value="rocks" />
     <Key Name="assetType" Value="0" />
     <Key Name="inventoryType" Value="0" />
-    <Key Name="currentPermissions" Value="2147483647" />
-    <Key Name="nextPermissions" Value="2147483647" />
-    <Key Name="everyonePermissions" Value="2147483647" />
-    <Key Name="basePermissions" Value="2147483647" />
   </Section>
 
   <Section Name="Terrain Dirt">
@@ -649,11 +500,8 @@
     <Key Name="name" Value="Terrain Dirt" />
     <Key Name="assetType" Value="0" />
     <Key Name="inventoryType" Value="0" />
-    <Key Name="currentPermissions" Value="2147483647" />
-    <Key Name="nextPermissions" Value="2147483647" />
-    <Key Name="everyonePermissions" Value="2147483647" />
-    <Key Name="basePermissions" Value="2147483647" />
   </Section>
+
   <Section Name="Terrain Grass">
     <Key Name="inventoryID" Value="00000000-0000-2222-9999-000000000007"/>
     <Key Name="assetID" Value="abb783e6-3e93-26c0-248a-247666855da3"/>
@@ -662,11 +510,8 @@
     <Key Name="name" Value="Terrain Grass" />
     <Key Name="assetType" Value="0" />
     <Key Name="inventoryType" Value="0" />
-    <Key Name="currentPermissions" Value="2147483647" />
-    <Key Name="nextPermissions" Value="2147483647" />
-    <Key Name="everyonePermissions" Value="2147483647" />
-    <Key Name="basePermissions" Value="2147483647" />
   </Section>
+
   <Section Name="Terrain Mountain">
     <Key Name="inventoryID" Value="00000000-0000-2222-9999-000000000008"/>
     <Key Name="assetID" Value="179cdabd-398a-9b6b-1391-4dc333ba321f"/>
@@ -675,11 +520,8 @@
     <Key Name="name" Value="Terrain Mountain" />
     <Key Name="assetType" Value="0" />
     <Key Name="inventoryType" Value="0" />
-    <Key Name="currentPermissions" Value="2147483647" />
-    <Key Name="nextPermissions" Value="2147483647" />
-    <Key Name="everyonePermissions" Value="2147483647" />
-    <Key Name="basePermissions" Value="2147483647" />
   </Section>
+
   <Section Name="Terrain Rock">
     <Key Name="inventoryID" Value="00000000-0000-2222-9999-000000000009"/>
     <Key Name="assetID" Value="beb169c7-11ea-fff2-efe5-0f24dc881df2"/>
@@ -688,10 +530,6 @@
     <Key Name="name" Value="Terrain Rock" />
     <Key Name="assetType" Value="0" />
     <Key Name="inventoryType" Value="0" />
-    <Key Name="currentPermissions" Value="2147483647" />
-    <Key Name="nextPermissions" Value="2147483647" />
-    <Key Name="everyonePermissions" Value="2147483647" />
-    <Key Name="basePermissions" Value="2147483647" />
   </Section>
 
   <Section Name="Blank Texture">
@@ -702,10 +540,6 @@
     <Key Name="name" Value="Blank Texture" />
     <Key Name="assetType" Value="0" />
     <Key Name="inventoryType" Value="0" />
-    <Key Name="currentPermissions" Value="2147483647" />
-    <Key Name="nextPermissions" Value="2147483647" />
-    <Key Name="everyonePermissions" Value="2147483647" />
-    <Key Name="basePermissions" Value="2147483647" />
   </Section>
 
   <Section Name="Default Media Texture">
@@ -716,10 +550,6 @@
     <Key Name="name" Value="Default Media Texture" />
     <Key Name="assetType" Value="0" />
     <Key Name="inventoryType" Value="0" />
-    <Key Name="currentPermissions" Value="2147483647" />
-    <Key Name="nextPermissions" Value="2147483647" />
-    <Key Name="everyonePermissions" Value="2147483647" />
-    <Key Name="basePermissions" Value="2147483647" />
   </Section>
 
   <Section Name="Default Transparent Texture">
@@ -730,9 +560,916 @@
     <Key Name="name" Value="Default Transparent Texture" />
     <Key Name="assetType" Value="0" />
     <Key Name="inventoryType" Value="0" />
-    <Key Name="currentPermissions" Value="2147483647" />
-    <Key Name="nextPermissions" Value="2147483647" />
-    <Key Name="everyonePermissions" Value="2147483647" />
-    <Key Name="basePermissions" Value="2147483647" />
   </Section>
+
+  <Section Name="Default Iris Texture">
+    <Key Name="inventoryID" Value="00000000-0000-2222-9999-000000000013"/>
+    <Key Name="assetID" Value="6522e74d-1660-4e7f-b601-6f48c1659a77"/>
+    <Key Name="folderID" Value="00000112-000f-0000-0000-000100bba001"/>
+    <Key Name="description" Value=""/>
+    <Key Name="name" Value="Default Iris Texture" />
+    <Key Name="assetType" Value="0" />
+    <Key Name="inventoryType" Value="0" />
+  </Section>
+
+  <Section Name="Cloud">
+    <Key Name="inventoryID" Value="9efcdbc3-1599-4323-a883-9828d94eb78d"/>
+    <Key Name="assetID" Value="dc4b9f0b-d008-45c6-96a4-01dd947ac621"/>
+    <Key Name="folderID" Value="00000112-000f-0000-0000-000100bba001"/>
+    <Key Name="description" Value=""/>
+    <Key Name="name" Value="Cloud" />
+    <Key Name="assetType" Value="0" />
+    <Key Name="inventoryType" Value="0" />
+  </Section>
+
+  <Section Name="Sea">
+    <Key Name="inventoryID" Value="e4f53747-6890-4842-99be-4a4b3b34031f"/>
+    <Key Name="assetID" Value="2bfd3884-7e27-69b9-ba3a-3e673f680004"/>
+    <Key Name="folderID" Value="00000112-000f-0000-0000-000100bba001"/>
+    <Key Name="description" Value=""/>
+    <Key Name="name" Value="Sea" />
+    <Key Name="assetType" Value="0" />
+    <Key Name="inventoryType" Value="0" />
+  </Section>
+
+  <Section Name="Moon">
+    <Key Name="inventoryID" Value="f8688d5a-0862-46da-85c3-2a53ef5415b9"/>
+    <Key Name="assetID" Value="ec4b9f0b-d008-45c6-96a4-01dd947ac621"/>
+    <Key Name="folderID" Value="00000112-000f-0000-0000-000100bba001"/>
+    <Key Name="description" Value=""/>
+    <Key Name="name" Value="Moon" />
+    <Key Name="assetType" Value="0" />
+    <Key Name="inventoryType" Value="0" />
+  </Section>
+
+  <Section Name="Hyperlink Map Texture">
+    <Key Name="inventoryID" Value="90baa8e1-b408-4899-baf5-f4de37c13fe7"/>
+    <Key Name="assetID" Value="00000000-0000-1111-9999-000000000013"/>
+    <Key Name="folderID" Value="00000112-000f-0000-0000-000100bba001"/>
+    <Key Name="description" Value=""/>
+    <Key Name="name" Value="Hyperlink Map Texture" />
+    <Key Name="assetType" Value="0" />
+    <Key Name="inventoryType" Value="0" />
+  </Section>
+
+  <Section Name="Map Texture">
+    <Key Name="inventoryID" Value="ac80e885-856e-4adf-9fbc-83690845c1e6"/>
+    <Key Name="assetID" Value="00000000-0000-1111-9999-000000000007"/>
+    <Key Name="folderID" Value="00000112-000f-0000-0000-000100bba001"/>
+    <Key Name="description" Value=""/>
+    <Key Name="name" Value="Map Texture" />
+    <Key Name="assetType" Value="0" />
+    <Key Name="inventoryType" Value="0" />
+  </Section>
+
+  <Section Name="Map Base Texture">
+    <Key Name="inventoryID" Value="679138c9-cd6e-4ca8-892d-d61424eeabdc"/>
+    <Key Name="assetID" Value="00000000-0000-1111-9999-000000000006"/>
+    <Key Name="folderID" Value="00000112-000f-0000-0000-000100bba001"/>
+    <Key Name="description" Value=""/>
+    <Key Name="name" Value="Map Base Texture" />
+    <Key Name="assetType" Value="0" />
+    <Key Name="inventoryType" Value="0" />
+  </Section>
+
+  <Section Name="plywood">
+    <Key Name="inventoryID" Value="0640f0ad-3e39-4ba7-8913-d251ce4ee78c"/>
+    <Key Name="assetID" Value="89556747-24cb-43ed-920b-47caed15465f"/>
+    <Key Name="folderID" Value="00000112-000f-0000-0000-000100bba001"/>
+    <Key Name="description" Value=""/>
+    <Key Name="name" Value="plywood" />
+    <Key Name="assetType" Value="0" />
+    <Key Name="inventoryType" Value="0" />
+  </Section>
+
+  <Section Name="weave_bumpmap">
+    <Key Name="inventoryID" Value="75aeed4d-edd1-49e1-9cc5-568672567a54"/>
+    <Key Name="assetID" Value="735198cf-6ea0-2550-e222-21d3c6a341ae"/>
+    <Key Name="folderID" Value="00000112-000f-0000-0000-000100bba001"/>
+    <Key Name="description" Value=""/>
+    <Key Name="name" Value="weave_bumpmap" />
+    <Key Name="assetType" Value="0" />
+    <Key Name="inventoryType" Value="0" />
+  </Section>
+
+  <Section Name="woodgrain_bumpmap">
+    <Key Name="inventoryID" Value="afe0d4c0-48bc-4df5-9bff-f5d2f6cc962c"/>
+    <Key Name="assetID" Value="058c75c0-a0d5-f2f8-43f3-e9699a89c2fc"/>
+    <Key Name="folderID" Value="00000112-000f-0000-0000-000100bba001"/>
+    <Key Name="description" Value=""/>
+    <Key Name="name" Value="woodgrain_bumpmap" />
+    <Key Name="assetType" Value="0" />
+    <Key Name="inventoryType" Value="0" />
+  </Section>
+
+  <Section Name="viewer_water">
+    <Key Name="inventoryID" Value="269a8c72-a692-4961-83f9-59ef4b927f9a"/>
+    <Key Name="assetID" Value="822ded49-9a6c-f61c-cb89-6df54f42cdf4"/>
+    <Key Name="folderID" Value="00000112-000f-0000-0000-000100bba001"/>
+    <Key Name="description" Value=""/>
+    <Key Name="name" Value="viewer_water" />
+    <Key Name="assetType" Value="0" />
+    <Key Name="inventoryType" Value="0" />
+  </Section>
+
+  <Section Name="texture_crosshair">
+    <Key Name="inventoryID" Value="bd756616-07fc-491f-a0fd-de469e866e25"/>
+    <Key Name="assetID" Value="a85ac674-cb75-4af6-9499-df7c5aaf7a28"/>
+    <Key Name="folderID" Value="00000112-000f-0000-0000-000100bba001"/>
+    <Key Name="description" Value=""/>
+    <Key Name="name" Value="texture_crosshair" />
+    <Key Name="assetType" Value="0" />
+    <Key Name="inventoryType" Value="0" />
+  </Section>
+
+  <Section Name="undergrowth_1">
+    <Key Name="inventoryID" Value="98707bb5-2f39-4831-912c-2ad0427ae888"/>
+    <Key Name="assetID" Value="8f458549-173b-23ff-d4ff-bfaa5ea2371b"/>
+    <Key Name="folderID" Value="00000112-000f-0000-0000-000100bba001"/>
+    <Key Name="description" Value=""/>
+    <Key Name="name" Value="undergrowth_1" />
+    <Key Name="assetType" Value="0" />
+    <Key Name="inventoryType" Value="0" />
+  </Section>
+
+  <Section Name="Grass 4">
+    <Key Name="inventoryID" Value="a9d197a9-fbfe-49b0-b247-6be7cf3eb0ce"/>
+    <Key Name="assetID" Value="7a2b3a4a-53c2-53ac-5716-aac7d743c020"/>
+    <Key Name="folderID" Value="00000112-000f-0000-0000-000100bba001"/>
+    <Key Name="description" Value=""/>
+    <Key Name="name" Value="Grass 4" />
+    <Key Name="assetType" Value="0" />
+    <Key Name="inventoryType" Value="0" />
+  </Section>
+
+  <Section Name="Grass 3">
+    <Key Name="inventoryID" Value="4bf181ca-3bf0-4304-bae7-537b4c636017"/>
+    <Key Name="assetID" Value="99bd60a2-3250-efc9-2e39-2fbcadefbecc"/>
+    <Key Name="folderID" Value="00000112-000f-0000-0000-000100bba001"/>
+    <Key Name="description" Value=""/>
+    <Key Name="name" Value="Grass 3" />
+    <Key Name="assetType" Value="0" />
+    <Key Name="inventoryType" Value="0" />
+  </Section>
+
+  <Section Name="Grass 2">
+    <Key Name="inventoryID" Value="7bb50cfd-5c0c-4cd9-9e17-3c3c0f1e309f"/>
+    <Key Name="assetID" Value="9ba3eb9d-e9e8-4efc-abe5-29ce723043ec"/>
+    <Key Name="folderID" Value="00000112-000f-0000-0000-000100bba001"/>
+    <Key Name="description" Value=""/>
+    <Key Name="name" Value="Grass 2" />
+    <Key Name="assetType" Value="0" />
+    <Key Name="inventoryType" Value="0" />
+  </Section>
+
+  <Section Name="Grass 1">
+    <Key Name="inventoryID" Value="138d7f5f-cf4c-4524-8d07-acbde61b3d3c"/>
+    <Key Name="assetID" Value="79504bf5-c3ec-0763-6563-d843de66d0a1"/>
+    <Key Name="folderID" Value="00000112-000f-0000-0000-000100bba001"/>
+    <Key Name="description" Value=""/>
+    <Key Name="name" Value="Grass 1" />
+    <Key Name="assetType" Value="0" />
+    <Key Name="inventoryType" Value="0" />
+  </Section>
+
+  <Section Name="Grass 0">
+    <Key Name="inventoryID" Value="6332c343-862a-440f-bd7d-76dee565c06d"/>
+    <Key Name="assetID" Value="6c4727b8-ac79-ba44-3b81-f9aa887b47eb"/>
+    <Key Name="folderID" Value="00000112-000f-0000-0000-000100bba001"/>
+    <Key Name="description" Value=""/>
+    <Key Name="name" Value="Grass 0" />
+    <Key Name="assetType" Value="0" />
+    <Key Name="inventoryType" Value="0" />
+  </Section>
+
+  <Section Name="Winter Aspen">
+    <Key Name="inventoryID" Value="b071bf7a-c130-436a-b130-68043c0d8440"/>
+    <Key Name="assetID" Value="7c0cf89b-44b1-1ce2-dd74-07102a98ac2a"/>
+    <Key Name="folderID" Value="00000112-000f-0000-0000-000100bba001"/>
+    <Key Name="description" Value=""/>
+    <Key Name="name" Value="Winter Aspen" />
+    <Key Name="assetType" Value="0" />
+    <Key Name="inventoryType" Value="0" />
+  </Section>
+
+  <Section Name="Winter Pine 2">
+    <Key Name="inventoryID" Value="7d50f297-03b1-46f9-98a8-f832be22f787"/>
+    <Key Name="assetID" Value="67931331-0c02-4876-1255-28770896c6a2"/>
+    <Key Name="folderID" Value="00000112-000f-0000-0000-000100bba001"/>
+    <Key Name="description" Value=""/>
+    <Key Name="name" Value="Winter Pine 2" />
+    <Key Name="assetType" Value="0" />
+    <Key Name="inventoryType" Value="0" />
+  </Section>
+
+  <Section Name="bark_bumpmap">
+    <Key Name="inventoryID" Value="f9f63144-deea-4015-8ff9-ac91860925f3"/>
+    <Key Name="assetID" Value="6c9fa78a-1c69-2168-325b-3e03ffa348ce"/>
+    <Key Name="folderID" Value="00000112-000f-0000-0000-000100bba001"/>
+    <Key Name="description" Value=""/>
+    <Key Name="name" Value="bark_bumpmap" />
+    <Key Name="assetType" Value="0" />
+    <Key Name="inventoryType" Value="0" />
+  </Section>
+
+  <Section Name="bricks_bumpmap">
+    <Key Name="inventoryID" Value="75d3cf71-de3c-4c17-a9ec-fac74904a3ee"/>
+    <Key Name="assetID" Value="b8eed5f0-64b7-6e12-b67f-43fa8e773440"/>
+    <Key Name="folderID" Value="00000112-000f-0000-0000-000100bba001"/>
+    <Key Name="description" Value=""/>
+    <Key Name="name" Value="bricks_bumpmap" />
+    <Key Name="assetType" Value="0" />
+    <Key Name="inventoryType" Value="0" />
+  </Section>
+
+  <Section Name="suction_bumpmap">
+    <Key Name="inventoryID" Value="ebc971b7-a14c-40f6-940d-f0d8117e7aec"/>
+    <Key Name="assetID" Value="83b77fc6-10b4-63ec-4de7-f40629f238c5"/>
+    <Key Name="folderID" Value="00000112-000f-0000-0000-000100bba001"/>
+    <Key Name="description" Value=""/>
+    <Key Name="name" Value="suction_bumpmap" />
+    <Key Name="assetType" Value="0" />
+    <Key Name="inventoryType" Value="0" />
+  </Section>
+
+  <Section Name="stucco_bumpmap">
+    <Key Name="inventoryID" Value="e8f6dfa2-4423-4767-88f6-976050bcfb44"/>
+    <Key Name="assetID" Value="92e66e00-f56f-598a-7997-048aa64cde18"/>
+    <Key Name="folderID" Value="00000112-000f-0000-0000-000100bba001"/>
+    <Key Name="description" Value=""/>
+    <Key Name="name" Value="stucco_bumpmap" />
+    <Key Name="assetType" Value="0" />
+    <Key Name="inventoryType" Value="0" />
+  </Section>
+
+  <Section Name="stonetile_bumpmap">
+    <Key Name="inventoryID" Value="22750ace-dd6f-42fc-9489-ec516a7bc687"/>
+    <Key Name="assetID" Value="ae874d1a-93ef-54fb-5fd3-eb0cb156afc0"/>
+    <Key Name="folderID" Value="00000112-000f-0000-0000-000100bba001"/>
+    <Key Name="description" Value=""/>
+    <Key Name="name" Value="stonetile_bumpmap" />
+    <Key Name="assetType" Value="0" />
+    <Key Name="inventoryType" Value="0" />
+  </Section>
+
+  <Section Name="siding_bumpmap">
+    <Key Name="inventoryID" Value="fd7fb18b-18f0-4cd9-983e-ff8f2462370a"/>
+    <Key Name="assetID" Value="073c9723-540c-5449-cdd4-0e87fdc159e3"/>
+    <Key Name="folderID" Value="00000112-000f-0000-0000-000100bba001"/>
+    <Key Name="description" Value=""/>
+    <Key Name="name" Value="siding_bumpmap" />
+    <Key Name="assetType" Value="0" />
+    <Key Name="inventoryType" Value="0" />
+  </Section>
+
+  <Section Name="petridish_bumpmap">
+    <Key Name="inventoryID" Value="6c89095b-780f-45e8-87bd-14db1b722425"/>
+    <Key Name="assetID" Value="e569711a-27c2-aad4-9246-0c910239a179"/>
+    <Key Name="folderID" Value="00000112-000f-0000-0000-000100bba001"/>
+    <Key Name="description" Value=""/>
+    <Key Name="name" Value="petridish_bumpmap" />
+    <Key Name="assetType" Value="0" />
+    <Key Name="inventoryType" Value="0" />
+  </Section>
+
+  <Section Name="gravel_bumpmap">
+    <Key Name="inventoryID" Value="9d72845a-5a6f-4101-89ca-7e7b294ddc1e"/>
+    <Key Name="assetID" Value="4726f13e-bd07-f2fb-feb0-bfa2ac58ab61"/>
+    <Key Name="folderID" Value="00000112-000f-0000-0000-000100bba001"/>
+    <Key Name="description" Value=""/>
+    <Key Name="name" Value="gravel_bumpmap" />
+    <Key Name="assetType" Value="0" />
+    <Key Name="inventoryType" Value="0" />
+  </Section>
+
+  <Section Name="discs_bumpmap">
+    <Key Name="inventoryID" Value="caa601c0-0e11-41bb-ba11-702237dd1b94"/>
+    <Key Name="assetID" Value="d21e44ca-ff1c-a96e-b2ef-c0753426b7d9"/>
+    <Key Name="folderID" Value="00000112-000f-0000-0000-000100bba001"/>
+    <Key Name="description" Value=""/>
+    <Key Name="name" Value="discs_bumpmap" />
+    <Key Name="assetType" Value="0" />
+    <Key Name="inventoryType" Value="0" />
+  </Section>
+
+  <Section Name="cutstone_bumpmap">
+    <Key Name="inventoryID" Value="2befbbda-5bcf-4634-aa34-d3d6687fe8f3"/>
+    <Key Name="assetID" Value="d9258671-868f-7511-c321-7baef9e948a4"/>
+    <Key Name="folderID" Value="00000112-000f-0000-0000-000100bba001"/>
+    <Key Name="description" Value=""/>
+    <Key Name="name" Value="cutstone_bumpmap" />
+    <Key Name="assetType" Value="0" />
+    <Key Name="inventoryType" Value="0" />
+  </Section>
+
+  <Section Name="crustytile_bumpmap">
+    <Key Name="inventoryID" Value="18ee9a0e-0ad4-4338-980a-00a575f4e5dd"/>
+    <Key Name="assetID" Value="f2d7b6f6-4200-1e9a-fd5b-96459e950f94"/>
+    <Key Name="folderID" Value="00000112-000f-0000-0000-000100bba001"/>
+    <Key Name="description" Value=""/>
+    <Key Name="name" Value="crustytile_bumpmap" />
+    <Key Name="assetType" Value="0" />
+    <Key Name="inventoryType" Value="0" />
+  </Section>
+
+  <Section Name="concrete_bumpmap">
+    <Key Name="inventoryID" Value="48b67c8b-8f27-4e73-a4f7-7b18556a0124"/>
+    <Key Name="assetID" Value="db9d39ec-a896-c287-1ced-64566217021e"/>
+    <Key Name="folderID" Value="00000112-000f-0000-0000-000100bba001"/>
+    <Key Name="description" Value=""/>
+    <Key Name="name" Value="concrete_bumpmap" />
+    <Key Name="assetType" Value="0" />
+    <Key Name="inventoryType" Value="0" />
+  </Section>
+
+  <Section Name="checker_bumpmap">
+    <Key Name="inventoryID" Value="7daccf4e-e877-4943-93ca-9f44ba15dd0a"/>
+    <Key Name="assetID" Value="9deab416-9c63-78d6-d558-9a156f12044c"/>
+    <Key Name="folderID" Value="00000112-000f-0000-0000-000100bba001"/>
+    <Key Name="description" Value=""/>
+    <Key Name="name" Value="checker_bumpmap" />
+    <Key Name="assetType" Value="0" />
+    <Key Name="inventoryType" Value="0" />
+  </Section>
+
+  <Section Name="Winter Pine 1">
+    <Key Name="inventoryID" Value="41f235c1-a2b9-43da-ab79-3ee9778312e2"/>
+    <Key Name="assetID" Value="10d2a01a-0818-84b9-4b96-c2eb63256519"/>
+    <Key Name="folderID" Value="00000112-000f-0000-0000-000100bba001"/>
+    <Key Name="description" Value=""/>
+    <Key Name="name" Value="Winter Pine 1" />
+    <Key Name="assetType" Value="0" />
+    <Key Name="inventoryType" Value="0" />
+  </Section>
+
+  <Section Name="Tropical Bush 2">
+    <Key Name="inventoryID" Value="bbb353e2-7cc4-4a8a-80dc-a68ea942141d"/>
+    <Key Name="assetID" Value="cdd9a9fc-6d0b-f90d-8416-c72b6019bca8"/>
+    <Key Name="folderID" Value="00000112-000f-0000-0000-000100bba001"/>
+    <Key Name="description" Value=""/>
+    <Key Name="name" Value="Tropical Bush 2" />
+    <Key Name="assetType" Value="0" />
+    <Key Name="inventoryType" Value="0" />
+  </Section>
+
+  <Section Name="Sea Sword">
+    <Key Name="inventoryID" Value="e99e96c8-dff9-4c36-a592-92ceb9bab591"/>
+    <Key Name="assetID" Value="5894e2e7-ab8d-edfa-e61c-18cf16854ba3"/>
+    <Key Name="folderID" Value="00000112-000f-0000-0000-000100bba001"/>
+    <Key Name="description" Value=""/>
+    <Key Name="name" Value="Sea Sword" />
+    <Key Name="assetType" Value="0" />
+    <Key Name="inventoryType" Value="0" />
+  </Section>
+
+  <Section Name="Beach Grass 1">
+    <Key Name="inventoryID" Value="00d7706c-3b17-483e-8a40-4b49e55eb79d"/>
+    <Key Name="assetID" Value="18fb888b-e8f1-dce7-7da7-321d651ea6b0"/>
+    <Key Name="folderID" Value="00000112-000f-0000-0000-000100bba001"/>
+    <Key Name="description" Value=""/>
+    <Key Name="name" Value="Beach Grass 1" />
+    <Key Name="assetType" Value="0" />
+    <Key Name="inventoryType" Value="0" />
+  </Section>
+
+  <Section Name="Cypress 1">
+    <Key Name="inventoryID" Value="9324fe39-16f2-400d-8950-27c5f2391552"/>
+    <Key Name="assetID" Value="fb2ae204-3fd1-df33-594f-c9f882830e66"/>
+    <Key Name="folderID" Value="00000112-000f-0000-0000-000100bba001"/>
+    <Key Name="description" Value=""/>
+    <Key Name="name" Value="Cypress 1" />
+    <Key Name="assetType" Value="0" />
+    <Key Name="inventoryType" Value="0" />
+  </Section>
+
+  <Section Name="Default Avatar">
+    <Key Name="inventoryID" Value="73974dbe-3d65-46c8-b454-718a2e475c6d"/>
+    <Key Name="assetID" Value="c228d1cf-4b5d-4ba8-84f4-899a0796aa97"/>
+    <Key Name="folderID" Value="00000112-000f-0000-0000-000100bba001"/>
+    <Key Name="description" Value=""/>
+    <Key Name="name" Value="Default Avatar" />
+    <Key Name="assetType" Value="0" />
+    <Key Name="inventoryType" Value="0" />
+  </Section>
+
+  <Section Name="Default Alpha Layer Texture">
+    <Key Name="inventoryID" Value="6bab07d1-3221-4534-a97d-4ed4f86376a0"/>
+    <Key Name="assetID" Value="3a367d1c-bef1-6d43-7595-e88c1e3aadb3"/>
+    <Key Name="folderID" Value="00000112-000f-0000-0000-000100bba001"/>
+    <Key Name="description" Value=""/>
+    <Key Name="name" Value="Default Alpha Layer Texture" />
+    <Key Name="assetType" Value="0" />
+    <Key Name="inventoryType" Value="0" />
+  </Section>
+
+  <Section Name="Cypress 2">
+    <Key Name="inventoryID" Value="8d023bc8-a96e-4acb-9fd6-dfa8e510ec95"/>
+    <Key Name="assetID" Value="30047cec-269d-408e-0c30-b2603b887268"/>
+    <Key Name="folderID" Value="00000112-000f-0000-0000-000100bba001"/>
+    <Key Name="description" Value=""/>
+    <Key Name="name" Value="Cypress 2" />
+    <Key Name="assetType" Value="0" />
+    <Key Name="inventoryType" Value="0" />
+  </Section>
+
+  <Section Name="Dogwood">
+    <Key Name="inventoryID" Value="d92af54-5a5c-4c76-a42b-68d05597dd9a"/>
+    <Key Name="assetID" Value="64367bd1-697e-b3e6-0b65-3f862a577366"/>
+    <Key Name="folderID" Value="00000112-000f-0000-0000-000100bba001"/>
+    <Key Name="description" Value=""/>
+    <Key Name="name" Value="Dogwood" />
+    <Key Name="assetType" Value="0" />
+    <Key Name="inventoryType" Value="0" />
+  </Section>
+
+  <Section Name="Plumeria">
+    <Key Name="inventoryID" Value="2aae8b2f-8ac0-473a-bcb5-4bd175eaaa37"/>
+    <Key Name="assetID" Value="6de37e4e-7029-61f5-54b8-f5e63f983f58"/>
+    <Key Name="folderID" Value="00000112-000f-0000-0000-000100bba001"/>
+    <Key Name="description" Value=""/>
+    <Key Name="name" Value="Plumeria" />
+    <Key Name="assetType" Value="0" />
+    <Key Name="inventoryType" Value="0" />
+  </Section>
+
+  <Section Name="Pine 2">
+    <Key Name="inventoryID" Value="bc941fbb-7649-40ae-a4f2-3071c71a711d"/>
+    <Key Name="assetID" Value="d691a01c-13b7-578d-57c0-5caef0b4e7e1"/>
+    <Key Name="folderID" Value="00000112-000f-0000-0000-000100bba001"/>
+    <Key Name="description" Value=""/>
+    <Key Name="name" Value="Pine 2" />
+    <Key Name="assetType" Value="0" />
+    <Key Name="inventoryType" Value="0" />
+  </Section>
+
+  <Section Name="Pine 1">
+    <Key Name="inventoryID" Value="7795b338-b306-4cee-bb9f-5d95849e95c1"/>
+    <Key Name="assetID" Value="0187babf-6c0d-5891-ebed-4ecab1426683"/>
+    <Key Name="folderID" Value="00000112-000f-0000-0000-000100bba001"/>
+    <Key Name="description" Value=""/>
+    <Key Name="name" Value="Pine 1" />
+    <Key Name="assetType" Value="0" />
+    <Key Name="inventoryType" Value="0" />
+  </Section>
+
+  <Section Name="Palm 2">
+    <Key Name="inventoryID" Value="adf01cea-02c7-4466-8f6b-c20f212574a2"/>
+    <Key Name="assetID" Value="2d784476-d0db-9979-0cff-9408745a7cf3"/>
+    <Key Name="folderID" Value="00000112-000f-0000-0000-000100bba001"/>
+    <Key Name="description" Value=""/>
+    <Key Name="name" Value="Palm 2" />
+    <Key Name="assetType" Value="0" />
+    <Key Name="inventoryType" Value="0" />
+  </Section>
+
+  <Section Name="Palm 1">
+    <Key Name="inventoryID" Value="f364e9fb-2013-4d00-ba73-7d004ae726eb"/>
+    <Key Name="assetID" Value="ca4e8c27-473c-eb1c-2f5d-50ee3f07d85c"/>
+    <Key Name="folderID" Value="00000112-000f-0000-0000-000100bba001"/>
+    <Key Name="description" Value=""/>
+    <Key Name="name" Value="Palm 1" />
+    <Key Name="assetType" Value="0" />
+    <Key Name="inventoryType" Value="0" />
+  </Section>
+
+  <Section Name="Oak">
+    <Key Name="inventoryID" Value="1f0a9662-65b2-457e-b483-e6927b2a1461"/>
+    <Key Name="assetID" Value="8a515889-eac9-fb55-8eba-d2dc09eb32c8"/>
+    <Key Name="folderID" Value="00000112-000f-0000-0000-000100bba001"/>
+    <Key Name="description" Value=""/>
+    <Key Name="name" Value="Oak" />
+    <Key Name="assetType" Value="0" />
+    <Key Name="inventoryType" Value="0" />
+  </Section>
+
+  <Section Name="Kelp 2">
+    <Key Name="inventoryID" Value="e821d127-2ef2-4bbe-885b-3cf4515a4fae"/>
+    <Key Name="assetID" Value="2a4880b6-b7a3-690a-2049-bfbe38eafb9f"/>
+    <Key Name="folderID" Value="00000112-000f-0000-0000-000100bba001"/>
+    <Key Name="description" Value=""/>
+    <Key Name="name" Value="Kelp 2" />
+    <Key Name="assetType" Value="0" />
+    <Key Name="inventoryType" Value="0" />
+  </Section>
+
+  <Section Name="Kelp 1">
+    <Key Name="inventoryID" Value="ac531693-d629-4cdc-8655-b20ed29e7481"/>
+    <Key Name="assetID" Value="2caf1179-7861-6ff3-4b7d-46e17780bdfa"/>
+    <Key Name="folderID" Value="00000112-000f-0000-0000-000100bba001"/>
+    <Key Name="description" Value=""/>
+    <Key Name="name" Value="Kelp 1" />
+    <Key Name="assetType" Value="0" />
+    <Key Name="inventoryType" Value="0" />
+  </Section>
+
+  <Section Name="Fern">
+    <Key Name="inventoryID" Value="f0c7dc66-b60f-4713-ac3c-2e6821482a9b"/>
+    <Key Name="assetID" Value="8872f2b8-31db-42d8-580a-b3e4a91262de"/>
+    <Key Name="folderID" Value="00000112-000f-0000-0000-000100bba001"/>
+    <Key Name="description" Value=""/>
+    <Key Name="name" Value="Fern" />
+    <Key Name="assetType" Value="0" />
+    <Key Name="inventoryType" Value="0" />
+  </Section>
+
+  <Section Name="Eucalyptus">
+    <Key Name="inventoryID" Value="bf6a64b9-ab45-488e-884a-4a95740c3508"/>
+    <Key Name="assetID" Value="a6162133-724b-54df-a12f-51cd070ad6f3"/>
+    <Key Name="folderID" Value="00000112-000f-0000-0000-000100bba001"/>
+    <Key Name="description" Value=""/>
+    <Key Name="name" Value="Eucalyptus" />
+    <Key Name="assetType" Value="0" />
+    <Key Name="inventoryType" Value="0" />
+  </Section>
+
+  <Section Name="Eelgrass">
+    <Key Name="inventoryID" Value="9fd1ff7c-44b3-4e3b-ba25-617c6115e47d"/>
+    <Key Name="assetID" Value="96b4de31-f4fa-337d-ec78-451e3609769e"/>
+    <Key Name="folderID" Value="00000112-000f-0000-0000-000100bba001"/>
+    <Key Name="description" Value=""/>
+    <Key Name="name" Value="Eelgrass" />
+    <Key Name="assetType" Value="0" />
+    <Key Name="inventoryType" Value="0" />
+  </Section>
+
+  <Section Name="Tropical Bush 1">
+    <Key Name="inventoryID" Value="4b81315a-9292-46ab-8ab0-9ecb426a57bf"/>
+    <Key Name="assetID" Value="5bc11cd6-2f40-071e-a8da-0903394204f9"/>
+    <Key Name="folderID" Value="00000112-000f-0000-0000-000100bba001"/>
+    <Key Name="description" Value=""/>
+    <Key Name="name" Value="Tropical Bush 1" />
+    <Key Name="assetType" Value="0" />
+    <Key Name="inventoryType" Value="0" />
+  </Section>
+
+  <Section Name="alpha">
+    <Key Name="inventoryID" Value="0eb0ec3d-f6ff-4455-86b9-0338cb59d853"/>
+    <Key Name="assetID" Value="1578a2b1-5179-4b53-b618-fe00ca5a5594"/>
+    <Key Name="folderID" Value="00000112-000f-0000-0000-000100bba001"/>
+    <Key Name="description" Value=""/>
+    <Key Name="name" Value="alpha" />
+    <Key Name="assetType" Value="0" />
+    <Key Name="inventoryType" Value="0" />
+  </Section>
+
+  <Section Name="femface">
+    <Key Name="inventoryID" Value="4b3c8fc6-fa19-41ec-9945-18b161e9960e"/>
+    <Key Name="assetID" Value="00000000-0000-2222-3333-000000000099"/>
+    <Key Name="folderID" Value="00000112-000f-0000-0000-000100bba001"/>
+    <Key Name="description" Value=""/>
+    <Key Name="name" Value="femface" />
+    <Key Name="assetType" Value="0" />
+    <Key Name="inventoryType" Value="0" />
+  </Section>
+
+  <Section Name="viewer_hardcoded_1">
+    <Key Name="inventoryID" Value="d30e2fce-2a0a-49a0-a899-b3503b367cc7"/>
+    <Key Name="assetID" Value="0bc58228-74a0-7e83-89bc-5c23464bcec5"/>
+    <Key Name="folderID" Value="00000112-000f-0000-0000-000100bba001"/>
+    <Key Name="description" Value=""/>
+    <Key Name="name" Value="viewer_hardcoded_1" />
+    <Key Name="assetType" Value="0" />
+    <Key Name="inventoryType" Value="0" />
+  </Section>
+
+  <Section Name="viewer_hardcoded_2">
+    <Key Name="inventoryID" Value="86fdb60c-ab39-481a-8efc-9cfc33feaafe"/>
+    <Key Name="assetID" Value="1e63e323-5fe0-452e-92f8-b98bd0f764e3"/>
+    <Key Name="folderID" Value="00000112-000f-0000-0000-000100bba001"/>
+    <Key Name="description" Value=""/>
+    <Key Name="name" Value="viewer_hardcoded_2" />
+    <Key Name="assetType" Value="0" />
+    <Key Name="inventoryType" Value="0" />
+  </Section>
+
+  <Section Name="viewer_hardcoded_3">
+    <Key Name="inventoryID" Value="35a32331-52f8-4c8e-aebd-0bded2574853"/>
+    <Key Name="assetID" Value="3c59f7fe-9dc8-47f9-8aaf-a9dd1fbc3bef"/>
+    <Key Name="folderID" Value="00000112-000f-0000-0000-000100bba001"/>
+    <Key Name="description" Value=""/>
+    <Key Name="name" Value="viewer_hardcoded_3" />
+    <Key Name="assetType" Value="0" />
+    <Key Name="inventoryType" Value="0" />
+  </Section>
+
+  <Section Name="viewer_hardcoded_4">
+    <Key Name="inventoryID" Value="0d8daa56-0845-481b-abc4-dfd3796ef038"/>
+    <Key Name="assetID" Value="5e47a0dc-97bf-44e0-8b40-de06718cee9d"/>
+    <Key Name="folderID" Value="00000112-000f-0000-0000-000100bba001"/>
+    <Key Name="description" Value=""/>
+    <Key Name="name" Value="viewer_hardcoded_4" />
+    <Key Name="assetType" Value="0" />
+    <Key Name="inventoryType" Value="0" />
+  </Section>
+
+  <Section Name="viewer_hardcoded_5">
+    <Key Name="inventoryID" Value="4f2f51ea-a9dc-42ba-b7b8-3a64b652b150"/>
+    <Key Name="assetID" Value="9c8eca51-53d5-42a7-bb58-cef070395db8"/>
+    <Key Name="folderID" Value="00000112-000f-0000-0000-000100bba001"/>
+    <Key Name="description" Value=""/>
+    <Key Name="name" Value="viewer_hardcoded_5" />
+    <Key Name="assetType" Value="0" />
+    <Key Name="inventoryType" Value="0" />
+  </Section>
+
+  <Section Name="viewer_hardcoded_6">
+    <Key Name="inventoryID" Value="144a66b5-94c2-425c-9847-a11f31cdffc5"/>
+    <Key Name="assetID" Value="21ce046c-83fe-430a-b629-c7660ac78d7c"/>
+    <Key Name="folderID" Value="00000112-000f-0000-0000-000100bba001"/>
+    <Key Name="description" Value=""/>
+    <Key Name="name" Value="viewer_hardcoded_6" />
+    <Key Name="assetType" Value="0" />
+    <Key Name="inventoryType" Value="0" />
+  </Section>
+
+  <Section Name="viewer_hardcoded_7">
+    <Key Name="inventoryID" Value="f969db8b-843b-4545-934a-8c5f487618dd"/>
+    <Key Name="assetID" Value="35f217a3-f618-49cf-bbca-c86d486551a9"/>
+    <Key Name="folderID" Value="00000112-000f-0000-0000-000100bba001"/>
+    <Key Name="description" Value=""/>
+    <Key Name="name" Value="viewer_hardcoded_7" />
+    <Key Name="assetType" Value="0" />
+    <Key Name="inventoryType" Value="0" />
+  </Section>
+
+  <Section Name="viewer_hardcoded_8">
+    <Key Name="inventoryID" Value="763ecc30-007e-4979-a47c-882fb5c25dce"/>
+    <Key Name="assetID" Value="53a2f406-4895-1d13-d541-d2e3b86bc19c"/>
+    <Key Name="folderID" Value="00000112-000f-0000-0000-000100bba001"/>
+    <Key Name="description" Value=""/>
+    <Key Name="name" Value="viewer_hardcoded_8" />
+    <Key Name="assetType" Value="0" />
+    <Key Name="inventoryType" Value="0" />
+  </Section>
+
+  <Section Name="viewer_hardcoded_9">
+    <Key Name="inventoryID" Value="f2d01803-1a82-48ad-bcf0-5889feda2a3b"/>
+    <Key Name="assetID" Value="68edcf47-ccd7-45b8-9f90-1649d7f12806"/>
+    <Key Name="folderID" Value="00000112-000f-0000-0000-000100bba001"/>
+    <Key Name="description" Value=""/>
+    <Key Name="name" Value="viewer_hardcoded_9" />
+    <Key Name="assetType" Value="0" />
+    <Key Name="inventoryType" Value="0" />
+  </Section>
+
+  <Section Name="viewer_hardcoded_10">
+    <Key Name="inventoryID" Value="4af90490-fc6b-4af8-a955-3a1e6ba5a042"/>
+    <Key Name="assetID" Value="303cd381-8560-7579-23f1-f0a880799740"/>
+    <Key Name="folderID" Value="00000112-000f-0000-0000-000100bba001"/>
+    <Key Name="description" Value=""/>
+    <Key Name="name" Value="viewer_hardcoded_10" />
+    <Key Name="assetType" Value="0" />
+    <Key Name="inventoryType" Value="0" />
+  </Section>
+
+  <Section Name="viewer_hardcoded_11">
+    <Key Name="inventoryID" Value="3489d90b-ec8b-451a-a81a-04237a5139df"/>
+    <Key Name="assetID" Value="63338ede-0037-c4fd-855b-015d77112fc8"/>
+    <Key Name="folderID" Value="00000112-000f-0000-0000-000100bba001"/>
+    <Key Name="description" Value=""/>
+    <Key Name="name" Value="viewer_hardcoded_11" />
+    <Key Name="assetType" Value="0" />
+    <Key Name="inventoryType" Value="0" />
+  </Section>
+
+  <Section Name="viewer_hardcoded_12">
+    <Key Name="inventoryID" Value="72e23a9a-04c2-4977-9282-edbb688fa8ae"/>
+    <Key Name="assetID" Value="abf0d56b-82e5-47a2-a8ad-74741bb2c29e"/>
+    <Key Name="folderID" Value="00000112-000f-0000-0000-000100bba001"/>
+    <Key Name="description" Value=""/>
+    <Key Name="name" Value="viewer_hardcoded_12" />
+    <Key Name="assetType" Value="0" />
+    <Key Name="inventoryType" Value="0" />
+  </Section>
+
+  <Section Name="viewer_hardcoded_13">
+    <Key Name="inventoryID" Value="ef2ecfec-b8bd-4df3-adcb-b1e70212a3d1"/>
+    <Key Name="assetID" Value="aca40aa8-44cf-44ca-a0fa-93e1a2986f82"/>
+    <Key Name="folderID" Value="00000112-000f-0000-0000-000100bba001"/>
+    <Key Name="description" Value=""/>
+    <Key Name="name" Value="viewer_hardcoded_13" />
+    <Key Name="assetType" Value="0" />
+    <Key Name="inventoryType" Value="0" />
+  </Section>
+
+  <Section Name="viewer_hardcoded_14">
+    <Key Name="inventoryID" Value="02fee623-0e65-493e-bbaf-5048dbb295ad"/>
+    <Key Name="assetID" Value="b4ba225c-373f-446d-9f7e-6cb7b5cf9b3d"/>
+    <Key Name="folderID" Value="00000112-000f-0000-0000-000100bba001"/>
+    <Key Name="description" Value=""/>
+    <Key Name="name" Value="viewer_hardcoded_14" />
+    <Key Name="assetType" Value="0" />
+    <Key Name="inventoryType" Value="0" />
+  </Section>
+
+  <Section Name="viewer_hardcoded_15">
+    <Key Name="inventoryID" Value="3de5a18c-b30f-4ac2-bd78-d6f18667efb0"/>
+    <Key Name="assetID" Value="cce0f112-878f-4586-a2e2-a8f104bba271"/>
+    <Key Name="folderID" Value="00000112-000f-0000-0000-000100bba001"/>
+    <Key Name="description" Value=""/>
+    <Key Name="name" Value="viewer_hardcoded_15" />
+    <Key Name="assetType" Value="0" />
+    <Key Name="inventoryType" Value="0" />
+  </Section>
+
+  <Section Name="viewer_hardcoded_16">
+    <Key Name="inventoryID" Value="601579a0-2c8d-40f4-8ff1-d89eb1f9a10e"/>
+    <Key Name="assetID" Value="d2e75ac1-d0fb-4532-820e-a20034ac814d"/>
+    <Key Name="folderID" Value="00000112-000f-0000-0000-000100bba001"/>
+    <Key Name="description" Value=""/>
+    <Key Name="name" Value="viewer_hardcoded_16" />
+    <Key Name="assetType" Value="0" />
+    <Key Name="inventoryType" Value="0" />
+  </Section>
+
+  <Section Name="viewer_hardcoded_17">
+    <Key Name="inventoryID" Value="f238bb74-cd50-40b8-96d2-9b56c85e4978"/>
+    <Key Name="assetID" Value="d07f6eed-b96a-47cd-b51d-400ad4a1c428"/>
+    <Key Name="folderID" Value="00000112-000f-0000-0000-000100bba001"/>
+    <Key Name="description" Value=""/>
+    <Key Name="name" Value="viewer_hardcoded_17" />
+    <Key Name="assetType" Value="0" />
+    <Key Name="inventoryType" Value="0" />
+  </Section>
+
+  <Section Name="viewer_hardcoded_18">
+    <Key Name="inventoryID" Value="fc56bbc1-f020-4975-a3a8-9f333de3b1eb"/>
+    <Key Name="assetID" Value="d2114404-dd59-4a4d-8e6c-49359e91bbf0"/>
+    <Key Name="folderID" Value="00000112-000f-0000-0000-000100bba001"/>
+    <Key Name="description" Value=""/>
+    <Key Name="name" Value="viewer_hardcoded_18" />
+    <Key Name="assetType" Value="0" />
+    <Key Name="inventoryType" Value="0" />
+  </Section>
+
+  <Section Name="viewer_hardcoded_19">
+    <Key Name="inventoryID" Value="99a11051-7acf-4122-ab1f-8449092bd36b"/>
+    <Key Name="assetID" Value="fc4b9f0b-d008-45c6-96a4-01dd947ac621"/>
+    <Key Name="folderID" Value="00000112-000f-0000-0000-000100bba001"/>
+    <Key Name="description" Value=""/>
+    <Key Name="name" Value="viewer_hardcoded_19" />
+    <Key Name="assetType" Value="0" />
+    <Key Name="inventoryType" Value="0" />
+  </Section>
+
+  <Section Name="viewer_hardcoded_20">
+    <Key Name="inventoryID" Value="e53bf4e4-98f3-4e37-b5df-6e165810a338"/>
+    <Key Name="assetID" Value="fedea30a-1be8-47a6-bc06-337a04a39c4b"/>
+    <Key Name="folderID" Value="00000112-000f-0000-0000-000100bba001"/>
+    <Key Name="description" Value=""/>
+    <Key Name="name" Value="viewer_hardcoded_20" />
+    <Key Name="assetType" Value="0" />
+    <Key Name="inventoryType" Value="0" />
+  </Section>
+
+  <Section Name="wl_water_1">
+    <Key Name="inventoryID" Value="22eadee0-5de4-42fb-b5ad-0cbb6e32f6f1"/>
+    <Key Name="assetID" Value="0297ce61-77f8-581e-b19d-2509881463e8"/>
+    <Key Name="folderID" Value="00000112-000f-0000-0000-000100bba001"/>
+    <Key Name="description" Value=""/>
+    <Key Name="name" Value="wl_water_1" />
+    <Key Name="assetType" Value="0" />
+    <Key Name="inventoryType" Value="0" />
+  </Section>
+
+  <Section Name="wl_water_2">
+    <Key Name="inventoryID" Value="90ad0bfe-79b9-4fc7-ade8-9bbdfd2533e6"/>
+    <Key Name="assetID" Value="0db3718c-49e9-ad61-b6c4-4e5b84d9e589"/>
+    <Key Name="folderID" Value="00000112-000f-0000-0000-000100bba001"/>
+    <Key Name="description" Value=""/>
+    <Key Name="name" Value="wl_water_2" />
+    <Key Name="assetType" Value="0" />
+    <Key Name="inventoryType" Value="0" />
+  </Section>
+
+  <Section Name="wl_water_3">
+    <Key Name="inventoryID" Value="ea38ccd8-7c87-4627-9429-9b2ed1cf427c"/>
+    <Key Name="assetID" Value="1a29d128-f6cb-874f-b39a-bbb68605f950"/>
+    <Key Name="folderID" Value="00000112-000f-0000-0000-000100bba001"/>
+    <Key Name="description" Value=""/>
+    <Key Name="name" Value="wl_water_3" />
+    <Key Name="assetType" Value="0" />
+    <Key Name="inventoryType" Value="0" />
+  </Section>
+
+  <Section Name="wl_water_4">
+    <Key Name="inventoryID" Value="220adc02-e988-498c-8606-5e66cc0b0035"/>
+    <Key Name="assetID" Value="1a5348cb-7164-b03e-8a45-70ad4cabe682"/>
+    <Key Name="folderID" Value="00000112-000f-0000-0000-000100bba001"/>
+    <Key Name="description" Value=""/>
+    <Key Name="name" Value="wl_water_4" />
+    <Key Name="assetType" Value="0" />
+    <Key Name="inventoryType" Value="0" />
+  </Section>
+
+  <Section Name="wl_water_5">
+    <Key Name="inventoryID" Value="1a5a9372-fdd7-4998-92e8-93342eb582aa"/>
+    <Key Name="assetID" Value="2124abf0-8733-8e3e-ff9b-2245f11884f5"/>
+    <Key Name="folderID" Value="00000112-000f-0000-0000-000100bba001"/>
+    <Key Name="description" Value=""/>
+    <Key Name="name" Value="wl_water_5" />
+    <Key Name="assetType" Value="0" />
+    <Key Name="inventoryType" Value="0" />
+  </Section>
+
+  <Section Name="wl_water_6">
+    <Key Name="inventoryID" Value="9bfddd9b-cb97-4a74-9449-fa61d9f2f946"/>
+    <Key Name="assetID" Value="2211e97d-e6ed-c592-3bac-c00cad2a86c0"/>
+    <Key Name="folderID" Value="00000112-000f-0000-0000-000100bba001"/>
+    <Key Name="description" Value=""/>
+    <Key Name="name" Value="wl_water_6" />
+    <Key Name="assetType" Value="0" />
+    <Key Name="inventoryType" Value="0" />
+  </Section>
+
+  <Section Name="wl_water_7">
+    <Key Name="inventoryID" Value="4566dc3c-eb3b-4373-a46e-631ccd707d33"/>
+    <Key Name="assetID" Value="22229d16-3871-7dee-2042-dbfa25cd8bce"/>
+    <Key Name="folderID" Value="00000112-000f-0000-0000-000100bba001"/>
+    <Key Name="description" Value=""/>
+    <Key Name="name" Value="wl_water_7" />
+    <Key Name="assetType" Value="0" />
+    <Key Name="inventoryType" Value="0" />
+  </Section>
+
+  <Section Name="wl_water_8">
+    <Key Name="inventoryID" Value="6b1eb04b-366a-407c-961f-cd3a746e1bbd"/>
+    <Key Name="assetID" Value="470626e3-ac38-8554-d49b-90311c0176a9"/>
+    <Key Name="folderID" Value="00000112-000f-0000-0000-000100bba001"/>
+    <Key Name="description" Value=""/>
+    <Key Name="name" Value="wl_water_8" />
+    <Key Name="assetType" Value="0" />
+    <Key Name="inventoryType" Value="0" />
+  </Section>
+
+  <Section Name="wl_water_9">
+    <Key Name="inventoryID" Value="5f807c93-1692-4f44-a324-48eb4a9b9beb"/>
+    <Key Name="assetID" Value="56b9a89e-6851-0ca6-6200-beddd03e08e0"/>
+    <Key Name="folderID" Value="00000112-000f-0000-0000-000100bba001"/>
+    <Key Name="description" Value=""/>
+    <Key Name="name" Value="wl_water_9" />
+    <Key Name="assetType" Value="0" />
+    <Key Name="inventoryType" Value="0" />
+  </Section>
+
+  <Section Name="wl_water_10">
+    <Key Name="inventoryID" Value="1bfb97be-3da8-4b0f-af81-609bdcde19a7"/>
+    <Key Name="assetID" Value="78b6ea66-f557-811f-dec7-b21552cc5c51"/>
+    <Key Name="folderID" Value="00000112-000f-0000-0000-000100bba001"/>
+    <Key Name="description" Value=""/>
+    <Key Name="name" Value="wl_water_10" />
+    <Key Name="assetType" Value="0" />
+    <Key Name="inventoryType" Value="0" />
+  </Section>
+
+  <Section Name="wl_water_11">
+    <Key Name="inventoryID" Value="d3957bd6-d963-4eed-927c-bb14e4685ac7"/>
+    <Key Name="assetID" Value="cb51029b-360b-81e6-a3e1-5620c44e0b71"/>
+    <Key Name="folderID" Value="00000112-000f-0000-0000-000100bba001"/>
+    <Key Name="description" Value=""/>
+    <Key Name="name" Value="wl_water_11" />
+    <Key Name="assetType" Value="0" />
+    <Key Name="inventoryType" Value="0" />
+  </Section>
+
+  <Section Name="wl_water_12">
+    <Key Name="inventoryID" Value="2f769c51-c11b-42ff-9183-3a9c425fa641"/>
+    <Key Name="assetID" Value="d0512dd3-2d6f-8970-1d16-3829d8f8299d"/>
+    <Key Name="folderID" Value="00000112-000f-0000-0000-000100bba001"/>
+    <Key Name="description" Value=""/>
+    <Key Name="name" Value="wl_water_12" />
+    <Key Name="assetType" Value="0" />
+    <Key Name="inventoryType" Value="0" />
+  </Section>
+
+  <Section Name="wl_water_13">
+    <Key Name="inventoryID" Value="99fbdc50-c760-4561-9ae0-da20faec1105"/>
+    <Key Name="assetID" Value="d0520e7b-b61a-3b0f-d043-0cd83644b814"/>
+    <Key Name="folderID" Value="00000112-000f-0000-0000-000100bba001"/>
+    <Key Name="description" Value=""/>
+    <Key Name="name" Value="wl_water_13" />
+    <Key Name="assetType" Value="0" />
+    <Key Name="inventoryType" Value="0" />
+  </Section>
+
+  <Section Name="wl_water_14">
+    <Key Name="inventoryID" Value="b26be379-76e0-4f19-8be7-cffcbdfa1143"/>
+    <Key Name="assetID" Value="d727239c-056f-cce0-0681-e190ba7d9e50"/>
+    <Key Name="folderID" Value="00000112-000f-0000-0000-000100bba001"/>
+    <Key Name="description" Value=""/>
+    <Key Name="name" Value="wl_water_14" />
+    <Key Name="assetType" Value="0" />
+    <Key Name="inventoryType" Value="0" />
+  </Section>
+
+  <Section Name="wl_water_15">
+    <Key Name="inventoryID" Value="fdc206cb-4541-46fd-b12d-133d430125ae"/>
+    <Key Name="assetID" Value="f9df2fcd-4895-77ec-3fcd-4cb1cef21588"/>
+    <Key Name="folderID" Value="00000112-000f-0000-0000-000100bba001"/>
+    <Key Name="description" Value=""/>
+    <Key Name="name" Value="wl_water_15" />
+    <Key Name="assetType" Value="0" />
+    <Key Name="inventoryType" Value="0" />
+  </Section>
+
 </Nini>
