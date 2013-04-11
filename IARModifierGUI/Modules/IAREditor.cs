@@ -40,13 +40,14 @@ using System.Xml;
 using Aurora.Framework;
 using Aurora.Framework.Serialization;
 using Aurora.Framework.Serialization.External;
-using OpenSim.Services.Interfaces;
 
-using log4net;
 using Nini.Config;
 using OpenMetaverse;
 
 using OpenSim.Region.CoreModules.Avatar.Inventory.Archiver;
+using Aurora.Framework.Services.ClassHelpers.Inventory;
+using Aurora.Framework.Services.ClassHelpers.Assets;
+using Aurora.Framework.Utilities;
 
 namespace IARModifierGUI
 {
@@ -229,13 +230,13 @@ namespace IARModifierGUI
         {
             string iarPathExisting = iarPath;
 
-            //            m_log.DebugFormat(
+            //            MainConsole.Instance.DebugFormat(
             //                "[INVENTORY ARCHIVER]: Loading folder {0} {1}", rootDestFolder.Name, rootDestFolder.ID);
 
             InventoryFolderBase destFolder
                 = ResolveDestinationFolder (rootDestFolder, ref iarPathExisting, ref resolvedFolders);
 
-            //            m_log.DebugFormat(
+            //            MainConsole.Instance.DebugFormat(
             //                "[INVENTORY ARCHIVER]: originalArchivePath [{0}], section already loaded [{1}]", 
             //                iarPath, iarPathExisting);
 
@@ -274,11 +275,11 @@ namespace IARModifierGUI
 
             while (archivePath.Length > 0)
             {
-                //                m_log.DebugFormat("[INVENTORY ARCHIVER]: Trying to resolve destination folder {0}", archivePath);
+                //                MainConsole.Instance.DebugFormat("[INVENTORY ARCHIVER]: Trying to resolve destination folder {0}", archivePath);
 
                 if (resolvedFolders.ContainsKey (archivePath))
                 {
-                    //                    m_log.DebugFormat(
+                    //                    MainConsole.Instance.DebugFormat(
                     //                        "[INVENTORY ARCHIVER]: Found previously created folder from archive path {0}", archivePath);
                     return resolvedFolders[archivePath];
                 }
@@ -294,7 +295,7 @@ namespace IARModifierGUI
                     }
                     else
                     {
-                        //                        m_log.DebugFormat(
+                        //                        MainConsole.Instance.DebugFormat(
                         //                            "[INVENTORY ARCHIVER]: Found no previously created folder for archive path {0}",
                         //                            originalArchivePath);
                         archivePath = string.Empty;
@@ -334,7 +335,7 @@ namespace IARModifierGUI
 
             for (int i = 0; i < rawDirsToCreate.Length; i++)
             {
-                //                m_log.DebugFormat("[INVENTORY ARCHIVER]: Creating folder {0} from IAR", rawDirsToCreate[i]);
+                //                MainConsole.Instance.DebugFormat("[INVENTORY ARCHIVER]: Creating folder {0} from IAR", rawDirsToCreate[i]);
 
                 if (!rawDirsToCreate[i].Contains (ArchiveConstants.INVENTORY_NODE_NAME_COMPONENT_SEPARATOR))
                     continue;
@@ -412,7 +413,7 @@ namespace IARModifierGUI
             {
                 AssetType assetType = ArchiveConstants.EXTENSION_TO_ASSET_TYPE[extension];
 
-                //m_log.DebugFormat("[INVENTORY ARCHIVER]: Importing asset {0}, type {1}", uuid, assetType);
+                //MainConsole.Instance.DebugFormat("[INVENTORY ARCHIVER]: Importing asset {0}, type {1}", uuid, assetType);
 
                 AssetBase asset = new AssetBase (new UUID (uuid), "RandomName", assetType, UUID.Zero);
                 asset.Data = data;
@@ -482,7 +483,7 @@ namespace IARModifierGUI
         private void rename_Click (object sender, EventArgs e)
         {
             string value = "";
-            Aurora.Framework.Utilities.InputBox ("Rename", "What should we rename this object to?", ref value);
+            Utilities.InputBox ("Rename", "What should we rename this object to?", ref value);
             UUID id = UUID.Parse (treeView1.SelectedNode.Name);
             if (m_folderList.ContainsKey (id))
             {

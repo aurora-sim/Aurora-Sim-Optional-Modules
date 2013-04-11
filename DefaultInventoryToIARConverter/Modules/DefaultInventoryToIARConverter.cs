@@ -33,16 +33,19 @@ using System.Reflection;
 using System.Xml;
 
 using Aurora.Framework;
-using OpenSim.Services.Interfaces;
 
-using log4net;
 using Nini.Config;
 using OpenMetaverse;
 using Aurora.Simulation.Base;
 using Aurora.Framework.Serialization;
 
-using OpenSim.Region.Framework.Scenes;
 using Aurora.Modules.Archivers;
+using Aurora.Framework.Services;
+using Aurora.Framework.Modules;
+using Aurora.Framework.SceneInfo;
+using Aurora.Framework.Services.ClassHelpers.Assets;
+using Aurora.Framework.Services.ClassHelpers.Inventory;
+using Aurora.Region;
 
 namespace OpenSim.Services.InventoryService
 {
@@ -51,7 +54,6 @@ namespace OpenSim.Services.InventoryService
     /// </summary>
     public class DefaultInventoryToIARConverter : IService
     {
-        protected static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         protected ILibraryService m_service;
 
         public void Initialize(IConfigSource config, IRegistryCore registry)

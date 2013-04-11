@@ -28,11 +28,10 @@
 using System;
 using System.Reflection;
 using Nini.Config;
-using log4net;
 using Aurora.Framework;
-using OpenSim.Region.Framework.Interfaces;
-using OpenSim.Region.Framework.Scenes;
 using OpenMetaverse;
+using Aurora.Framework.Modules;
+using Aurora.Framework.SceneInfo;
 
 namespace OpenSim.Region.OptionalModules.Scripting.ScriptModuleComms
 {
@@ -60,7 +59,7 @@ namespace OpenSim.Region.OptionalModules.Scripting.ScriptModuleComms
             m_scriptModule = scene.RequestModuleInterface<IScriptModule>();
             
             //if (m_scriptModule != null)
-                //m_log.Info("[MODULE COMMANDS]: Script engine found, module active");
+                //MainConsole.Instance.Info("[MODULE COMMANDS]: Script engine found, module active");
         }
 
         public string Name

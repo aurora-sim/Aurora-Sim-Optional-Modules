@@ -33,9 +33,6 @@ using System.Reflection;
 using System.IO;
 using System.Text;
 using Microsoft.CSharp;
-//using Microsoft.JScript;
-using Microsoft.VisualBasic;
-using log4net;
 using OpenMetaverse;
 
 namespace Aurora.ScriptEngine.AuroraDotNetEngine.CompilerTools

@@ -26,12 +26,13 @@ using System.Collections.Generic;
 using System.Text;
 using LandscapeGenCore;
 using Aurora.Framework;
-using OpenSim.Region.Framework.Interfaces;
-using OpenSim.Region.Framework.Scenes;
+using Aurora.Framework.ConsoleFramework;
+using Aurora.Framework.SceneInfo;
+using Aurora.Framework.Modules;
 
 namespace Aurora.Addon.FractalTerrain
 {
-    public class FractalTerrain : ISharedRegionModule
+    public class FractalTerrain : INonSharedRegionModule
     {
         private PerlinNoise m_perlinNoise = new PerlinNoise();
         private KochLikeNoise m_kochLikeNoise = new KochLikeNoise();
@@ -75,11 +76,6 @@ namespace Aurora.Addon.FractalTerrain
 
         public void Generate (string[] s)
         {
-            if(MainConsole.Instance.ConsoleScene == null)
-            {
-                MainConsole.Instance.Output("Select a scene first");
-                return;
-            }
             //string noiseGen = MainConsole.Instance.CmdPrompt("Noise generator (Perlin or Kosh)", "Perlin", new List<string>(new [] { "Perlin", "Kosh" }));
             //if(noiseGen == "Perlin")
             {

@@ -33,21 +33,20 @@ using System.Reflection;
 using System.Xml;
 
 using Aurora.Framework;
-using OpenSim.Services.Interfaces;
 
-using log4net;
 using Nini.Config;
 using OpenMetaverse;
 
-using OpenSim.Region.Framework.Scenes;
 using Aurora.Modules;
+using Aurora.Framework.Services;
+using Aurora.Framework.Modules;
+using Aurora.Framework.Services.ClassHelpers.Inventory;
+using Aurora.Framework.ConsoleFramework;
 
 namespace Aurora.DefaultLibraryLoaders
 {
     public class InventoryXMLLoader : IDefaultLibraryLoader
     {
-        private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-
         protected ILibraryService m_service;
         protected IInventoryService m_inventoryService;
 
@@ -94,7 +93,7 @@ namespace Aurora.DefaultLibraryLoaders
         /// <param name="assets"></param>
         protected void LoadLibraries(string librariesControlPath)
         {
-            m_log.InfoFormat("[LIBRARY INVENTORY]: Loading library control file {0}", librariesControlPath);
+            MainConsole.Instance.InfoFormat("[LIBRARY INVENTORY]: Loading library control file {0}", librariesControlPath);
             LoadFromFile(librariesControlPath, "Libraries control", ReadLibraryFromConfig);
         }
 
@@ -185,12 +184,12 @@ namespace Aurora.DefaultLibraryLoaders
                 }
                 catch (XmlException e)
                 {
-                    m_log.ErrorFormat("[LIBRARY INVENTORY]: Error loading {0} : {1}", path, e);
+                    MainConsole.Instance.ErrorFormat("[LIBRARY INVENTORY]: Error loading {0} : {1}", path, e);
                 }
             }
             else
             {
-                m_log.ErrorFormat("[LIBRARY INVENTORY]: {0} file {1} does not exist!", fileDescription, path);
+                MainConsole.Instance.ErrorFormat("[LIBRARY INVENTORY]: {0} file {1} does not exist!", fileDescription, path);
             }
         }
     }

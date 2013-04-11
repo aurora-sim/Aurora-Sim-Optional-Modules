@@ -33,20 +33,26 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using Aurora.Framework;
-using OpenSim.Region.Framework.Interfaces;
 using Nini.Config;
 using MetaBuilders.Irc.Messages;
 using MetaBuilders.Irc.Network;
 using MetaBuilders.Irc;
-using log4net;
 using OpenMetaverse;
+using Aurora.Framework.Modules;
+using Aurora.Framework.SceneInfo;
+using Aurora.Framework.ClientInterfaces;
+using Aurora.Framework.DatabaseInterfaces;
+using Aurora.Framework.Servers;
+using Aurora.Framework.PresenceInfo;
+using GridRegion = Aurora.Framework.Services.GridRegion;
+using Aurora.Framework.Utilities;
+using Aurora.Framework.Services;
+using Aurora.Framework.ConsoleFramework;
 
 namespace Aurora.Addon.IRCChat
 {
     public class IRCGroupService : INonSharedRegionModule
     {
-        private static readonly ILog m_log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-
         private Dictionary<UUID, string> m_network = new Dictionary<UUID, string>();
         private Dictionary<UUID, string> m_channel = new Dictionary<UUID, string>();
         private Dictionary<UUID, string> m_gridName = new Dictionary<UUID, string>();
@@ -86,7 +92,7 @@ namespace Aurora.Addon.IRCChat
 
         private void InitClients ()
         {
-            IGroupsServicesConnector conn = m_scene.RequestModuleInterface<IGroupsServicesConnector>();
+            IGroupsServiceConnector conn = Aurora.Framework.Utilities.DataManager.RequestPlugin<IGroupsServiceConnector>();
             foreach(string s in m_config.GetKeys())
             {
                 if(s.EndsWith("_Network"))
@@ -146,7 +152,7 @@ namespace Aurora.Addon.IRCChat
             presence.ControllingClient.OnPreSendInstantMessage -= ControllingClient_OnPreSendInstantMessage;
         }
 
-        void EventManager_OnMakeChildAgent (IScenePresence presence, OpenSim.Services.Interfaces.GridRegion destination)
+        void EventManager_OnMakeChildAgent (IScenePresence presence, GridRegion destination)
         {
             presence.ControllingClient.OnPreSendInstantMessage -= ControllingClient_OnPreSendInstantMessage;
         }
@@ -179,12 +185,11 @@ namespace Aurora.Addon.IRCChat
 
         private void chatting (Object sender, IrcMessageEventArgs<TextMessage> e, UUID groupID)
         {
-            IGroupsServicesConnector conn = m_scene.RequestModuleInterface<IGroupsServicesConnector>();
-            IGroupsMessagingModule gMessaging = m_scene.RequestModuleInterface<IGroupsMessagingModule>();
+            IInstantMessagingService gMessaging = m_scene.RequestModuleInterface<IInstantMessagingService>();
 
-            gMessaging.EnsureGroupChatIsStarted(groupID);
-            gMessaging.SendMessageToGroup(new GridInstantMessage(null, UUID.Random(), e.Message.Sender.Nick,
-                UUID.Zero, (byte)InstantMessageDialog.SessionSend, e.Message.Text, false, Vector3.Zero), groupID);
+            gMessaging.EnsureSessionIsStarted(groupID);
+            gMessaging.SendChatToSession(UUID.Zero, new GridInstantMessage(null, UUID.Random(), e.Message.Sender.Nick,
+                UUID.Zero, (byte)InstantMessageDialog.SessionSend, e.Message.Text, false, Vector3.Zero));
         }
 
         private void CreateIRCConnection (string network, string nick, string channel, UUID groupID)
@@ -240,7 +245,7 @@ namespace Aurora.Addon.IRCChat
             if(m_spamDebug)
             {
                 String data = "*** Disconnected: " + e.Data;
-                m_log.Warn("[RegionIRC]: " + data);
+                MainConsole.Instance.Warn("[RegionIRC]: " + data);
             }
         }
 
@@ -249,7 +254,7 @@ namespace Aurora.Addon.IRCChat
             if(m_spamDebug)
             {
                 String data = "*** Got: " + e.Data;
-                m_log.Warn("[RegionIRC]: " + data);
+                MainConsole.Instance.Warn("[RegionIRC]: " + data);
             }
         }
 
@@ -258,7 +263,7 @@ namespace Aurora.Addon.IRCChat
             if(m_spamDebug)
             {
                 String data = "*** Sent: " + e.Data;
-                m_log.Warn("[RegionIRC]: " + data);
+                MainConsole.Instance.Warn("[RegionIRC]: " + data);
             }
         }
 

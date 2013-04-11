@@ -30,11 +30,13 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Xml;
-using log4net;
 using Nini.Config;
 using OpenMetaverse;
-using OpenSim.Services.Interfaces;
 using Aurora.Framework;
+using Aurora.Framework.Services;
+using Aurora.Framework.Services.ClassHelpers.Assets;
+using Aurora.Framework.Modules;
+using Aurora.Framework.ConsoleFramework;
 
 /// <summary>
 /// Loads assets from the filesystem location.  Not yet a plugin, though it should be.
@@ -44,7 +46,6 @@ namespace Aurora.DefaultLibraryLoaders
     public class DefaultAssetXMLLoader : IDefaultLibraryLoader
     {
         protected static readonly UUID LIBRARY_OWNER_ID = new UUID("11111111-1111-0000-0000-000100bba000");
-        protected static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         protected ILibraryService m_service;
 
         protected AssetBase CreateAsset(string assetIdStr, string name, string path, AssetType type)
@@ -53,13 +54,13 @@ namespace Aurora.DefaultLibraryLoaders
 
             if (!String.IsNullOrEmpty(path))
             {
-                //m_log.InfoFormat("[ASSETS]: Loading: [{0}][{1}]", name, path);
+                //MainConsole.Instance.InfoFormat("[ASSETS]: Loading: [{0}][{1}]", name, path);
 
                 LoadAsset(asset, path);
             }
             else
             {
-                m_log.InfoFormat("[ASSETS]: Instantiated: [{0}]", name);
+                MainConsole.Instance.InfoFormat("[ASSETS]: Instantiated: [{0}]", name);
             }
 
             return asset;
@@ -88,7 +89,7 @@ namespace Aurora.DefaultLibraryLoaders
             }
             else
             {
-                m_log.ErrorFormat("[ASSETS]: file: [{0}] not found !", path);
+                MainConsole.Instance.ErrorFormat("[ASSETS]: file: [{0}] not found !", path);
             }
         }
 
@@ -112,21 +113,21 @@ namespace Aurora.DefaultLibraryLoaders
 
                         LoadXmlAssetSet(Path.Combine(assetRootPath, assetSetPath), assets);
                     }
-                    m_log.Warn((DateTime.Now - start).Milliseconds);
+                    MainConsole.Instance.Warn((DateTime.Now - start).Milliseconds);
                 }
                 catch (XmlException e)
                 {
-                    m_log.ErrorFormat("[ASSETS]: Error loading {0} : {1}", assetSetPath, e);
+                    MainConsole.Instance.ErrorFormat("[ASSETS]: Error loading {0} : {1}", assetSetPath, e);
                 }
             }
             else
             {
-                m_log.ErrorFormat("[ASSETS]: Asset set control file {0} does not exist!  No assets loaded.", assetSetFilename);
+                MainConsole.Instance.ErrorFormat("[ASSETS]: Asset set control file {0} does not exist!  No assets loaded.", assetSetFilename);
             }
 
             DateTime start2 = DateTime.Now;
             assets.ForEach(action);
-            m_log.Warn((DateTime.Now - start2).Milliseconds);
+            MainConsole.Instance.Warn((DateTime.Now - start2).Milliseconds);
         }
 
         /// <summary>
@@ -136,7 +137,7 @@ namespace Aurora.DefaultLibraryLoaders
         /// <param name="assets"></param>
         protected void LoadXmlAssetSet(string assetSetPath, List<AssetBase> assets)
         {
-            //m_log.InfoFormat("[ASSETS]: Loading asset set {0}", assetSetPath);
+            //MainConsole.Instance.InfoFormat("[ASSETS]: Loading asset set {0}", assetSetPath);
 
             if (File.Exists(assetSetPath))
             {
@@ -160,12 +161,12 @@ namespace Aurora.DefaultLibraryLoaders
                 }
                 catch (XmlException e)
                 {
-                    m_log.ErrorFormat("[ASSETS]: Error loading {0} : {1}", assetSetPath, e);
+                    MainConsole.Instance.ErrorFormat("[ASSETS]: Error loading {0} : {1}", assetSetPath, e);
                 }
             }
             else
             {
-                m_log.ErrorFormat("[ASSETS]: Asset set file {0} does not exist!", assetSetPath);
+                MainConsole.Instance.ErrorFormat("[ASSETS]: Asset set file {0} does not exist!", assetSetPath);
             }
         }
 
@@ -187,7 +188,7 @@ namespace Aurora.DefaultLibraryLoaders
 
             registry.RegisterModuleInterface<DefaultAssetXMLLoader>(this);
 
-            m_log.InfoFormat("[DefaultXMLAssetLoader]: Loading default asset set from {0}", loaderArgs);
+            MainConsole.Instance.InfoFormat("[DefaultXMLAssetLoader]: Loading default asset set from {0}", loaderArgs);
             IAssetService assetService = registry.RequestModuleInterface<IAssetService>();
             ForEachDefaultXmlAsset(loaderArgs,
                     delegate(AssetBase a)
