@@ -55,9 +55,13 @@ namespace OpenSim.Services.InventoryService
     public class DefaultInventoryToIARConverter : IService
     {
         protected ILibraryService m_service;
+        protected IConfigSource m_config;
+        protected IRegistryCore m_registry;
 
         public void Initialize(IConfigSource config, IRegistryCore registry)
         {
+            m_config = config;
+            m_registry = registry;
         }
 
         public void PostInitialize(IConfigSource config, IRegistryCore registry)
@@ -65,6 +69,10 @@ namespace OpenSim.Services.InventoryService
         }
 
         public void Start(IConfigSource config, IRegistryCore registry)
+        {
+        }
+
+        public void FinishedStartup()
         {
             string IARName = "DefaultInventory.iar";
             IniConfigSource iniSource = null;
@@ -75,7 +83,7 @@ namespace OpenSim.Services.InventoryService
             catch
             {
             }
-            IConfig libConfig = config.Configs["DefaultAssetsIARCreator"];
+            IConfig libConfig = m_config.Configs["DefaultAssetsIARCreator"];
             if (libConfig == null)
                 libConfig = iniSource.Configs["DefaultAssetsIARCreator"];
             if (libConfig != null)
@@ -86,18 +94,18 @@ namespace OpenSim.Services.InventoryService
             }
             else
                 return;
-            m_service = registry.RequestModuleInterface<ILibraryService>();
+            m_service = m_registry.RequestModuleInterface<ILibraryService>();
 
             RegionInfo regInfo = new RegionInfo();
             IScene m_MockScene = null;
             //Make the scene for the IAR loader
-            if (registry is IScene)
-                m_MockScene = (IScene)registry;
+            if (m_registry is IScene)
+                m_MockScene = (IScene)m_registry;
             else
             {
                 m_MockScene = new Scene();
                 m_MockScene.Initialize(regInfo);
-                m_MockScene.AddModuleInterfaces(registry.GetInterfaces());
+                m_MockScene.AddModuleInterfaces(m_registry.GetInterfaces());
             }
 
             UserAccount uinfo = m_MockScene.UserAccountService.GetUserAccount(null, m_service.LibraryOwner);
@@ -106,9 +114,24 @@ namespace OpenSim.Services.InventoryService
             {
                 uinfo = new UserAccount(m_service.LibraryOwner);
                 uinfo.Name = m_service.LibraryOwnerName;
-                m_MockScene.InventoryService.CreateUserInventory(m_service.LibraryOwner, false);
+                //m_MockScene.InventoryService.CreateUserInventory(m_service.LibraryOwner, false);
+                m_log.InfoFormat("[DefaultInventoryToIARConverter]: 1,1");
+                m_Database = DataManager.RequestPlugin<IInventoryData>();
+                m_log.InfoFormat("[DefaultInventoryToIARConverter]: 1,2");
+                if(m_Database == null) m_log.InfoFormat("[DefaultInventoryToIARConverter]: m_Database == null");
+                InventoryFolderBase newFolder = new InventoryFolderBase
+                                                    {
+                                                	Name = "My Inventory",
+                                                	Type = 9,
+                                                	Version = 1,
+                                                	ID = new UUID("00000112-000f-0000-0000-000100bba000"),
+                                                	Owner = m_service.LibraryOwner,
+                                                	ParentID = UUID.Zero
+                                                    };
+                m_log.InfoFormat("[DefaultInventoryToIARConverter]: 1,3");
             }
 
+            m_log.InfoFormat("[DefaultInventoryToIARConverter]: 1,4");
             List<AssetBase> assets = new List<AssetBase> ();
             if (m_MockScene.InventoryService != null)
             {
@@ -141,10 +164,6 @@ namespace OpenSim.Services.InventoryService
                     uinfo, "/", new GZipStream (new FileStream (IARName, FileMode.Create), CompressionMode.Compress), true, rootFolder, assets);
                 write.Execute ();
             }
-        }
-
-        public void FinishedStartup()
-        {
         }
     }
 }

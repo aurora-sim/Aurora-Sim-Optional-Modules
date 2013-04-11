@@ -177,8 +177,9 @@ namespace Aurora.DefaultLibraryLoaders
             m_service = service;
 
             IConfig assetConfig = source.Configs["DefaultXMLAssetLoader"];
-            if (assetConfig == null)
+            if (assetConfig == null){
                 return;
+            }
             string loaderArgs = assetConfig.GetString("AssetLoaderArgs",
                         String.Empty);
             bool assetLoaderEnabled = !assetConfig.GetBoolean("PreviouslyLoaded", false);
