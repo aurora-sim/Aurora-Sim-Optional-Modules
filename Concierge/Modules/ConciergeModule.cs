@@ -143,7 +143,7 @@ namespace OpenSim.Region.OptionalModules.Avatar.Concierge
         {
             if (!m_enabled) return;
 
-            MainServer.Instance.AddXmlRPCHandler("concierge_update_welcome", XmlRpcUpdateWelcomeMethod, false);
+            MainServer.Instance.AddXmlRPCHandler("concierge_update_welcome", XmlRpcUpdateWelcomeMethod);
 
             lock (m_syncy)
             {

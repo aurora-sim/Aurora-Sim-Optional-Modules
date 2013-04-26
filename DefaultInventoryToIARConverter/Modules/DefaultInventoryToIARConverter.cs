@@ -46,6 +46,8 @@ using Aurora.Framework.SceneInfo;
 using Aurora.Framework.Services.ClassHelpers.Assets;
 using Aurora.Framework.Services.ClassHelpers.Inventory;
 using Aurora.Region;
+using Aurora.Framework.ConsoleFramework;
+using Aurora.Framework.Utilities;
 
 namespace OpenSim.Services.InventoryService
 {
@@ -115,10 +117,7 @@ namespace OpenSim.Services.InventoryService
                 uinfo = new UserAccount(m_service.LibraryOwner);
                 uinfo.Name = m_service.LibraryOwnerName;
                 //m_MockScene.InventoryService.CreateUserInventory(m_service.LibraryOwner, false);
-                m_log.InfoFormat("[DefaultInventoryToIARConverter]: 1,1");
-                m_Database = DataManager.RequestPlugin<IInventoryData>();
-                m_log.InfoFormat("[DefaultInventoryToIARConverter]: 1,2");
-                if(m_Database == null) m_log.InfoFormat("[DefaultInventoryToIARConverter]: m_Database == null");
+                MainConsole.Instance.InfoFormat("[DefaultInventoryToIARConverter]: 1,1");
                 InventoryFolderBase newFolder = new InventoryFolderBase
                                                     {
                                                 	Name = "My Inventory",
@@ -128,10 +127,10 @@ namespace OpenSim.Services.InventoryService
                                                 	Owner = m_service.LibraryOwner,
                                                 	ParentID = UUID.Zero
                                                     };
-                m_log.InfoFormat("[DefaultInventoryToIARConverter]: 1,3");
+                MainConsole.Instance.InfoFormat("[DefaultInventoryToIARConverter]: 1,3");
             }
 
-            m_log.InfoFormat("[DefaultInventoryToIARConverter]: 1,4");
+            MainConsole.Instance.InfoFormat("[DefaultInventoryToIARConverter]: 1,4");
             List<AssetBase> assets = new List<AssetBase> ();
             if (m_MockScene.InventoryService != null)
             {

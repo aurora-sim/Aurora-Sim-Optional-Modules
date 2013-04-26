@@ -29,7 +29,6 @@ using System;
 using System.Text;
 using System.Reflection;
 using Nini.Config;
-using log4net;
 using Aurora.Framework;
 using OpenMetaverse;
 using OpenMetaverse.StructuredData;
@@ -45,8 +44,6 @@ namespace FreeswitchVoice
 {
     public class FreeswitchService : IFreeswitchService, IService
     {
-        private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-
         protected string m_freeSwitchRealm;
         protected string m_freeSwitchSIPProxy;
         protected bool m_freeSwitchAttemptUseSTUN = false;
