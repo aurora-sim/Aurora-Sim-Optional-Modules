@@ -29,6 +29,7 @@ using Aurora.Framework.ClientInterfaces;
 using Aurora.Framework.ConsoleFramework;
 using Aurora.Framework.DatabaseInterfaces;
 using Aurora.Framework.Modules;
+using Aurora.Framework.Servers;
 using Aurora.Framework.Servers.HttpServer;
 using Aurora.Framework.Servers.HttpServer.Implementation;
 using Aurora.Framework.Servers.HttpServer.Interfaces;
@@ -102,10 +103,7 @@ namespace OpenSim.Services
         public override byte[] Handle(string path, Stream requestData,
                 OSHttpRequest httpRequest, OSHttpResponse httpResponse)
         {
-            StreamReader sr = new StreamReader(requestData);
-            string body = sr.ReadToEnd();
-            sr.Close();
-            body = body.Trim();
+            string body = HttpServerHandlerHelpers.ReadString(requestData);
 
             //MainConsole.Instance.DebugFormat("[XXX]: query String: {0}", body);
             try
@@ -182,7 +180,7 @@ namespace OpenSim.Services
         private string AddSpecificUrl(string type)
         {
             string capPath = "/cap/"+UUID.Random()+"/"+type;
-            m_server.AddHTTPHandler(new GenericStreamHandler("GET", capPath, 
+            m_server.AddStreamHandler(new GenericStreamHandler("GET", capPath, 
                 delegate(string path, Stream request, OSHttpRequest httpRequest, OSHttpResponse httpResponse)
                 {
                     httpResponse.ContentType = "text/html";
@@ -190,7 +188,7 @@ namespace OpenSim.Services
                     OSD resp = new OSD();
                     try
                     {
-                        OSDMap r = (OSDMap)OSDParser.DeserializeLLSDXml(request);
+                        OSDMap r = (OSDMap)OSDParser.DeserializeLLSDXml(HttpServerHandlerHelpers.ReadFully(request));
 
                         if (type == "add_to_group")
                             resp = AddUserToGroup(r);
@@ -214,13 +212,7 @@ namespace OpenSim.Services
                     httpResponse.StatusCode = (int)HttpStatusCode.OK;
                     return OSDParser.SerializeLLSDXmlBytes(resp);
                 }));
-            ICapsService capsService = m_registry.RequestModuleInterface<ICapsService>();
-            if (capsService != null)
-            {
-                capPath = capsService.HostUri + capPath;
-                return capPath;
-            }
-            return "";
+            return MainServer.Instance.ServerURI + capPath;
         }
 
         private OSD AddUserToGroup(OSDMap map)

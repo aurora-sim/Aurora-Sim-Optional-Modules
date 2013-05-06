@@ -57,11 +57,6 @@ namespace OpenSim.Region.OptionalModules.World.WorldView
         {
             httpResponse.ContentType = "image/jpeg";
 
-//            StreamReader sr = new StreamReader(requestData);
-//            string body = sr.ReadToEnd();
-//            sr.Close();
-//            body = body.Trim();
-
             try
             {
                 lock (m_RequestLock)

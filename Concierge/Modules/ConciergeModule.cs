@@ -124,8 +124,10 @@ namespace OpenSim.Region.OptionalModules.Avatar.Concierge
             m_xmlRpcPassword = m_config.GetString("password", m_xmlRpcPassword);
             m_brokerURI = m_config.GetString("broker", m_brokerURI);
             m_brokerUpdateTimeout = m_config.GetInt("broker_timeout", m_brokerUpdateTimeout);
-            
+
             MainConsole.Instance.InfoFormat("[Concierge] reporting as \"{0}\" to our users", m_whoami);
+
+            MainServer.Instance.AddXmlRPCHandler("concierge_update_welcome", XmlRpcUpdateWelcomeMethod);
 
             // calculate regions Regex
             if (m_regions == null)
@@ -142,8 +144,6 @@ namespace OpenSim.Region.OptionalModules.Avatar.Concierge
         public override void AddRegion(IScene scene)
         {
             if (!m_enabled) return;
-
-            MainServer.Instance.AddXmlRPCHandler("concierge_update_welcome", XmlRpcUpdateWelcomeMethod);
 
             lock (m_syncy)
             {
@@ -169,8 +169,6 @@ namespace OpenSim.Region.OptionalModules.Avatar.Concierge
         public override void RemoveRegion(IScene scene)
         {
             if (!m_enabled) return;
-
-            MainServer.Instance.RemoveXmlRPCHandler("concierge_update_welcome");
 
             lock (m_syncy)
             {

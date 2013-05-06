@@ -150,10 +150,10 @@ namespace FreeswitchVoice
                     // - buddies: viv_buddy.php
                     // - ???: viv_watcher.php
                     // - signout: viv_signout.php
-                    MainServer.Instance.AddHTTPHandler (new GenericStreamHandler("GET", String.Format ("{0}/viv_get_prelogin.php", m_freeSwitchAPIPrefix),
+                    MainServer.Instance.AddStreamHandler(new GenericStreamHandler("GET", String.Format ("{0}/viv_get_prelogin.php", m_freeSwitchAPIPrefix),
                                                          FreeSwitchSLVoiceGetPreloginHTTPHandler));
 
-                    MainServer.Instance.AddHTTPHandler (new GenericStreamHandler("GET", String.Format ("{0}/freeswitch-config", m_freeSwitchAPIPrefix), FreeSwitchConfigHTTPHandler));
+                    MainServer.Instance.AddStreamHandler(new GenericStreamHandler("GET", String.Format("{0}/freeswitch-config", m_freeSwitchAPIPrefix), FreeSwitchConfigHTTPHandler));
 
                     // RestStreamHandler h = new
                     // RestStreamHandler("GET",
@@ -162,13 +162,13 @@ namespace FreeswitchVoice
 
 
 
-                    MainServer.Instance.AddHTTPHandler (new GenericStreamHandler("GET", String.Format ("{0}/viv_signin.php", m_freeSwitchAPIPrefix),
+                    MainServer.Instance.AddStreamHandler(new GenericStreamHandler("GET", String.Format("{0}/viv_signin.php", m_freeSwitchAPIPrefix),
                                      FreeSwitchSLVoiceSigninHTTPHandler));
 
-                    MainServer.Instance.AddHTTPHandler (new GenericStreamHandler("GET", String.Format ("{0}/viv_buddy.php", m_freeSwitchAPIPrefix),
+                    MainServer.Instance.AddStreamHandler(new GenericStreamHandler("GET", String.Format("{0}/viv_buddy.php", m_freeSwitchAPIPrefix),
                                      FreeSwitchSLVoiceBuddyHTTPHandler));
 
-                    MainServer.Instance.AddHTTPHandler(new GenericStreamHandler("GET", String.Format("{0}/viv_watcher.php", m_freeSwitchAPIPrefix),
+                    MainServer.Instance.AddStreamHandler(new GenericStreamHandler("GET", String.Format("{0}/viv_watcher.php", m_freeSwitchAPIPrefix),
                                      FreeSwitchSLVoiceWatcherHTTPHandler));
 
                     MainConsole.Instance.InfoFormat ("[FreeSwitchVoice] using FreeSwitch server {0}", m_freeSwitchRealm);
@@ -296,7 +296,7 @@ namespace FreeswitchVoice
                                                        delegate(string path, Stream req,
                                                                 OSHttpRequest httpRequest, OSHttpResponse httpResponse)
                                                        {
-                                                           return ProvisionVoiceAccountRequest(scene, req.ReadUntilEnd(),
+                                                           return ProvisionVoiceAccountRequest(scene, HttpServerHandlerHelpers.ReadString(req),
                                                                                                agentID);
                                                        }));
             retVal["ParcelVoiceInfoRequest"] = CapsUtil.CreateCAPS("ParcelVoiceInfoRequest", "");
@@ -304,7 +304,7 @@ namespace FreeswitchVoice
                                                        delegate(string path, Stream req,
                                                                 OSHttpRequest httpRequest, OSHttpResponse httpResponse)
                                                        {
-                                                           return ParcelVoiceInfoRequest(scene, req.ReadUntilEnd(),
+                                                           return ParcelVoiceInfoRequest(scene, HttpServerHandlerHelpers.ReadString(req),
                                                                                          agentID);
                                                        }));
             return retVal;
@@ -538,7 +538,7 @@ namespace FreeswitchVoice
             httpResponse.ContentType = "text/xml";
             httpResponse.StatusCode = 200;
 
-            Hashtable requestBody = ParseRequestBody(request.ReadUntilEnd());
+            Hashtable requestBody = ParseRequestBody(HttpServerHandlerHelpers.ReadString(request));
 
             if (!requestBody.ContainsKey("auth_token"))
                 return MainServer.BadRequest;
@@ -612,7 +612,7 @@ namespace FreeswitchVoice
             httpResponse.ContentType = "text/xml";
             httpResponse.StatusCode = 200;
 
-            Hashtable requestBody = ParseRequestBody(request.ReadUntilEnd());
+            Hashtable requestBody = ParseRequestBody(HttpServerHandlerHelpers.ReadString(request));
 
             string auth_token = (string)requestBody["auth_token"];
             //string[] auth_tokenvals = auth_token.Split(':');
@@ -640,7 +640,7 @@ namespace FreeswitchVoice
                                       OSHttpResponse httpResponse)
         {
             MainConsole.Instance.Debug("[FreeSwitchVoice] FreeSwitchSLVoiceSigninHTTPHandler called");
-            string requestbody = request.ReadUntilEnd();
+            string requestbody = HttpServerHandlerHelpers.ReadString(request);
             string uri = httpRequest.RawUrl;
             string contenttype = httpRequest.ContentType;
 
@@ -764,7 +764,7 @@ namespace FreeswitchVoice
         public byte[] FreeSwitchConfigHTTPHandler(string path, Stream request, OSHttpRequest httpRequest,
                                       OSHttpResponse httpResponse)
         {
-            Hashtable requestBody = ParseRequestBody(request.ReadUntilEnd());
+            Hashtable requestBody = ParseRequestBody(HttpServerHandlerHelpers.ReadString(request));
 
             string section = httpRequest.QueryString["section"];
 
