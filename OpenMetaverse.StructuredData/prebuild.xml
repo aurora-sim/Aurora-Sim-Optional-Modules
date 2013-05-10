@@ -1,0 +1,54 @@
+<?xml version="1.0" ?>
+<Project frameworkVersion="v3_5" name="OpenMetaverse.StructuredData" path="addon-modules/OpenMetaverse.StructuredData/Modules" type="Library">
+  <Configuration name="Debug" platform="x86">
+	<Options>
+		<OutputPath>../../../bin/</OutputPath>
+		
+		<SuppressWarnings>1591,1574,0419,0618</SuppressWarnings>
+	</Options>
+  </Configuration>
+  <Configuration name="Release" platform="x86">
+	<Options>
+	  <OutputPath>../../../bin/</OutputPath>
+	  
+	  <SuppressWarnings>1591,1574,0419,0618</SuppressWarnings>
+	</Options>
+  </Configuration>
+  <Configuration name="Debug" platform="x64">
+	<Options>
+	  <OutputPath>../../../bin/</OutputPath>
+	  
+	  <SuppressWarnings>1591,1574,0419,0618</SuppressWarnings>
+	</Options>
+  </Configuration>
+  <Configuration name="Release" platform="x64">
+	<Options>
+	  <OutputPath>../../../bin/</OutputPath>
+	  
+	  <SuppressWarnings>1591,1574,0419,0618</SuppressWarnings>
+	</Options>
+  </Configuration>
+  <Configuration name="Debug" platform="AnyCPU">
+	<Options>
+	  <OutputPath>../../../bin/</OutputPath>
+	  
+	  <SuppressWarnings>1591,1574,0419,0618</SuppressWarnings>
+	</Options>
+  </Configuration>
+  <Configuration name="Release" platform="AnyCPU">
+	<Options>
+	  <OutputPath>../../../bin/</OutputPath>
+	  
+	  <SuppressWarnings>1591,1574,0419,0618</SuppressWarnings>
+	</Options>
+  </Configuration>
+
+  <ReferencePath>../../../bin/</ReferencePath>
+  <Reference name="System"/>
+  <Reference name="System.Xml"/>
+  <Reference name="OpenMetaverseTypes" />
+  
+  <Files>
+	<Match pattern="*.cs" recurse="true"/>
+  </Files>
+</Project>

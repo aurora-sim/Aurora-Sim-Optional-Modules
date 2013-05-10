@@ -1,0 +1,49 @@
+<?xml version="1.0" ?>
+<Project frameworkVersion="v3_5" name="Newtonsoft.Json" path="addon-modules/Newtonsoft.Json/Modules" type="Library">
+  <Configuration name="Debug" platform="x86">
+	<Options>
+	  <OutputPath>../../../bin/</OutputPath>
+	  <KeyFile>Dynamic.snk</KeyFile>
+	</Options>
+  </Configuration>
+  <Configuration name="Release" platform="x86">
+	<Options>
+	  <OutputPath>../../../bin/</OutputPath>
+	  <KeyFile>Dynamic.snk</KeyFile>
+	</Options>
+  </Configuration>
+  <Configuration name="Debug" platform="x64">
+	<Options>
+	  <OutputPath>../../../bin/</OutputPath>
+	  <KeyFile>Dynamic.snk</KeyFile>
+	</Options>
+  </Configuration>
+  <Configuration name="Release" platform="x64">
+	<Options>
+	  <OutputPath>../../../bin/</OutputPath>
+	  <KeyFile>Dynamic.snk</KeyFile>
+	</Options>
+  </Configuration>
+  <Configuration name="Debug" platform="AnyCPU">
+	<Options>
+	  <OutputPath>../../../bin/</OutputPath>
+	  <KeyFile>Dynamic.snk</KeyFile>
+	</Options>
+  </Configuration>
+  <Configuration name="Release" platform="AnyCPU">
+	<Options>
+	  <OutputPath>../../../bin/</OutputPath>
+	  <KeyFile>Dynamic.snk</KeyFile>
+	</Options>
+  </Configuration>
+
+  <ReferencePath>../../../bin/</ReferencePath>
+  <Reference name="System"/>
+  <Reference name="System.Data"/>
+  <Reference name="System.XML"/>
+  <Reference name="System.Runtime.Serialization"/>
+  <Reference name="System.Xml.Linq"/>
+  <Files>
+	<Match pattern="*.cs" recurse="true"/>
+  </Files>
+</Project>

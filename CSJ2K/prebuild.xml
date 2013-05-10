@@ -1,0 +1,51 @@
+<?xml version="1.0" ?>
+<Project frameworkVersion="v3_5" name="CSJ2K" path="addon-modules/CSJ2K/Modules" type="Library">
+  <Configuration name="Debug" platform="x86">
+	<Options>
+	  <OutputPath>../../../bin/</OutputPath>
+	  
+	</Options>
+  </Configuration>
+  <Configuration name="Release" platform="x86">
+	<Options>
+	  <OutputPath>../../../bin/</OutputPath>
+	  
+	</Options>
+  </Configuration>
+  <Configuration name="Debug" platform="x64">
+	<Options>
+	  <OutputPath>../../../bin/</OutputPath>
+	  
+	</Options>
+  </Configuration>
+  <Configuration name="Release" platform="x64">
+	<Options>
+	  <OutputPath>../../../bin/</OutputPath>
+	  
+	</Options>
+  </Configuration>
+  <Configuration name="Debug" platform="AnyCPU">
+	<Options>
+	  <OutputPath>../../../bin/</OutputPath>
+	  
+	</Options>
+  </Configuration>
+  <Configuration name="Release" platform="AnyCPU">
+	<Options>
+	  <OutputPath>../../../bin/</OutputPath>
+	  
+	</Options>
+  </Configuration>
+
+  <ReferencePath>../../../bin/</ReferencePath>
+  <Reference name="System"/>
+  <Reference name="System.Data"/>
+  <Reference name="System.Design"/>
+  <Reference name="System.Drawing"/>
+  <Reference name="System.Management"/>
+  <Reference name="System.Windows.Forms"/>
+  <Reference name="System.Xml"/>
+  <Files>
+	<Match pattern="*.cs" recurse="true"/>
+  </Files>
+</Project>
