@@ -1,0 +1,3 @@
+[submodule "Aurora-Sim-Joomla"]
+	path = Aurora-Sim-Joomla
+	url = https://github.com/skidzTweak/Aurora-Sim-Joomla.git
