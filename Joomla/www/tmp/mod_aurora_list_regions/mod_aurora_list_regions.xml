@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<install type="module" version="1.5.1">
+    <!-- Name of the Module -->
+	<name>Aurora - List Regions</name> 
+ 
+    <!-- Name of the Author -->
+	<author>Skidz Tweak</author> 
+ 
+    <!-- Version Date of the Module -->
+	<creationDate>2011-10-16</creationDate> 
+ 
+    <!-- Copyright information -->
+	<copyright>All rights reserved by New Worldz LLC</copyright> 
+ 
+    <!-- License Information -->
+	<license>GPL 2.0</license> 
+ 
+    <!-- Author's email address -->
+	<authorEmail>Robert.Skidmore@NewWorldz.com</authorEmail> 
+ 
+    <!-- Author's website -->
+	<authorUrl>www.NewWorldz.com</authorUrl> 
+ 
+    <!-- Module version number -->
+	<version>1.5.1</version> 
+ 
+    <!-- Description of what the module does -->
+	<description>List Regions module</description>
+ 
+    <!-- Listing of all files that should be installed for the module to function -->
+	<files>
+        <!-- The "module" attribute signifies that this is the main controller file -->
+		<filename module="mod_aurora_list_regions">mod_aurora_list_regions.php</filename>
+		<filename>index.html</filename>
+		<filename>helper.php</filename>
+		<filename>tmpl/default.php</filename>
+		<filename>tmpl/index.html</filename>
+		<filename>icons/activate.png</filename>
+		<filename>icons/ban.png</filename>
+		<filename>icons/btn_del.png</filename>
+		<filename>icons/desactivate.png</filename>
+		<filename>icons/icon_user.png</filename>
+		<filename>icons/unban.png</filename>
+		<filename>icons/ban.jpg</filename>
+		<filename>icons/unban.jpg</filename>
+		<filename>icons/btn_del.gif</filename>
+		<filename>icons/icon_back_more_off.gif</filename>
+		<filename>icons/icon_back_more_on.gif</filename>
+		<filename>icons/icon_back_one_off.gif</filename>
+		<filename>icons/icon_back_one_on.gif</filename>
+		<filename>icons/icon_forward_more_off.gif</filename>
+		<filename>icons/icon_forward_more_on.gif</filename>
+		<filename>icons/icon_forward_one_off.gif</filename>
+		<filename>icons/icon_forward_one_on.gif</filename>
+		<filename>icons/icon_limit_10_on.gif</filename>
+		<filename>icons/icon_limit_25_on.gif</filename>
+		<filename>icons/icon_limit_50_on.gif</filename>
+		<filename>icons/icon_limit_100_on.gif</filename>
+		<filename>icons/icon_limit_off.gif</filename>
+		<filename>icons/icon_user.gif</filename>
+		<filename>icons/loader.gif</filename>
+		<filename>icons/subarrow.gif</filename>
+		<filename>icons/index.html</filename>
+	</files>
+	<languages>
+        <!-- Any language files included with the module -->
+		<language tag="en-GB">en-GB.mod_aurora_list_regions.ini</language>
+		<language tag="fr-FR">fr-FR.mod_aurora_list_regions.ini</language>
+    </languages>
+ 
+    <!-- Optional parameters -->
+	<params>
+        <!-- parameter to allow placement of a module class suffix for the module table / xhtml display -->
+		<param name="moduleclass_sfx" type="text" default="" label="Module Class Suffix" description="PARAMMODULECLASSSUFFIX" />
+    </params>
+</install>
