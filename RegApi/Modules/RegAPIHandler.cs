@@ -25,6 +25,20 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+using Aurora.Framework.ClientInterfaces;
+using Aurora.Framework.ConsoleFramework;
+using Aurora.Framework.DatabaseInterfaces;
+using Aurora.Framework.Modules;
+using Aurora.Framework.Servers;
+using Aurora.Framework.Servers.HttpServer;
+using Aurora.Framework.Servers.HttpServer.Implementation;
+using Aurora.Framework.Servers.HttpServer.Interfaces;
+using Aurora.Framework.Services;
+using Aurora.Framework.Services.ClassHelpers.Profile;
+using Aurora.Framework.Utilities;
+using Nini.Config;
+using OpenMetaverse;
+using OpenMetaverse.StructuredData;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -32,18 +46,6 @@ using System.IO;
 using System.Net;
 using System.Reflection;
 using System.Text;
-using log4net;
-using Nini.Config;
-using Aurora.Simulation.Base;
-using OpenSim.Services.Interfaces;
-using OpenSim.Framework;
-using OpenSim.Framework.Servers.HttpServer;
-
-using Aurora.DataManager;
-using Aurora.Framework;
-using OpenMetaverse;
-using OpenMetaverse.StructuredData;
-using System.Collections.Specialized;
 
 namespace OpenSim.Services
 {
@@ -79,10 +81,8 @@ namespace OpenSim.Services
         }
     }
 
-    public class RegApiHTTPHandler : BaseStreamHandler
+    public class RegApiHTTPHandler : BaseRequestHandler
     {
-        private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-
         protected IRegistryCore m_registry;
         protected IHttpServer m_server;
         public const int RegApiAllowed = 512;
@@ -103,12 +103,9 @@ namespace OpenSim.Services
         public override byte[] Handle(string path, Stream requestData,
                 OSHttpRequest httpRequest, OSHttpResponse httpResponse)
         {
-            StreamReader sr = new StreamReader(requestData);
-            string body = sr.ReadToEnd();
-            sr.Close();
-            body = body.Trim();
+            string body = HttpServerHandlerHelpers.ReadString(requestData);
 
-            //m_log.DebugFormat("[XXX]: query String: {0}", body);
+            //MainConsole.Instance.DebugFormat("[XXX]: query String: {0}", body);
             try
             {
                 OSDMap map = (OSDMap)OSDParser.DeserializeLLSDXml(body);
@@ -136,16 +133,13 @@ namespace OpenSim.Services
             string Password = map["password"].AsString();
 
             ILoginService loginService = m_registry.RequestModuleInterface<ILoginService>();
-            UUID secureSessionID;
 
-            LoginResponse loginresp = loginService.VerifyClient (FirstName + " " + LastName, "UserAccount", Password, UUID.Zero, false, "", "", "", out secureSessionID);
-            //Null means it went through without an error
-            Verified = loginresp == null;
-
+            Verified = loginService.VerifyClient(UUID.Zero, FirstName + " " + LastName, "UserAccount", Password);
+            
             OSDMap resp = new OSDMap();
             if (Verified)
             {
-                UserAccount account = m_registry.RequestModuleInterface<IUserAccountService>().GetUserAccount(UUID.Zero, FirstName, LastName);
+                UserAccount account = m_registry.RequestModuleInterface<IUserAccountService>().GetUserAccount(null, FirstName, LastName);
                 if (Verified)
                 {
                     AddCapsUrls(resp, account);
@@ -186,16 +180,15 @@ namespace OpenSim.Services
         private string AddSpecificUrl(string type)
         {
             string capPath = "/cap/"+UUID.Random()+"/"+type;
-            m_server.AddHTTPHandler(capPath, delegate(Hashtable request)
+            m_server.AddStreamHandler(new GenericStreamHandler("GET", capPath, 
+                delegate(string path, Stream request, OSHttpRequest httpRequest, OSHttpResponse httpResponse)
                 {
-                    Hashtable responsedata = new Hashtable();
-                    responsedata["content_type"] = "text/html";
-                    responsedata["keepalive"] = false;
+                    httpResponse.ContentType = "text/html";
 
                     OSD resp = new OSD();
                     try
                     {
-                        OSDMap r = (OSDMap)OSDParser.DeserializeLLSDXml((string)request["requestbody"]);
+                        OSDMap r = (OSDMap)OSDParser.DeserializeLLSDXml(HttpServerHandlerHelpers.ReadFully(request));
 
                         if (type == "add_to_group")
                             resp = AddUserToGroup(r);
@@ -216,24 +209,16 @@ namespace OpenSim.Services
                     {
                     }
 
-                    responsedata["int_response_code"] = HttpStatusCode.OK;
-                    responsedata["str_response_string"] = OSDParser.SerializeLLSDXmlString(resp);
-
-                    return responsedata;
-                });
-            ICapsService capsService = m_registry.RequestModuleInterface<ICapsService>();
-            if (capsService != null)
-            {
-                capPath = capsService.HostUri + capPath;
-                return capPath;
-            }
-            return "";
+                    httpResponse.StatusCode = (int)HttpStatusCode.OK;
+                    return OSDParser.SerializeLLSDXmlBytes(resp);
+                }));
+            return MainServer.Instance.ServerURI + capPath;
         }
 
         private OSD AddUserToGroup(OSDMap map)
         {
             bool finished = false;
-            IGroupsServiceConnector groupsService = Aurora.DataManager.DataManager.RequestPlugin<IGroupsServiceConnector>();
+            IGroupsServiceConnector groupsService = Aurora.Framework.Utilities.DataManager.RequestPlugin<IGroupsServiceConnector>();
             if (groupsService != null)
             {
                 string first = map["first"];
@@ -242,7 +227,7 @@ namespace OpenSim.Services
                 GroupRecord record = groupsService.GetGroupRecord(UUID.Zero, UUID.Zero, group_name);
                 if (record != null)
                 {
-                    UserAccount user = m_registry.RequestModuleInterface<IUserAccountService>().GetUserAccount(UUID.Zero, first, last);
+                    UserAccount user = m_registry.RequestModuleInterface<IUserAccountService>().GetUserAccount(null, first, last);
                     if (user != null)
                     {
                         groupsService.AddAgentToGroup(UUID.Zero, user.PrincipalID, record.GroupID, UUID.Zero);
@@ -263,7 +248,7 @@ namespace OpenSim.Services
             {
                 string lastName = m_lastNameRegistry[last_name_id];
                 IUserAccountService accountService = m_registry.RequestModuleInterface<IUserAccountService>();
-                UserAccount user = accountService.GetUserAccount(UUID.Zero, userName, lastName);
+                UserAccount user = accountService.GetUserAccount(null, userName, lastName);
                 if (user != null)
                     found = true;
             }
@@ -287,7 +272,7 @@ namespace OpenSim.Services
             string dob = map["dob"];
 
             //Optional params
-            //int limited_to_estate = map["limited_to_estate"];
+            int limited_to_estate = map["limited_to_estate"];
             string start_region_name = map["start_region_name"];
             float start_local_x = map["start_local_x"];
             float start_local_y = map["start_local_y"];
@@ -304,18 +289,30 @@ namespace OpenSim.Services
                 if (m_lastNameRegistry.ContainsKey(last_name_id))
                 {
                     string lastName = m_lastNameRegistry[last_name_id];
-                    UserAccount user = accountService.GetUserAccount(UUID.Zero, username, lastName);
+                    UserAccount user = accountService.GetUserAccount(null, username, lastName);
                     if (user == null)
                     {
                         //The pass is in plain text... so put it in and create the account
                         accountService.CreateUser(username + " " + lastName, password, email);
                         DateTime time = DateTime.ParseExact(dob, "YYYY-MM-DD", System.Globalization.CultureInfo.InvariantCulture);
-                        user = accountService.GetUserAccount(UUID.Zero, username, lastName);
+                        user = accountService.GetUserAccount(null, username, lastName);
                         //Update the dob
                         user.Created = Util.ToUnixTime(time);
                         accountService.StoreUserAccount(user);
 
-                        m_log.Info("[RegApi]: Created new user " + user.Name);
+                        IAgentConnector agentConnector = Aurora.Framework.Utilities.DataManager.RequestPlugin<IAgentConnector>();
+                        if (agentConnector != null)
+                        {
+                            agentConnector.CreateNewAgent(user.PrincipalID);
+                            if (map.ContainsKey("limited_to_estate"))
+                            {
+                                IAgentInfo agentInfo = agentConnector.GetAgent(user.PrincipalID);
+                                agentInfo.OtherAgentInformation["LimitedToEstate"] = limited_to_estate;
+                                agentConnector.UpdateAgent(agentInfo);
+                            }
+                        }
+
+                        MainConsole.Instance.Info("[RegApi]: Created new user " + user.Name);
                         try
                         {
                             if (start_region_name != "")
@@ -325,7 +322,7 @@ namespace OpenSim.Services
                                 {
                                     agentInfoService.SetHomePosition(user.PrincipalID.ToString(),
                                             m_registry.RequestModuleInterface<IGridService>().GetRegionByName
-                                            (UUID.Zero, start_region_name).RegionID,
+                                            (null, start_region_name).RegionID,
                                             new Vector3(start_local_x,
                                             start_local_y,
                                             start_local_z),
@@ -337,7 +334,7 @@ namespace OpenSim.Services
                         }
                         catch
                         {
-                            m_log.Warn("[RegApi]: Encountered an error when setting the home position of a new user");
+                            MainConsole.Instance.Warn("[RegApi]: Encountered an error when setting the home position of a new user");
                         }
                         OSDMap r = new OSDMap();
                         r["agent_id"] = user.PrincipalID;
@@ -365,7 +362,7 @@ namespace OpenSim.Services
             {
                 string lastName = m_lastNameRegistry[last_name_id];
                 IUserAccountService accountService = m_registry.RequestModuleInterface<IUserAccountService>();
-                UserAccount user = accountService.GetUserAccount(UUID.Zero, userName, lastName);
+                UserAccount user = accountService.GetUserAccount(null, userName, lastName);
                 if (user != null)
                     found = true;
             }

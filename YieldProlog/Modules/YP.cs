@@ -33,7 +33,7 @@ using System.Reflection;
 using System.Net.Sockets;
 using System.Text;
 using System.Text.RegularExpressions;
-using log4net;
+using Aurora.Framework.ConsoleFramework;
 
 namespace OpenSim.Region.ScriptEngine.Shared.YieldProlog
 {
@@ -43,7 +43,6 @@ namespace OpenSim.Region.ScriptEngine.Shared.YieldProlog
     /// </summary>
     public class YP
     {
-        private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         private static Fail _fail = new Fail();
         private static Repeat _repeat = new Repeat();
         private static Dictionary<NameArity, List<IClause>> _predicatesStore =
@@ -2340,7 +2339,7 @@ namespace OpenSim.Region.ScriptEngine.Shared.YieldProlog
             string results = "";
             for (Match m = Regex.Match(inData,inPattern); m.Success; m=m.NextMatch())
             {
-                //m_log.Debug(m);
+                //MainConsole.Instance.Debug(m);
                 results += presep+ m + postsep;
             }
             return results;
@@ -2358,7 +2357,7 @@ namespace OpenSim.Region.ScriptEngine.Shared.YieldProlog
             }
             catch
             {
-                m_log.Error("Failed to connect to server at localhost:999");
+                MainConsole.Instance.Error("Failed to connect to server at localhost:999");
                 return "";
             }
 
@@ -2378,16 +2377,16 @@ namespace OpenSim.Region.ScriptEngine.Shared.YieldProlog
                     streamWriter.Flush();
 
                     cycOutputString = streamReader.ReadLine();
-                    m_log.Debug("Cycoutput:" + cycOutputString);
+                    MainConsole.Instance.Debug("Cycoutput:" + cycOutputString);
                     //streamWriter.WriteLine("Client Message");
-                    //m_log.Debug("Client Message");
+                    //MainConsole.Instance.Debug("Client Message");
                     streamWriter.Flush();
                 }
 
             }
             catch
             {
-                m_log.Error("Exception reading from Server");
+                MainConsole.Instance.Error("Exception reading from Server");
                 return "";
             }
             // tidy up

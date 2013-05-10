@@ -1,6 +1,0 @@
-;Add the following to your own OpenSim.ini file to make the UserProfile service working
-
-[DefaultAssetsIARCreator]
-    Enabled = false
-    ;;Name of the IAR file that will be created
-    NameOfIAR = "DefaultInventory.iar"

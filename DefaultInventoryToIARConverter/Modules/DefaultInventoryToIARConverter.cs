@@ -32,16 +32,22 @@ using System.IO.Compression;
 using System.Reflection;
 using System.Xml;
 
-using OpenSim.Framework;
-using OpenSim.Services.Interfaces;
+using Aurora.Framework;
 
-using log4net;
 using Nini.Config;
 using OpenMetaverse;
 using Aurora.Simulation.Base;
+using Aurora.Framework.Serialization;
 
-using OpenSim.Region.Framework.Scenes;
-using OpenSim.Region.CoreModules.Avatar.Inventory.Archiver;
+using Aurora.Modules.Archivers;
+using Aurora.Framework.Services;
+using Aurora.Framework.Modules;
+using Aurora.Framework.SceneInfo;
+using Aurora.Framework.Services.ClassHelpers.Assets;
+using Aurora.Framework.Services.ClassHelpers.Inventory;
+using Aurora.Region;
+using Aurora.Framework.ConsoleFramework;
+using Aurora.Framework.Utilities;
 
 namespace OpenSim.Services.InventoryService
 {
@@ -50,11 +56,14 @@ namespace OpenSim.Services.InventoryService
     /// </summary>
     public class DefaultInventoryToIARConverter : IService
     {
-        protected static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         protected ILibraryService m_service;
+        protected IConfigSource m_config;
+        protected IRegistryCore m_registry;
 
         public void Initialize(IConfigSource config, IRegistryCore registry)
         {
+            m_config = config;
+            m_registry = registry;
         }
 
         public void PostInitialize(IConfigSource config, IRegistryCore registry)
@@ -62,6 +71,10 @@ namespace OpenSim.Services.InventoryService
         }
 
         public void Start(IConfigSource config, IRegistryCore registry)
+        {
+        }
+
+        public void FinishedStartup()
         {
             string IARName = "DefaultInventory.iar";
             IniConfigSource iniSource = null;
@@ -72,7 +85,7 @@ namespace OpenSim.Services.InventoryService
             catch
             {
             }
-            IConfig libConfig = config.Configs["DefaultAssetsIARCreator"];
+            IConfig libConfig = m_config.Configs["DefaultAssetsIARCreator"];
             if (libConfig == null)
                 libConfig = iniSource.Configs["DefaultAssetsIARCreator"];
             if (libConfig != null)
@@ -83,29 +96,41 @@ namespace OpenSim.Services.InventoryService
             }
             else
                 return;
-            m_service = registry.RequestModuleInterface<ILibraryService>();
+            m_service = m_registry.RequestModuleInterface<ILibraryService>();
 
             RegionInfo regInfo = new RegionInfo();
             IScene m_MockScene = null;
             //Make the scene for the IAR loader
-            if (registry is IScene)
-                m_MockScene = (IScene)registry;
+            if (m_registry is IScene)
+                m_MockScene = (IScene)m_registry;
             else
             {
                 m_MockScene = new Scene();
                 m_MockScene.Initialize(regInfo);
-                m_MockScene.AddModuleInterfaces(registry.GetInterfaces());
+                m_MockScene.AddModuleInterfaces(m_registry.GetInterfaces());
             }
 
-            UserAccount uinfo = m_MockScene.UserAccountService.GetUserAccount(UUID.Zero, m_service.LibraryOwner);
+            UserAccount uinfo = m_MockScene.UserAccountService.GetUserAccount(null, m_service.LibraryOwner);
             //Make the user account for the default IAR
             if (uinfo == null)
             {
                 uinfo = new UserAccount(m_service.LibraryOwner);
                 uinfo.Name = m_service.LibraryOwnerName;
-                m_MockScene.InventoryService.CreateUserInventory(m_service.LibraryOwner, false);
+                //m_MockScene.InventoryService.CreateUserInventory(m_service.LibraryOwner, false);
+                MainConsole.Instance.InfoFormat("[DefaultInventoryToIARConverter]: 1,1");
+                InventoryFolderBase newFolder = new InventoryFolderBase
+                                                    {
+                                                	Name = "My Inventory",
+                                                	Type = 9,
+                                                	Version = 1,
+                                                	ID = new UUID("00000112-000f-0000-0000-000100bba000"),
+                                                	Owner = m_service.LibraryOwner,
+                                                	ParentID = UUID.Zero
+                                                    };
+                MainConsole.Instance.InfoFormat("[DefaultInventoryToIARConverter]: 1,3");
             }
 
+            MainConsole.Instance.InfoFormat("[DefaultInventoryToIARConverter]: 1,4");
             List<AssetBase> assets = new List<AssetBase> ();
             if (m_MockScene.InventoryService != null)
             {
@@ -138,10 +163,6 @@ namespace OpenSim.Services.InventoryService
                     uinfo, "/", new GZipStream (new FileStream (IARName, FileMode.Create), CompressionMode.Compress), true, rootFolder, assets);
                 write.Execute ();
             }
-        }
-
-        public void FinishedStartup()
-        {
         }
     }
 }

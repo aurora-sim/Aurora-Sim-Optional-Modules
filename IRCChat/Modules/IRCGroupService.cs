@@ -4,9 +4,9 @@
  *  Copyright 2011 Matthew Beardmore
  *
  *  This file is part of Aurora.Addon.IRCChat.
- *  Foobar is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- *  Foobar is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
- *  You should have received a copy of the GNU General Public License along with Foobar. If not, see http://www.gnu.org/licenses/.
+ *  Aurora.Addon.IRCChat is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *  Aurora.Addon.IRCChat is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ *  You should have received a copy of the GNU General Public License along with Aurora.Addon.IRCChat. If not, see http://www.gnu.org/licenses/.
  *
  * 
  * MetaBuilders.Irc.dll License:
@@ -32,21 +32,27 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using OpenSim.Framework;
-using OpenSim.Region.Framework.Interfaces;
+using Aurora.Framework;
 using Nini.Config;
 using MetaBuilders.Irc.Messages;
 using MetaBuilders.Irc.Network;
 using MetaBuilders.Irc;
-using log4net;
 using OpenMetaverse;
+using Aurora.Framework.Modules;
+using Aurora.Framework.SceneInfo;
+using Aurora.Framework.ClientInterfaces;
+using Aurora.Framework.DatabaseInterfaces;
+using Aurora.Framework.Servers;
+using Aurora.Framework.PresenceInfo;
+using GridRegion = Aurora.Framework.Services.GridRegion;
+using Aurora.Framework.Utilities;
+using Aurora.Framework.Services;
+using Aurora.Framework.ConsoleFramework;
 
 namespace Aurora.Addon.IRCChat
 {
     public class IRCGroupService : INonSharedRegionModule
     {
-        private static readonly ILog m_log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-
         private Dictionary<UUID, string> m_network = new Dictionary<UUID, string>();
         private Dictionary<UUID, string> m_channel = new Dictionary<UUID, string>();
         private Dictionary<UUID, string> m_gridName = new Dictionary<UUID, string>();
@@ -86,7 +92,7 @@ namespace Aurora.Addon.IRCChat
 
         private void InitClients ()
         {
-            IGroupsServicesConnector conn = m_scene.RequestModuleInterface<IGroupsServicesConnector>();
+            IGroupsServiceConnector conn = Aurora.Framework.Utilities.DataManager.RequestPlugin<IGroupsServiceConnector>();
             foreach(string s in m_config.GetKeys())
             {
                 if(s.EndsWith("_Network"))
@@ -94,7 +100,7 @@ namespace Aurora.Addon.IRCChat
                     string networkvalue = m_config.GetString(s);
                     string channelvalue = m_config.GetString(s.Replace("_Network", "_Channel"));
                     string nickvalue = m_config.GetString(s.Replace("_Network", "_Nick"));
-                    string gridName = m_config.GetString(s.Replace("_Network", "_GridName"), MainServer.Instance.HostName.Remove(0, 7) + ":" + MainServer.Instance.Port);
+                    string gridName = m_config.GetString(s.Replace("_Network", "_GridName"), MainServer.Instance.ServerURI.Remove(0, 7));
                     GroupRecord g = conn.GetGroupRecord(UUID.Zero, UUID.Zero, s.Replace("_Network", "").Replace('_',' '));
                     if(g != null)
                     {
@@ -146,7 +152,7 @@ namespace Aurora.Addon.IRCChat
             presence.ControllingClient.OnPreSendInstantMessage -= ControllingClient_OnPreSendInstantMessage;
         }
 
-        void EventManager_OnMakeChildAgent (IScenePresence presence, OpenSim.Services.Interfaces.GridRegion destination)
+        void EventManager_OnMakeChildAgent (IScenePresence presence, GridRegion destination)
         {
             presence.ControllingClient.OnPreSendInstantMessage -= ControllingClient_OnPreSendInstantMessage;
         }
@@ -164,7 +170,14 @@ namespace Aurora.Addon.IRCChat
                 Client client;
                 if(clients.TryGetValue(im.imSessionID, out client))
                 {
-                    client.SendChat("(grid:" + m_gridName[im.imSessionID] + ") " + name + ": " + im.message, m_channel[im.imSessionID]);
+                    try
+                    {
+                        if(client.Connection.Status == ConnectionStatus.Connected)
+                            client.SendChat("(grid:" + m_gridName[im.imSessionID] + ") " + name + ": " + im.message, m_channel[im.imSessionID]);
+                    }
+                    catch
+                    {
+                    }
                 }
             }
             return false;
@@ -172,12 +185,11 @@ namespace Aurora.Addon.IRCChat
 
         private void chatting (Object sender, IrcMessageEventArgs<TextMessage> e, UUID groupID)
         {
-            IGroupsServicesConnector conn = m_scene.RequestModuleInterface<IGroupsServicesConnector>();
-            IGroupsMessagingModule gMessaging = m_scene.RequestModuleInterface<IGroupsMessagingModule>();
+            IInstantMessagingService gMessaging = m_scene.RequestModuleInterface<IInstantMessagingService>();
 
-            gMessaging.EnsureGroupChatIsStarted(groupID);
-            gMessaging.SendMessageToGroup(new GridInstantMessage(null, UUID.Random(), e.Message.Sender.Nick,
-                UUID.Zero, (byte)InstantMessageDialog.SessionSend, e.Message.Text, false, Vector3.Zero), groupID);
+            gMessaging.EnsureSessionIsStarted(groupID);
+            gMessaging.SendChatToSession(UUID.Zero, new GridInstantMessage(null, UUID.Random(), e.Message.Sender.Nick,
+                UUID.Zero, (byte)InstantMessageDialog.SessionSend, e.Message.Text, false, Vector3.Zero));
         }
 
         private void CreateIRCConnection (string network, string nick, string channel, UUID groupID)
@@ -233,7 +245,7 @@ namespace Aurora.Addon.IRCChat
             if(m_spamDebug)
             {
                 String data = "*** Disconnected: " + e.Data;
-                m_log.Warn("[RegionIRC]: " + data);
+                MainConsole.Instance.Warn("[RegionIRC]: " + data);
             }
         }
 
@@ -242,7 +254,7 @@ namespace Aurora.Addon.IRCChat
             if(m_spamDebug)
             {
                 String data = "*** Got: " + e.Data;
-                m_log.Warn("[RegionIRC]: " + data);
+                MainConsole.Instance.Warn("[RegionIRC]: " + data);
             }
         }
 
@@ -251,7 +263,7 @@ namespace Aurora.Addon.IRCChat
             if(m_spamDebug)
             {
                 String data = "*** Sent: " + e.Data;
-                m_log.Warn("[RegionIRC]: " + data);
+                MainConsole.Instance.Warn("[RegionIRC]: " + data);
             }
         }
 
