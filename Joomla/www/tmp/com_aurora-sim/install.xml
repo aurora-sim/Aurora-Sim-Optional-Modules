@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<install type="component" version="1.5.0">
+	<name>AuroraSim</name>
+	<!-- The following elements are optional and free of formatting conttraints -->
+	<creationDate>2007-02-22</creationDate>
+	<author>John Doe</author>
+	<authorEmail>john.doe@example.org</authorEmail>
+	<authorUrl>http://www.example.org</authorUrl>
+	<copyright>Copyright Info</copyright>
+	<license>License Info</license>
+	<!--  The version string is recorded in the components table -->
+	<version>4.02</version>
+	<!-- The description is optional and defaults to the name -->
+	<description>Description of the component ...</description>
+
+
+
+	<install>
+		<sql>
+			<file charset="utf8" driver="mysql">install.sql</file>
+		</sql>
+	</install>
+	<uninstall>
+		<sql>
+			<file charset="utf8" driver="mysql">uninstall.sql</file>
+		</sql>
+	</uninstall>	
+
+	<administration>
+		<!-- Administration Menu Section -->
+		<menu>AuroraSim World!</menu>
+		
+		<!-- Administration Main File Copy Section -->
+		<!-- Note the folder attribute: This attribute describes the folder
+			to copy FROM in the package to install therefore files copied
+			in this section are copied from /admin/ in the package -->
+		<files folder="admin">
+			<!-- Site Main File Copy Section -->
+			<filename>aurorasim.php</filename>
+			<filename>index.html</filename>
+			<filename>install.sql</filename>
+			<filename>uninstall.sql</filename>
+			<filename>controller.php</filename>
+			<filename>controllers/aurorasim.php</filename>
+			<filename>controllers/aurorasim_user.php</filename>
+			<filename>controllers/index.html</filename>
+			<filename>models/aurorasims.php</filename>
+			<filename>models/aurorasim_users.php</filename>
+			<filename>models/aurorasim.php</filename>
+			<filename>models/aurorasim_user.php</filename>
+			<filename>models/index.html</filename>
+			<filename>tables/aurorasim.php</filename>
+			<filename>tables/aurorasim_user.php</filename>
+			<filename>tables/index.html</filename>
+			<filename>views/aurorasim/view.html.php</filename>
+			<filename>views/aurorasim/tmpl/form.php</filename>
+			<filename>views/aurorasim/index.html</filename>
+			<filename>views/aurorasim/tmpl/index.html</filename>
+			
+			<filename>views/aurorasim_user/view.html.php</filename>
+			<filename>views/aurorasim_user/tmpl/form.php</filename>
+			<filename>views/aurorasim_user/index.html</filename>
+			<filename>views/aurorasim_user/tmpl/index.html</filename>
+			
+			<filename>views/aurorasims/view.html.php</filename>
+			<filename>views/aurorasims/index.html</filename>
+			<filename>views/aurorasims/tmpl/default.php</filename>
+			<filename>views/aurorasims/tmpl/index.html</filename>
+			
+			<filename>views/aurorasim_users/view.html.php</filename>
+			<filename>views/aurorasim_users/index.html</filename>
+			<filename>views/aurorasim_users/tmpl/default.php</filename>
+			<filename>views/aurorasim_users/tmpl/index.html</filename>
+		</files>		
+	</administration>
+</install>

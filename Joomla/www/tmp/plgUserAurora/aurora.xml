@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<install version="1.5.1" type="plugin" group="user">
+	<name>User - Aurora</name>
+	<author>Skidz Tweak</author>
+	<creationDate>Oct 30, 2011</creationDate>
+	<copyright>Copyright (C) 2011 - 2012 Open Source Matters. All rights reserved.</copyright>
+	<license>http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL</license>
+	<authorEmail>robert.skidmore@newworldz.com</authorEmail>
+	<authorUrl>NewWorldz.com</authorUrl>
+	<version>1.5.2</version>
+	<description>An aurora user synchronisation plugin</description>
+	<files>
+		<filename plugin="aurora">aurora.php</filename>
+	</files>
+	<params/>
+</install>
