@@ -33,20 +33,24 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using Aurora.Framework;
-using OpenSim.Region.Framework.Interfaces;
 using Nini.Config;
 using MetaBuilders.Irc.Messages;
 using MetaBuilders.Irc.Network;
 using MetaBuilders.Irc;
-using log4net;
 using OpenMetaverse;
+using Aurora.Framework.PresenceInfo;
+using Aurora.Framework.ClientInterfaces;
+using GridRegion = Aurora.Framework.Services.GridRegion;
+using Aurora.Framework.Modules;
+using Aurora.Framework.SceneInfo;
+using Aurora.Framework.Utilities;
+using Aurora.Framework.Servers;
+using Aurora.Framework.ConsoleFramework;
 
 namespace Aurora.Addon.IRCChat
 {
     public class IRCRegionService : INonSharedRegionModule
     {
-        private static readonly ILog m_log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-
         private string m_network = "";
         private string m_channel = "";
         private IScene m_scene;
@@ -119,7 +123,7 @@ namespace Aurora.Addon.IRCChat
             presence.ControllingClient.OnPreSendInstantMessage -= ControllingClient_OnInstantMessage;
         }
 
-        void EventManager_OnMakeChildAgent (IScenePresence presence, OpenSim.Services.Interfaces.GridRegion destination)
+        void EventManager_OnMakeChildAgent (IScenePresence presence, GridRegion destination)
         {
             CloseClient(presence);
             presence.ControllingClient.OnPreSendInstantMessage -= ControllingClient_OnInstantMessage;
@@ -229,7 +233,7 @@ namespace Aurora.Addon.IRCChat
             if(m_spamDebug)
             {
                 String data = "*** Disconnected: " + e.Data;
-                m_log.Warn("[RegionIRC]: " + data);
+                MainConsole.Instance.Warn("[RegionIRC]: " + data);
             }
         }
 
@@ -238,7 +242,7 @@ namespace Aurora.Addon.IRCChat
             if(m_spamDebug)
             {
                 String data = "*** Got: " + e.Data;
-                m_log.Warn("[RegionIRC]: " + data);
+                MainConsole.Instance.Warn("[RegionIRC]: " + data);
             }
         }
 
@@ -247,14 +251,14 @@ namespace Aurora.Addon.IRCChat
             if(m_spamDebug)
             {
                 String data = "*** Sent: " + e.Data;
-                m_log.Warn("[RegionIRC]: " + data);
+                MainConsole.Instance.Warn("[RegionIRC]: " + data);
             }
         }
 
         private Dictionary<string, UUID> m_ircUsersToFakeUUIDs = new Dictionary<string, UUID>();
         private void chatting (Object sender, IrcMessageEventArgs<TextMessage> e, IScenePresence sp)
         {
-            Aurora.Framework.IChatModule chatModule = m_scene.RequestModuleInterface<Aurora.Framework.IChatModule>();
+            IChatModule chatModule = m_scene.RequestModuleInterface<IChatModule>();
             if(chatModule != null)
             {
                 if(e.Message.Targets.Count > 0 && e.Message.Targets[0] == clients[sp.UUID].User.Nick)

@@ -34,6 +34,9 @@ using System.Collections.Generic;
 using Nini.Config;
 
 using Aurora.Framework;
+using Aurora.Framework.Modules;
+using Aurora.Framework.Services;
+using Aurora.Framework.ConsoleFramework;
 
 namespace Aurora.Addon.HelpHTML
 {

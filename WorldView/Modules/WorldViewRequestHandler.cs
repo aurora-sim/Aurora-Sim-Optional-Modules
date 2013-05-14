@@ -34,18 +34,15 @@ using System.Xml;
 using Aurora.Framework;
 using Aurora.Simulation.Base;
 using Aurora.Framework.Servers.HttpServer;
-using OpenSim.Region.Framework.Scenes;
-using OpenSim.Region.Framework.Interfaces;
 
 using OpenMetaverse;
-using log4net;
+using Aurora.Framework.Servers.HttpServer.Implementation;
+using Aurora.Framework.ConsoleFramework;
 
 namespace OpenSim.Region.OptionalModules.World.WorldView
 {
-    public class WorldViewRequestHandler : BaseStreamHandler
+    public class WorldViewRequestHandler : BaseRequestHandler
     {
-        private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-
         protected WorldViewModule m_WorldViewModule;
         protected Object m_RequestLock = new Object();
 
@@ -59,11 +56,6 @@ namespace OpenSim.Region.OptionalModules.World.WorldView
                 OSHttpRequest httpRequest, OSHttpResponse httpResponse)
         {
             httpResponse.ContentType = "image/jpeg";
-
-//            StreamReader sr = new StreamReader(requestData);
-//            string body = sr.ReadToEnd();
-//            sr.Close();
-//            body = body.Trim();
 
             try
             {
@@ -79,7 +71,7 @@ namespace OpenSim.Region.OptionalModules.World.WorldView
             }
             catch (Exception e)
             {
-                m_log.Debug("[WORLDVIEW]: Exception: " + e.ToString());
+                MainConsole.Instance.Debug("[WORLDVIEW]: Exception: " + e.ToString());
             }
 
             return new Byte[0];

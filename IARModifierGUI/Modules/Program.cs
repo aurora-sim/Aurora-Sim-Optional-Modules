@@ -35,9 +35,7 @@ using System.Windows.Forms;
 using Microsoft.Win32;
 
 using Aurora.Framework;
-using OpenSim.Services.Interfaces;
 
-using log4net;
 using Nini.Config;
 using OpenMetaverse;
 

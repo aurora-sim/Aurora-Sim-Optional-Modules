@@ -41,9 +41,7 @@
 	<Reference name="Aurora.Framework"/>
 	<Reference name="Aurora.Modules"/>
 	<Reference name="Aurora.Simulation.Base"/>
-	<Reference name="OpenSim.Region.Framework"/>
 
-	<Reference name="log4net" path="../../../bin/"/>
 	<Reference name="Nini" path="../../../bin/"/>
 	<Reference name="OpenMetaverse" path="../../../bin/"/>
 	<Reference name="OpenMetaverse.StructuredData" path="../../../bin/"/>

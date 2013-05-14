@@ -31,25 +31,21 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.Reflection;
 using System.IO;
-using log4net;
 using Nini.Config;
 using OpenMetaverse;
 using OpenMetaverse.Imaging;
 using Aurora.Framework;
-using OpenSim.Region.Framework.Interfaces;
-using OpenSim.Region.Framework.Scenes;
 using Aurora.Simulation.Base;
 using Aurora.Framework.Servers.HttpServer;
-using OpenSim.Services.Interfaces;
+using Aurora.Framework.Modules;
+using Aurora.Framework.SceneInfo;
+using Aurora.Framework.Servers.HttpServer.Interfaces;
+using Aurora.Framework.ConsoleFramework;
 
 namespace OpenSim.Region.OptionalModules.World.WorldView
 {
     public class WorldViewModule : INonSharedRegionModule
     {
-        private static readonly ILog m_log =
-            LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-
-
         private bool m_Enabled = false;
         private IMapImageGenerator m_Generator;
 
@@ -80,7 +76,7 @@ namespace OpenSim.Region.OptionalModules.World.WorldView
                 return;
             }
 
-            m_log.Info("[WORLDVIEW]: Configured and enabled");
+            MainConsole.Instance.Info("[WORLDVIEW]: Configured and enabled");
             ISimulationBase simulationBase = scene.RequestModuleInterface<ISimulationBase>();
             if (simulationBase != null)
             {

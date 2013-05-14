@@ -67,7 +67,7 @@ namespace Aurora.ScriptEngine.AuroraDotNetEngine.CompilerTools
             YP.see(myCode_SR);
             YP.tell(myCS_SW);
 
-            //m_log.Debug("Mycode\n ===================================\n" + myCode+"\n");
+            //MainConsole.Instance.Debug("Mycode\n ===================================\n" + myCode+"\n");
 
 // disable warning: don't see how we can code this differently short
 // of rewriting the whole thing
@@ -77,9 +77,9 @@ namespace Aurora.ScriptEngine.AuroraDotNetEngine.CompilerTools
                 foreach (bool l2 in YPCompiler.makeFunctionPseudoCode(TermList, FunctionCode))
                 {
                     // ListPair VFC = new ListPair(FunctionCode, new Variable());
-                    //m_log.Debug("-------------------------")
-                    //m_log.Debug(FunctionCode.ToString())
-                    //m_log.Debug("-------------------------")
+                    //MainConsole.Instance.Debug("-------------------------")
+                    //MainConsole.Instance.Debug(FunctionCode.ToString())
+                    //MainConsole.Instance.Debug("-------------------------")
                     YPCompiler.convertFunctionCSharp(FunctionCode);
                     //YPCompiler.convertStringCodesCSharp(VFC);
                 }
