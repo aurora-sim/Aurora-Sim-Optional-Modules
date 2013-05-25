@@ -42,8 +42,6 @@
   <Reference name="Aurora.Framework"/>
   <Reference name="Aurora.Simulation.Base"/>
   <Reference name="Aurora.Services.DataService"/>
-  <Reference name="OpenSim.Region.Framework"/>
-  <Reference name="OpenSim.Services"/>
   
   <Reference name="Nini" path="../../../bin/"/>
   <Reference name="OpenMetaverse" path="../../../bin/"/>

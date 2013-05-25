@@ -224,7 +224,7 @@ namespace Aurora.Addon.IRCChat
         {
             foreach(KeyValuePair<string, UUID> fakeID in m_ircUsersToFakeUUIDs)
             {
-                if(im.toAgentID == fakeID.Value)
+                if(im.ToAgentID == fakeID.Value)
                 {
                     Client client;
                     if(TryGetClient(remoteclient.AgentId, out client))
@@ -235,8 +235,8 @@ namespace Aurora.Addon.IRCChat
                                 return true;
                             return false;
                         });
-                        if(im.message != "" && im.dialog == (byte)InstantMessageDialog.MessageFromAgent)
-                            client.SendChat(im.message, user.Nick);
+                        if (im.Message != "" && im.Dialog == (byte)InstantMessageDialog.MessageFromAgent)
+                            client.SendChat(im.Message, user.Nick);
                         return true;
                     }
                 }
@@ -257,12 +257,22 @@ namespace Aurora.Addon.IRCChat
                         fakeUUID = UUID.Random();
                         m_ircUsersToFakeUUIDs[e.Message.Sender.UserName] = fakeUUID;
                     }
-                    presence.ControllingClient.SendInstantMessage(new GridInstantMessage(null,
-                        fakeUUID, e.Message.Sender.Nick, presence.UUID, (byte)InstantMessageDialog.MessageFromAgent,
-                        e.Message.Text, false, Vector3.Zero));
+                    presence.ControllingClient.SendInstantMessage(new GridInstantMessage()
+                        {
+                            FromAgentID = fakeUUID,
+                            FromAgentName = e.Message.Sender.Nick,
+                            ToAgentID = presence.UUID,
+                            Dialog = (byte)InstantMessageDialog.MessageFromAgent,
+                            Message = e.Message.Text,
+                            FromGroup = false,
+                            SessionID = UUID.Zero,
+                            Offline = 0,
+                            BinaryBucket = new byte[0],
+                            Timestamp = (uint)Util.UnixTimeSinceEpoch()
+                        });
                 }
                 else
-                    chatModule.TrySendChatMessage(presence, presence.AbsolutePosition, presence.AbsolutePosition, UUID.Zero,
+                    chatModule.TrySendChatMessage(presence, presence.AbsolutePosition, UUID.Zero,
                         e.Message.Targets[0] + " - " + e.Message.Sender.Nick, ChatTypeEnum.Say, e.Message.Text, ChatSourceType.Agent, 20);
             }
         }
@@ -392,7 +402,7 @@ namespace Aurora.Addon.IRCChat
             IChatModule chatModule = presence.Scene.RequestModuleInterface<IChatModule>();
             if(chatModule != null)
             {
-                chatModule.TrySendChatMessage(presence, presence.AbsolutePosition, presence.AbsolutePosition, UUID.Zero,
+                chatModule.TrySendChatMessage(presence, presence.AbsolutePosition, UUID.Zero,
                         "System", ChatTypeEnum.Say, "You joined " + channel, ChatSourceType.Agent, 20);
             }
         }

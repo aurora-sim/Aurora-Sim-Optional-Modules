@@ -164,16 +164,16 @@ namespace Aurora.Addon.IRCChat
 
         bool ControllingClient_OnPreSendInstantMessage (IClientAPI remoteclient, GridInstantMessage im)
         {
-            string name = remoteclient == null ? im.fromAgentName : remoteclient.Name;
-            if(im.dialog == (byte)InstantMessageDialog.SessionSend)
+            string name = remoteclient == null ? im.FromAgentName : remoteclient.Name;
+            if(im.Dialog == (byte)InstantMessageDialog.SessionSend)
             {
                 Client client;
-                if(clients.TryGetValue(im.imSessionID, out client))
+                if(clients.TryGetValue(im.SessionID, out client))
                 {
                     try
                     {
                         if(client.Connection.Status == ConnectionStatus.Connected)
-                            client.SendChat("(grid:" + m_gridName[im.imSessionID] + ") " + name + ": " + im.message, m_channel[im.imSessionID]);
+                            client.SendChat("(grid:" + m_gridName[im.SessionID] + ") " + name + ": " + im.Message, m_channel[im.SessionID]);
                     }
                     catch
                     {
@@ -188,8 +188,19 @@ namespace Aurora.Addon.IRCChat
             IInstantMessagingService gMessaging = m_scene.RequestModuleInterface<IInstantMessagingService>();
 
             gMessaging.EnsureSessionIsStarted(groupID);
-            gMessaging.SendChatToSession(UUID.Zero, new GridInstantMessage(null, UUID.Random(), e.Message.Sender.Nick,
-                UUID.Zero, (byte)InstantMessageDialog.SessionSend, e.Message.Text, false, Vector3.Zero));
+            gMessaging.SendChatToSession(UUID.Zero, new GridInstantMessage()
+            {
+                FromAgentID = UUID.Random(),
+                FromAgentName = e.Message.Sender.Nick,
+                ToAgentID = UUID.Zero,
+                Dialog = (byte)InstantMessageDialog.SessionSend,
+                Message = e.Message.Text,
+                FromGroup = false,
+                SessionID = UUID.Zero,
+                Offline = 0,
+                BinaryBucket = new byte[0],
+                Timestamp = (uint)Util.UnixTimeSinceEpoch()
+            });
         }
 
         private void CreateIRCConnection (string network, string nick, string channel, UUID groupID)
