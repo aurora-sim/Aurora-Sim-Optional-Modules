@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<install type="module" version="1.5.0">
+    <!-- Name of the Module -->
+	<name>Aurora - List Friends</name> 
+ 
+    <!-- Name of the Author -->
+	<author>Skidz Tweak</author> 
+ 
+    <!-- Version Date of the Module -->
+	<creationDate>2012-04-16</creationDate> 
+ 
+    <!-- Copyright information -->
+	<copyright>All rights reserved by New Worldz LLC</copyright> 
+ 
+    <!-- License Information -->
+	<license>GPL 2.0</license> 
+ 
+    <!-- Author's email address -->
+	<authorEmail>Robert.Skidmore@NewWorldz.com</authorEmail> 
+ 
+    <!-- Author's website -->
+	<authorUrl>www.NewWorldz.com</authorUrl> 
+ 
+    <!-- Module version number -->
+	<version>1.0.0</version> 
+ 
+    <!-- Description of what the module does -->
+	<description>List Friends module</description>
+ 
+    <!-- Listing of all files that should be installed for the module to function -->
+	<files>
+        <!-- The "module" attribute signifies that this is the main controller file -->
+		<filename module="mod_aurora_list_friends">mod_aurora_list_friends.php</filename>
+		<filename>index.html</filename>
+		<filename>helper.php</filename>
+		<filename>tmpl/default.php</filename>
+		<filename>tmpl/index.html</filename>
+	</files>
+	<languages>
+        <!-- Any language files included with the module -->
+		<language tag="en-GB">en-GB.mod_aurora_list_friends.ini</language>
+		<language tag="fr-FR">fr-FR.mod_aurora_list_friends.ini</language>
+    </languages>
+ 
+    <!-- Optional parameters -->
+	<params>
+        <!-- parameter to allow placement of a module class suffix for the module table / xhtml display -->
+		<param name="moduleclass_sfx" type="text" default="" label="Module Class Suffix" description="PARAMMODULECLASSSUFFIX" />
+    </params>
+</install>
