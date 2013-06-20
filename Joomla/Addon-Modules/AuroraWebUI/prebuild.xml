@@ -1,0 +1,55 @@
+<?xml version="1.0" ?>
+<Project frameworkVersion="v3_5" name="Aurora.Addon.WebUI" path="addon-modules/AuroraWebUI/Modules" type="Library">
+	<Configuration name="Debug" platform="x86">
+		<Options>
+			<OutputPath>../../../bin/</OutputPath>
+		</Options>
+	</Configuration>
+	<Configuration name="Release" platform="x86">
+		<Options>
+			<OutputPath>../../../bin/</OutputPath>
+		</Options>
+	</Configuration>
+	<Configuration name="Debug" platform="x64">
+		<Options>
+			<OutputPath>../../../bin/</OutputPath>
+		</Options>
+	</Configuration>
+	<Configuration name="Release" platform="x64">
+		<Options>
+			<OutputPath>../../../bin/</OutputPath>
+		</Options>
+	</Configuration>
+	<Configuration name="Debug" platform="AnyCPU">
+		<Options>
+			<OutputPath>../../../bin/</OutputPath>
+		</Options>
+	</Configuration>
+	<Configuration name="Release" platform="AnyCPU">
+		<Options>
+			<OutputPath>../../../bin/</OutputPath>
+		</Options>
+	</Configuration>
+
+	<ReferencePath>../../../bin/</ReferencePath>
+	<Reference name="System"/>
+	<Reference name="System.Drawing"/>
+	<Reference name="System.Web"/>
+	<Reference name="System.Xml"/>
+
+	<Reference name="Nini" path="../../../bin/"/>
+
+	<Reference name="OpenMetaverse" path="../../../bin/"/>
+	<Reference name="OpenMetaverse.StructuredData" path="../../../bin/"/>
+	<Reference name="OpenMetaverseTypes" path="../../../bin/"/>
+
+	<Reference name="Aurora.DataManager"/>
+	<Reference name="Aurora.Framework"/>
+
+
+	<Files>
+		<Match pattern="*.cs" recurse="true">
+			<Exclude pattern="Tests"/>
+		</Match>
+	</Files>
+</Project>

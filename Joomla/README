@@ -1,0 +1,85 @@
+What are the Joomla components for Aurora-Sim? They allow you to run a joomla site that integrates 
+directly in with Aurora-sim. There are several components included in this bunch.
+
+Disclaimer and license Info: The code is released under GPL, so its free to use, but if you 
+modifications or improvements, please forward changes to me. This licences is subject to change. 
+You are using these components/modules/plug-ins at your own risk, and I am not responsible for anything. 
+If you do find a issue though, please let me know about it so I can get it fixed.
+
+Download Here
+
+Lets take a look at each component/module/plugin:
+
+com_aurora-sim
+	This installs a component on joomla that allows you to fill in the aurora-sim configuration 
+	settings in the administor/components/Aurora-Sim area of your website. There configureation 
+	settings are used by most of the other modules and plugins.
+plgAuthAurora
+	This plugin allows you to authenticate aurora-sim users. Upon authenication the user is 
+	imported into Joomla as well
+plgUserAurora
+	This plugin allows you to create new users on Aurora-Sim. If activation is required by the 
+	joomla site the aurora user will not be activated until doing so.
+mod_aurora_list_regions
+	This module creates a nice list to display all the regions on a grid.
+mod_aurora_list_friends
+	This module give a quick display of a logged in user's friends list with online and offline
+	status and profile images. This module is a sidebar module and would be a good module to 
+	display on every page.
+mod_stardust
+	This module will display the currency history of the current user. It requires stardust to 
+	be present on your Aurora-Sim instance.
+mod_stardust_land
+	This module displays options to buy a region. It requires stardust to be present on your 
+	Aurora-Sim instance.
+mod_stardust_purchase
+	This module allows the purchase of stardust currency in the grid. After the purchase inworld, 
+	they are directed to a page to complete the transaction. Thats what this module does. It 
+	requires stardust to be present on your Aurora-Sim instance.
+	
+How to install main components:
+
+1. First Setup Aurora-Sim with the WebUI Module like your normally would.
+2. Set up joomla 1.5 and use a seperate database than your Aurora-Sim but in the same instance of mysql
+3. Replace the WebUI module in aurora-sim with the one from this package. No INI changes are needed.
+4. From the package, open the folder www and copy everything in it to your joomla directory.
+5. Login to your Joomla administrator page
+6. Go to “Extensions/Install/Uninstall”
+7. under the section “Install from Directory” add the folder name com_aurora-sim
+8. Go to “Components/Aurora-Sim World!”
+9. Edit the default entry and fill it in with your grid information and save. These values should refect what you would place in the WebUI Setting file if you set up the WebUI.
+10. Go back to “Extensions/Install/Uninstall”
+11. under the section “Install from Directory” add the folder name plgAuthAurora
+12. under the section “Install from Directory” add the folder name plgUserAurora
+13. Goto “Extensions/Plugin Manager”
+14. Located the plugin "Authentication - AuroraSim” and enable it
+15. Located the plugin “User - Aurora” and enable it
+16. Go back to “Extensions/Install/Uninstall”
+17. under the section “Install from Directory” add the folder name mod_aurora_list_regions
+18. Go to your arical manager under “Content/Artile Manager”
+19. Create a new Article, this is the page that the region list will be displayed
+20. Add your new Region list artical as a link in the main menu under “Menus/Main Menu”
+21. Go to “Extension/Modules”
+22. Located the module “Aurora List Regions”
+23. Enable it, and set the “Menu Assignment” to “Select Menu Item(s) from the List” and choose the menu item you just added pointing to the page. This will make this module show up on this page. If you find this part confusing just know you can chagne it later if you don’t like the way you set it up the first time.
+24. under the section “Install from Directory” add the folder name mod_aurora_list_friends
+25. Go to “Extension/Modules”
+26. Enable it, and set the options as needed. You can leave it on for non logged in users as well. 
+
+
+How to install Stardust components:
+
+1. Install Stardust on your Aurora-Sim instance like normal
+2. Run the Stardust WebUI “SQL” files in the same database as Aurora-Sim
+3. Login to your Joomla administrator page
+4. Go to “Extensions/Install/Uninstall”
+5. Under the section “Install from Directory” type in the follow folders
+6. mod_stardust
+7. mod_stardust_purchase
+8. mod_stardust_land
+9. Go to your arical manager under “Content/Artile Manager”
+10. Create a 3 new Articles, *Stardust Currency History, *Purchase Island, and *Purchase currency
+11. Add your articles as links in the main menu under “Menus/Main Menu”
+12. Go to “Extension/Modules”
+13. Locate the 3 modules and enable them, and fill out the paramaters. For details on the correct values for each of the paramaters please see Stardust documentation. Notification URLs, and Return URLs should be pointed to the page you made for stardust purchase currency page.
+14. If you have any questions, or concerns or you would like to contribute please feel free to contant me.
