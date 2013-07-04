@@ -235,9 +235,9 @@ namespace OpenSim.Region.OptionalModules.World.TreePopulator
 
         #region ICommandableModule Members
 
-        private void HandleTreeActive(string[] cmd)
+        private void HandleTreeActive(IScene scene, string[] cmd)
         {
-            if (MainConsole.Instance.ConsoleScene != m_scene)
+            if (scene != m_scene)
                 return;
             if (Boolean.Parse(cmd[2]) && !m_active_trees)
             {
@@ -257,9 +257,9 @@ namespace OpenSim.Region.OptionalModules.World.TreePopulator
             }
         }
 
-        private void HandleTreeFreeze(string[] cmd)
+        private void HandleTreeFreeze(IScene scene, string[] cmd)
         {
-            if (MainConsole.Instance.ConsoleScene != m_scene)
+            if (scene != m_scene)
                 return;
             string copsename = cmd[2].Trim();
             Boolean freezeState = Boolean.Parse(cmd[3]);
@@ -292,9 +292,9 @@ namespace OpenSim.Region.OptionalModules.World.TreePopulator
             MainConsole.Instance.InfoFormat("[TREES]: Copse {0} was not found - command failed", copsename);
         }
 
-        private void HandleTreeLoad(string[] cmd)
+        private void HandleTreeLoad(IScene scene, string[] cmd)
         {
-            if (MainConsole.Instance.ConsoleScene != m_scene)
+            if (scene != m_scene)
                 return;
             Copse copse;
 
@@ -314,9 +314,9 @@ namespace OpenSim.Region.OptionalModules.World.TreePopulator
             MainConsole.Instance.InfoFormat("[TREES]: Loaded copse: {0}", copse.ToString());
         }
 
-        private void HandleTreePlant(string[] cmd)
+        private void HandleTreePlant(IScene scene, string[] cmd)
         {
-            if (MainConsole.Instance.ConsoleScene != m_scene)
+            if (scene != m_scene)
                 return;
             string copsename = cmd[0].Trim();
 
@@ -343,9 +343,9 @@ namespace OpenSim.Region.OptionalModules.World.TreePopulator
             MainConsole.Instance.InfoFormat("[TREES]: Copse {0} not found for planting", copsename);
         }
 
-        private void HandleTreeRate(string[] cmd)
+        private void HandleTreeRate(IScene scene, string[] cmd)
         {
-            if (MainConsole.Instance.ConsoleScene != m_scene)
+            if (scene != m_scene)
                 return;
             m_update_ms = double.Parse(cmd[2]);
             if (m_update_ms >= 1000.0)
@@ -363,9 +363,9 @@ namespace OpenSim.Region.OptionalModules.World.TreePopulator
             }
         }
 
-        private void HandleTreeReload(string[] cmd)
+        private void HandleTreeReload(IScene scene, string[] cmd)
         {
-            if (MainConsole.Instance.ConsoleScene != m_scene)
+            if (scene != m_scene)
                 return;
             if (m_active_trees)
             {
@@ -380,9 +380,9 @@ namespace OpenSim.Region.OptionalModules.World.TreePopulator
             }
         }
 
-        private void HandleTreeRemove(string[] cmd)
+        private void HandleTreeRemove(IScene scene, string[] cmd)
         {
-            if (MainConsole.Instance.ConsoleScene != m_scene)
+            if (scene != m_scene)
                 return;
             string copsename = (cmd[2]).Trim();
             Copse copseIdentity = null;
@@ -422,9 +422,9 @@ namespace OpenSim.Region.OptionalModules.World.TreePopulator
             }
         }
 
-        private void HandleTreeStatistics(string[] cmd)
+        private void HandleTreeStatistics(IScene scene, string[] cmd)
         {
-            if (MainConsole.Instance.ConsoleScene != m_scene)
+            if (scene != m_scene)
                 return;
             MainConsole.Instance.InfoFormat("[TREES]: Activity State: {0};  Update Rate: {1}", m_active_trees, m_update_ms);
             foreach (Copse cp in m_copse)
@@ -433,9 +433,9 @@ namespace OpenSim.Region.OptionalModules.World.TreePopulator
             }
         }
 
-        private void HandleTreeHelp(string[] cmd)
+        private void HandleTreeHelp(IScene scene, string[] cmd)
         {
-            if (MainConsole.Instance.ConsoleScene != m_scene)
+            if (scene != m_scene)
                 return;
             MainConsole.Instance.Info("tree active <activeTF> - Change activity state for the trees module. "
                                + "\n activeTF: The required activity state");
@@ -460,30 +460,30 @@ namespace OpenSim.Region.OptionalModules.World.TreePopulator
             {
                 MainConsole.Instance.Commands.AddCommand ("tree active",
                 "tree active <activeTF>", "Change activity state for the trees module. "
-                               + "\n activeTF: The required activity state", HandleTreeActive);
+                               + "\n activeTF: The required activity state", HandleTreeActive, true, false);
                 MainConsole.Instance.Commands.AddCommand ("tree freeze <",
                     "tree freeze <copse> <freezeTF>", "Freeze/Unfreeze activity for a defined copse. "
                                    + "\n copse: The required copse"
-                                   + "\n freezeTF: The required freeze state", HandleTreeFreeze);
+                                   + "\n freezeTF: The required freeze state", HandleTreeFreeze, true, false);
                 MainConsole.Instance.Commands.AddCommand ("tree load",
                     "tree load <filename>", "Load a copse definition from an xml file. "
-                                   + "\n filename: The (xml) file you wish to load", HandleTreeLoad);
+                                   + "\n filename: The (xml) file you wish to load", HandleTreeLoad, true, false);
                 MainConsole.Instance.Commands.AddCommand ("tree plant",
                     "tree plant <copse>", "Start the planting on a copse. "
-                                   + "\n copse: The required copse", HandleTreePlant);
+                                   + "\n copse: The required copse", HandleTreePlant, true, false);
                 MainConsole.Instance.Commands.AddCommand ("tree rate",
                     "tree rate <updateRate>", "Reset the tree update rate (mSec). "
-                                   + "\n updateRate: The required update rate (minimum 1000.0)", HandleTreeRate);
+                                   + "\n updateRate: The required update rate (minimum 1000.0)", HandleTreeRate, true, false);
                 MainConsole.Instance.Commands.AddCommand ("tree reload",
-                    "tree reload", "Reload copse definitions from the in-scene trees.", HandleTreeReload);
+                    "tree reload", "Reload copse definitions from the in-scene trees.", HandleTreeReload, true, false);
 
                 MainConsole.Instance.Commands.AddCommand ("tree remove",
                     "tree remove <copse>", "Remove a copse definition and all its in-scene trees. "
-                                   + "\n copse: The required copse", HandleTreeRemove);
+                                   + "\n copse: The required copse", HandleTreeRemove, true, false);
                 MainConsole.Instance.Commands.AddCommand ("tree statistics",
-                    "tree statistics", "Log statistics about the trees.", HandleTreeStatistics);
+                    "tree statistics", "Log statistics about the trees.", HandleTreeStatistics, true, false);
                 MainConsole.Instance.Commands.AddCommand ("tree help",
-                    "tree help", "Help about the trees.", HandleTreeHelp);
+                    "tree help", "Help about the trees.", HandleTreeHelp, true, true);
             }
         }
 

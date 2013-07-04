@@ -37,6 +37,7 @@ using Aurora.Framework;
 using Aurora.Framework.Modules;
 using Aurora.Framework.Services;
 using Aurora.Framework.ConsoleFramework;
+using Aurora.Framework.SceneInfo;
 
 namespace Aurora.Addon.HelpHTML
 {
@@ -55,7 +56,7 @@ namespace Aurora.Addon.HelpHTML
         public void Initialize(IGenericData GenericData, IConfigSource source, IRegistryCore simBase, string DefaultConnectionString)
         {
             loaded = DateTime.Now;
-            MainConsole.Instance.Commands.AddCommand("helphtml", "helphtml", "output help as html document", loadHelp);
+            MainConsole.Instance.Commands.AddCommand("helphtml", "helphtml", "output help as html document", loadHelp, false, true);
         }
 
         #endregion
@@ -74,7 +75,7 @@ namespace Aurora.Addon.HelpHTML
             return "Aurora Help";
         }
 
-        private void loadHelp(string[] cmd)
+        private void loadHelp(IScene scene, string[] cmd)
         {
             string fileName = cmd2helpFile(cmd);
 

@@ -41,7 +41,7 @@ namespace Aurora.Addon.FractalTerrain
         public void Initialise (Nini.Config.IConfigSource source)
         {
             MainConsole.Instance.Commands.AddCommand("generate fractal terrain", "generate fractal terrain",
-                "Generates a fractal terrain", Generate);
+                "Generates a fractal terrain", Generate, true, false);
         }
 
         public void PostInitialise ()
@@ -74,15 +74,15 @@ namespace Aurora.Addon.FractalTerrain
             get { return null; }
         }
 
-        public void Generate (string[] s)
+        public void Generate (IScene scene, string[] s)
         {
             //string noiseGen = MainConsole.Instance.CmdPrompt("Noise generator (Perlin or Kosh)", "Perlin", new List<string>(new [] { "Perlin", "Kosh" }));
             //if(noiseGen == "Perlin")
             {
                 _noiseGen = m_perlinNoise;
                 PerlinNoiseSettings pns = new PerlinNoiseSettings();
-                pns.ResultX = MainConsole.Instance.ConsoleScene.RegionInfo.RegionSizeX;
-                pns.ResultY = MainConsole.Instance.ConsoleScene.RegionInfo.RegionSizeY;
+                pns.ResultX = scene.RegionInfo.RegionSizeX;
+                pns.ResultY = scene.RegionInfo.RegionSizeY;
                 pns.RandomSeed = int.Parse(MainConsole.Instance.Prompt("Random Seed (0-infinity)", "10"));
                 pns.CorsenessX = int.Parse(MainConsole.Instance.Prompt("Corseness (X direction) (2-1000)", "100"));
                 pns.CorsenessY = int.Parse(MainConsole.Instance.Prompt("Corseness (Y direction) (2-1000)", "100"));
@@ -112,17 +112,17 @@ namespace Aurora.Addon.FractalTerrain
             }*/
             float scaling = float.Parse(MainConsole.Instance.Prompt("Fractal Scaling", "50"));
             float[,] land = _noiseGen.Generate();
-            ITerrainChannel c = new TerrainChannel(MainConsole.Instance.ConsoleScene);
-            for(int x = 0; x < MainConsole.Instance.ConsoleScene.RegionInfo.RegionSizeX; x++)
+            ITerrainChannel c = new TerrainChannel(scene);
+            for(int x = 0; x < scene.RegionInfo.RegionSizeX; x++)
             {
-                for(int y = 0; y < MainConsole.Instance.ConsoleScene.RegionInfo.RegionSizeY; y++)
+                for(int y = 0; y < scene.RegionInfo.RegionSizeY; y++)
                 {
-                    c[x, y] = (land[x, y] * scaling) + (float)MainConsole.Instance.ConsoleScene.RegionInfo.RegionSettings.WaterHeight + 10;
+                    c[x, y] = (land[x, y] * scaling) + (float)scene.RegionInfo.RegionSettings.WaterHeight + 10;
                 }
             }
-            MainConsole.Instance.ConsoleScene.RequestModuleInterface<ITerrainModule>().TerrainMap = c;
-            MainConsole.Instance.ConsoleScene.RequestModuleInterface<ITerrainModule>().TaintTerrain();
-            MainConsole.Instance.ConsoleScene.RegisterModuleInterface<ITerrainChannel>(c);
+            scene.RequestModuleInterface<ITerrainModule>().TerrainMap = c;
+            scene.RequestModuleInterface<ITerrainModule>().TaintTerrain();
+            scene.RegisterModuleInterface<ITerrainChannel>(c);
         }
     }
 }
